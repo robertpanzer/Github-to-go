@@ -224,18 +224,6 @@
         Commit* commit = [[[Commit alloc] initWithJSONObject:[(NSDictionary*)data objectForKey:@"commit"]] autorelease];
         TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
-//        [[NetworkProxy sharedInstance] loadStringFromURL:commit.treeUrl block:^(int statusCode, id data) {
-//            NSLog(@"StatusCode: %d", statusCode);
-//            NSLog(@"Tree %@", data);
-//            
-//            //Now create the view controller and push it.
-//            Tree* tree = [[[Tree alloc] initWithJSONObject:data andName:@"/"] autorelease];
-//            TreeViewController* treeViewController = [[[TreeViewController alloc] initWithTree:tree ] autorelease];//]JSONObject: [data objectForKey:@"tree"]] autorelease];
-//            [self.navigationController pushViewController:treeViewController animated:YES];
-//            
-//        } 
-//         ];
-
     } 
      ];
 

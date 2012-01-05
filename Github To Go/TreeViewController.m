@@ -7,6 +7,7 @@
 //
 
 #import "TreeViewController.h"
+#import "BlobViewController.h"
 #import "NetworkProxy.h"
 #import "Tree.h"
 #import "Blob.h"
@@ -115,21 +116,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifierTree = @"TreeCell";
+    static NSString *CellIdentifierBlob = @"BlobCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
     if (indexPath.section == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierTree];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree] autorelease];
+        }
         Tree* file = [self.tree treeAtIndex:indexPath.row];
         cell.textLabel.text = file.name;
+        return cell;
     } else if (indexPath.section == 1) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierBlob];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob] autorelease];
+        }
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d bytes", blob.size]; 
         cell.textLabel.text = blob.name;
+        return cell;
+    } else {
+        @throw [NSString stringWithFormat:@"Section %d out of range", indexPath.section];
     }
         
-    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -191,10 +201,8 @@
     } else {
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         NSString* blobUrl = blob.url;
-        [[NetworkProxy sharedInstance] loadStringFromURL:blobUrl block:^(int statusCode, id data) {
-            NSLog(@"Blob: %@", data);
-        }
-         ];
+        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl name:blob.name] autorelease];
+        [self.navigationController pushViewController:blobViewController animated:YES];
     }
 }
 

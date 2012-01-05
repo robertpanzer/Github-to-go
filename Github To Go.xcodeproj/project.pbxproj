@@ -13,6 +13,9 @@
 		942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */; };
 		942CBD6014B5A1B80047F712 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD5F14B5A1B80047F712 /* Tree.m */; };
 		942CBD6414B607990047F712 /* Blob.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6314B607990047F712 /* Blob.m */; };
+		942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6614B6116A0047F712 /* BlobViewController.m */; };
+		942CBD6914B6116A0047F712 /* BlobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942CBD6714B6116A0047F712 /* BlobViewController.xib */; };
+		9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9445E35A14B6198300BB929C /* NSData+Base64.m */; };
 		946CB2A714B4651700BBFDAD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2A614B4651700BBFDAD /* Person.m */; };
 		946CB2AB14B4796000BBFDAD /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AA14B4796000BBFDAD /* Commit.m */; };
 		946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AD14B48E6000BBFDAD /* TreeViewController.m */; };
@@ -43,6 +46,11 @@
 		942CBD5F14B5A1B80047F712 /* Tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tree.m; sourceTree = "<group>"; };
 		942CBD6214B607990047F712 /* Blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blob.h; sourceTree = "<group>"; };
 		942CBD6314B607990047F712 /* Blob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Blob.m; sourceTree = "<group>"; };
+		942CBD6514B6116A0047F712 /* BlobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlobViewController.h; sourceTree = "<group>"; };
+		942CBD6614B6116A0047F712 /* BlobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlobViewController.m; sourceTree = "<group>"; };
+		942CBD6714B6116A0047F712 /* BlobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlobViewController.xib; sourceTree = "<group>"; };
+		9445E35914B6198300BB929C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		9445E35A14B6198300BB929C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		946CB2A514B4651700BBFDAD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		946CB2A614B4651700BBFDAD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		946CB2A914B4796000BBFDAD /* Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commit.h; sourceTree = "<group>"; };
@@ -138,9 +146,14 @@
 				949FB13A14B3327800D3E713 /* Supporting Files */,
 				946CB2A914B4796000BBFDAD /* Commit.h */,
 				946CB2AA14B4796000BBFDAD /* Commit.m */,
+				942CBD6514B6116A0047F712 /* BlobViewController.h */,
+				942CBD6614B6116A0047F712 /* BlobViewController.m */,
+				942CBD6714B6116A0047F712 /* BlobViewController.xib */,
 				946CB2AC14B48E6000BBFDAD /* TreeViewController.h */,
 				946CB2AD14B48E6000BBFDAD /* TreeViewController.m */,
 				946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */,
+				9445E35914B6198300BB929C /* NSData+Base64.h */,
+				9445E35A14B6198300BB929C /* NSData+Base64.m */,
 			);
 			path = "Github To Go";
 			sourceTree = "<group>";
@@ -214,6 +227,7 @@
 				949FB15814B3327800D3E713 /* SecondViewController.xib in Resources */,
 				942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */,
 				946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */,
+				942CBD6914B6116A0047F712 /* BlobViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +249,8 @@
 				946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */,
 				942CBD6014B5A1B80047F712 /* Tree.m in Sources */,
 				942CBD6414B607990047F712 /* Blob.m in Sources */,
+				942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */,
+				9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

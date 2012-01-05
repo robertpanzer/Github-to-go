@@ -12,11 +12,13 @@
     NSString* name;
     NSString* url;
     long size;
+    NSString* content;
 
 }
 
 @property(strong) NSString* name;
 @property(strong) NSString* url;
+@property(strong) NSString* content;
 @property(readonly) long size;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject andName:(NSString*)aName;
