@@ -7,10 +7,10 @@
 //
 
 #import "AppDelegate.h"
-
-#import "FirstViewController.h"
-
 #import "SecondViewController.h"
+#import "Repository.h"
+#import "NetworkProxy.h"
+#import "RepoBrowserTableViewController.h"
 
 @implementation AppDelegate
 
@@ -26,12 +26,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[NetworkProxy alloc] init];
+    
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    UIViewController *viewController1 = [[[FirstViewController alloc] initWithNibName:@"FirstViewController" bundle:nil] autorelease];
+    //    UIViewController *viewController1 = [[[FirstViewController alloc] initWithNibName:@"FirstViewController" bundle:nil] autorelease];
+    
+    RepoBrowserTableViewController* repoBrowserController = [[[RepoBrowserTableViewController alloc] initWithNibName:@"RepoBrowserTableViewController" bundle:nil] autorelease];
+    
+    UINavigationController* navigationController = [[[UINavigationController alloc] initWithRootViewController:repoBrowserController] autorelease];
     UIViewController *viewController2 = [[[SecondViewController alloc] initWithNibName:@"SecondViewController" bundle:nil] autorelease];
     self.tabBarController = [[[UITabBarController alloc] init] autorelease];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:viewController1, viewController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navigationController, viewController2, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;

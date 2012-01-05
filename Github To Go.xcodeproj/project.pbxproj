@@ -7,42 +7,65 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		942130C414B455C000969D38 /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130BF14B455C000969D38 /* NetworkProxy.m */; };
+		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
+		942130C614B455C000969D38 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C314B455C000969D38 /* Repository.m */; };
+		942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */; };
+		942CBD6014B5A1B80047F712 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD5F14B5A1B80047F712 /* Tree.m */; };
+		942CBD6414B607990047F712 /* Blob.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6314B607990047F712 /* Blob.m */; };
+		946CB2A714B4651700BBFDAD /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2A614B4651700BBFDAD /* Person.m */; };
+		946CB2AB14B4796000BBFDAD /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AA14B4796000BBFDAD /* Commit.m */; };
+		946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AD14B48E6000BBFDAD /* TreeViewController.m */; };
+		946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */; };
 		949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13314B3327800D3E713 /* UIKit.framework */; };
 		949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13514B3327800D3E713 /* Foundation.framework */; };
 		949FB13814B3327800D3E713 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13714B3327800D3E713 /* CoreGraphics.framework */; };
 		949FB13E14B3327800D3E713 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 949FB13C14B3327800D3E713 /* InfoPlist.strings */; };
 		949FB14014B3327800D3E713 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 949FB13F14B3327800D3E713 /* main.m */; };
 		949FB14414B3327800D3E713 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 949FB14314B3327800D3E713 /* AppDelegate.m */; };
-		949FB14714B3327800D3E713 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949FB14614B3327800D3E713 /* FirstViewController.m */; };
 		949FB14914B3327800D3E713 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14814B3327800D3E713 /* first.png */; };
 		949FB14B14B3327800D3E713 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14A14B3327800D3E713 /* first@2x.png */; };
 		949FB14E14B3327800D3E713 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949FB14D14B3327800D3E713 /* SecondViewController.m */; };
 		949FB15014B3327800D3E713 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14F14B3327800D3E713 /* second.png */; };
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
-		949FB15514B3327800D3E713 /* FirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15314B3327800D3E713 /* FirstViewController.xib */; };
 		949FB15814B3327800D3E713 /* SecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15614B3327800D3E713 /* SecondViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		942130BE14B455C000969D38 /* NetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkProxy.h; sourceTree = "<group>"; };
+		942130BF14B455C000969D38 /* NetworkProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkProxy.m; sourceTree = "<group>"; };
+		942130C014B455C000969D38 /* RepoBrowserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepoBrowserTableViewController.h; sourceTree = "<group>"; };
+		942130C114B455C000969D38 /* RepoBrowserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepoBrowserTableViewController.m; sourceTree = "<group>"; };
+		942130C214B455C000969D38 /* Repository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
+		942130C314B455C000969D38 /* Repository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Repository.m; sourceTree = "<group>"; };
+		942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoBrowserTableViewController.xib; sourceTree = "<group>"; };
+		942CBD5E14B5A1B80047F712 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
+		942CBD5F14B5A1B80047F712 /* Tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tree.m; sourceTree = "<group>"; };
+		942CBD6214B607990047F712 /* Blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blob.h; sourceTree = "<group>"; };
+		942CBD6314B607990047F712 /* Blob.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Blob.m; sourceTree = "<group>"; };
+		946CB2A514B4651700BBFDAD /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		946CB2A614B4651700BBFDAD /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		946CB2A914B4796000BBFDAD /* Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Commit.h; sourceTree = "<group>"; };
+		946CB2AA14B4796000BBFDAD /* Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Commit.m; sourceTree = "<group>"; };
+		946CB2AC14B48E6000BBFDAD /* TreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewController.h; sourceTree = "<group>"; };
+		946CB2AD14B48E6000BBFDAD /* TreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewController.m; sourceTree = "<group>"; };
+		946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeViewController.xib; sourceTree = "<group>"; };
 		949FB12F14B3327800D3E713 /* Github To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		949FB13314B3327800D3E713 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		949FB13514B3327800D3E713 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		949FB13714B3327800D3E713 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		949FB13B14B3327800D3E713 /* Github To Go-Info.plist */ = {isa = PBXFileReference; path = "Github To Go-Info.plist"; sourceTree = "<group>"; };
+		949FB13B14B3327800D3E713 /* Github To Go-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Github To Go-Info.plist"; sourceTree = "<group>"; };
 		949FB13D14B3327800D3E713 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		949FB13F14B3327800D3E713 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */ = {isa = PBXFileReference; path = "Github To Go-Prefix.pch"; sourceTree = "<group>"; };
-		949FB14214B3327800D3E713 /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Github To Go-Prefix.pch"; sourceTree = "<group>"; };
+		949FB14214B3327800D3E713 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		949FB14314B3327800D3E713 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		949FB14514B3327800D3E713 /* FirstViewController.h */ = {isa = PBXFileReference; path = FirstViewController.h; sourceTree = "<group>"; };
-		949FB14614B3327800D3E713 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		949FB14814B3327800D3E713 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		949FB14A14B3327800D3E713 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		949FB14C14B3327800D3E713 /* SecondViewController.h */ = {isa = PBXFileReference; path = SecondViewController.h; sourceTree = "<group>"; };
+		949FB14C14B3327800D3E713 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		949FB14D14B3327800D3E713 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
 		949FB14F14B3327800D3E713 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		949FB15114B3327800D3E713 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
-		949FB15414B3327800D3E713 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstViewController.xib; sourceTree = "<group>"; };
 		949FB15714B3327800D3E713 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,19 +113,34 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				942CBD6214B607990047F712 /* Blob.h */,
+				942CBD6314B607990047F712 /* Blob.m */,
+				942CBD5E14B5A1B80047F712 /* Tree.h */,
+				942CBD5F14B5A1B80047F712 /* Tree.m */,
+				946CB2A514B4651700BBFDAD /* Person.h */,
+				946CB2A614B4651700BBFDAD /* Person.m */,
+				942130BE14B455C000969D38 /* NetworkProxy.h */,
+				942130BF14B455C000969D38 /* NetworkProxy.m */,
+				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
+				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
+				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
+				942130C214B455C000969D38 /* Repository.h */,
+				942130C314B455C000969D38 /* Repository.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
-				949FB14514B3327800D3E713 /* FirstViewController.h */,
-				949FB14614B3327800D3E713 /* FirstViewController.m */,
 				949FB14814B3327800D3E713 /* first.png */,
 				949FB14A14B3327800D3E713 /* first@2x.png */,
 				949FB14C14B3327800D3E713 /* SecondViewController.h */,
 				949FB14D14B3327800D3E713 /* SecondViewController.m */,
 				949FB14F14B3327800D3E713 /* second.png */,
 				949FB15114B3327800D3E713 /* second@2x.png */,
-				949FB15314B3327800D3E713 /* FirstViewController.xib */,
 				949FB15614B3327800D3E713 /* SecondViewController.xib */,
 				949FB13A14B3327800D3E713 /* Supporting Files */,
+				946CB2A914B4796000BBFDAD /* Commit.h */,
+				946CB2AA14B4796000BBFDAD /* Commit.m */,
+				946CB2AC14B48E6000BBFDAD /* TreeViewController.h */,
+				946CB2AD14B48E6000BBFDAD /* TreeViewController.m */,
+				946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */,
 			);
 			path = "Github To Go";
 			sourceTree = "<group>";
@@ -173,8 +211,9 @@
 				949FB14B14B3327800D3E713 /* first@2x.png in Resources */,
 				949FB15014B3327800D3E713 /* second.png in Resources */,
 				949FB15214B3327800D3E713 /* second@2x.png in Resources */,
-				949FB15514B3327800D3E713 /* FirstViewController.xib in Resources */,
 				949FB15814B3327800D3E713 /* SecondViewController.xib in Resources */,
+				942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */,
+				946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,8 +226,15 @@
 			files = (
 				949FB14014B3327800D3E713 /* main.m in Sources */,
 				949FB14414B3327800D3E713 /* AppDelegate.m in Sources */,
-				949FB14714B3327800D3E713 /* FirstViewController.m in Sources */,
 				949FB14E14B3327800D3E713 /* SecondViewController.m in Sources */,
+				942130C414B455C000969D38 /* NetworkProxy.m in Sources */,
+				942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */,
+				942130C614B455C000969D38 /* Repository.m in Sources */,
+				946CB2A714B4651700BBFDAD /* Person.m in Sources */,
+				946CB2AB14B4796000BBFDAD /* Commit.m in Sources */,
+				946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */,
+				942CBD6014B5A1B80047F712 /* Tree.m in Sources */,
+				942CBD6414B607990047F712 /* Blob.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,14 +247,6 @@
 				949FB13D14B3327800D3E713 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		949FB15314B3327800D3E713 /* FirstViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				949FB15414B3327800D3E713 /* en */,
-			);
-			name = FirstViewController.xib;
 			sourceTree = "<group>";
 		};
 		949FB15614B3327800D3E713 /* SecondViewController.xib */ = {
@@ -271,6 +309,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -282,6 +321,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -306,6 +346,7 @@
 				949FB15D14B3327800D3E713 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
