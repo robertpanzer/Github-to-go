@@ -11,6 +11,7 @@
 @interface RepoBrowserTableViewController : UITableViewController {
     NSMutableData* receivedData;
     NSArray* myRepos;
+    NSArray* watchedRepos;
 }
 
 - (IBAction)onFetchRepos;
@@ -18,4 +19,6 @@
 -(void)showBranch:(NSString*)urlOfBranch;
 
 @property(strong) NSArray* myRepos;
+@property(strong) NSArray* watchedRepos;
+
 @end

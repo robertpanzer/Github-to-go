@@ -55,6 +55,9 @@
     return [branches valueForKey:self.masterBranch];
 }
 
+- (NSString*)fullName {
+    return [NSString stringWithFormat:@"%@/%@", self.owner.login, self.name];
+}
 - (void)dealloc {
     [name release];
     [description release];

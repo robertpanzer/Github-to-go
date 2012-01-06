@@ -17,6 +17,8 @@
 @implementation RepoBrowserTableViewController
 
 @synthesize myRepos;
+@synthesize watchedRepos;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,13 +34,10 @@
     return self;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+- (void)dealloc {
+    [myRepos release];
+    [watchedRepos release];
+    [super dealloc];
 }
 
 - (void)didReceiveMemoryWarning
@@ -102,13 +101,19 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [myRepos count];
+    if (section == 0) {
+        return [myRepos count];
+    } else if (section == 1) {
+        return [watchedRepos count];
+    } else {
+        return -1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -121,12 +126,25 @@
     }
     
     // Configure the cell...
-    Repository* repo = (Repository*)[myRepos objectAtIndex:indexPath.row];
-    cell.textLabel.text = repo.name;
+    Repository* repo = nil;
+    if (indexPath.section == 0) {
+        repo = (Repository*)[myRepos objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
+        repo = (Repository*)[watchedRepos objectAtIndex:indexPath.row];
+    }
+    cell.textLabel.text = repo.fullName;
     cell.detailTextLabel.text = repo.description;
     
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"My Repositories";   
+    } else {
+        return @"Watched Repositories";
+    }
 }
 
 /*
@@ -171,24 +189,28 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Repository* repo = nil;
     if (indexPath.section == 0) {
-        Repository* repo = [self.myRepos objectAtIndex:indexPath.row];
-        NSString* masterBranchUrl = [repo urlOfMasterBranch];
-        if (masterBranchUrl == nil) {
-            NSString* urlString = [NSString stringWithFormat:@"https://api.github.com/repos/%@/%@/branches", repo.owner.login, repo.name];
-            [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, id data) {
-                NSLog(@"StatusCode: %d", statusCode);
-                if (statusCode == 200) {
-                    [repo setBranchesFromJSONObject:(NSArray*)data];
-                    NSLog(@"Master Branch URL: %@", [repo urlOfMasterBranch]);
-                    [self showBranch:[repo urlOfMasterBranch]];
-                }
-            } 
-             ];
-        } else {
-            [self showBranch:[repo urlOfMasterBranch]];
-        }
-        
+        repo = [self.myRepos objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
+        repo = [self.watchedRepos objectAtIndex:indexPath.row];
+    } else {
+        return;
+    }
+    NSString* masterBranchUrl = [repo urlOfMasterBranch];
+    if (masterBranchUrl == nil) {
+        NSString* urlString = [NSString stringWithFormat:@"https://api.github.com/repos/%@/%@/branches", repo.owner.login, repo.name];
+        [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, id data) {
+            NSLog(@"StatusCode: %d", statusCode);
+            if (statusCode == 200) {
+                [repo setBranchesFromJSONObject:(NSArray*)data];
+                NSLog(@"Master Branch URL: %@", [repo urlOfMasterBranch]);
+                [self showBranch:[repo urlOfMasterBranch]];
+            }
+        } 
+         ];
+    } else {
+        [self showBranch:[repo urlOfMasterBranch]];
     }
 }
 
@@ -210,6 +232,20 @@
             [(UITableView*)self.view reloadData];
         } 
     ];
+    
+    [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, id data) {
+        NSLog(@"StatusCode: %d", statusCode);
+        NSMutableArray* newRepos = [[[NSMutableArray alloc] init] autorelease];
+        NSArray* array = (NSArray*) data;
+        NSLog(@"%d elements", [array count]);
+        for (NSDictionary* repoObject in array) {
+            [newRepos addObject:[[[Repository alloc] initFromJSONObject:repoObject] autorelease]];
+        }
+        self.watchedRepos = newRepos;
+        [(UITableView*)self.view reloadData];
+    } 
+     ];
+
 }
 
 
@@ -228,4 +264,5 @@
      ];
 
 }
+
 @end

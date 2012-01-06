@@ -22,6 +22,7 @@
 @property(strong) NSString* masterBranch;
 @property(strong) Person* owner;
 @property(strong) NSDictionary* branches;
+@property(readonly) NSString* fullName;
 
 -(id) initFromJSONObject:(NSDictionary*)json;
 
