@@ -11,16 +11,22 @@
 @implementation Person 
 
 @synthesize login;
+@synthesize name;
+@synthesize email;
 
 - (id)initWithJSONObject:(NSDictionary*)dictionary {
     self = [super init];
     if (self) {
         self.login = [dictionary objectForKey:@"login"];
+        self.name = [dictionary objectForKey:@"name"];
+        self.email = [dictionary objectForKey:@"email"];
     }
     return self;
 }
 - (void)dealloc {
     [login release];
+    [name release];
+    [email release];
     [super dealloc];
 }
 @end

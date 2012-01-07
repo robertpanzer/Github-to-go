@@ -1,39 +1,55 @@
 //
-//  TreeViewController.m
+//  BranchViewController.m
 //  Github To Go
 //
-//  Created by Robert Panzer on 04.01.12.
+//  Created by Robert Panzer on 07.01.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "TreeViewController.h"
-#import "BlobViewController.h"
+#import "BranchViewController.h"
+
 #import "NetworkProxy.h"
-#import "Tree.h"
-#import "Blob.h"
+#import "Commit.h"
 
-@implementation TreeViewController
+@implementation BranchViewController
 
-@synthesize tree;
+@synthesize commits;
+@synthesize commitUrls;
 
 -(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
-    self = [super initWithNibName:@"TreeViewController" bundle:nil];
+    self = [super initWithNibName:@"BranchViewController" bundle:nil];
     if (self) {
+        self.commits = [[[NSMutableArray alloc] init] autorelease];
+        self.commitUrls = [[[StringQueue alloc] init] autorelease];
         self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Loaded tree %@", data);
-                self.tree = [[[Tree alloc] initWithJSONObject:data andName:aName] autorelease];
-                [(UITableView*)self.view reloadData];
-            }
-        }];
+        [self.commitUrls enqueueString:anUrl];
+        [self loadCommits:10];
+        
     }
     return self;
 }
 
-- (void)dealloc {
-    [tree release];
-    [super dealloc];
+-(void)loadCommits:(int)count {
+    NSString* url = [self.commitUrls dequeueString];
+    if (url != nil) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
+            if (statusCode == 200) {
+                NSLog(@"Loaded commit %@", data);
+                Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
+                [(NSMutableArray*)self.commits addObject:commit];
+                for (NSString* parentUrl in commit.parentUrls) {
+                    [self.commitUrls enqueueString:parentUrl];
+                }
+                
+                if (![self.commitUrls isEmpty] && count > 0) {
+                    [self loadCommits:count - 1];
+                } else {
+                    [(UITableView*)self.view reloadData];
+                    isLoading = NO;
+                }
+            }
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,61 +109,40 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tree == nil) {
-        return 0;
-    } else {
-        return 2;
-    }
+    // Return the number of sections.
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-//    return treeContent.count;
-    if (section == 0) {
-        return tree.subtreeCount;
-    } else if (section == 1) {
-        return tree.blobCount;
+    if ([commitUrls isEmpty]) {
+        return commits.count;
     } else {
-        @throw [NSString stringWithFormat:@"Section %d out of range!", section];
+        return commits.count + 1;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifierTree = @"TreeCell";
-    static NSString *CellIdentifierBlob = @"BlobCell";
+    static NSString *CellIdentifier = @"Cell";
     
-    if (indexPath.section == 0) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierTree];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree] autorelease];
-        }
-        Tree* file = [self.tree treeAtIndex:indexPath.row];
-        cell.textLabel.text = file.name;
-        return cell;
-    } else if (indexPath.section == 1) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierBlob];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob] autorelease];
-        }
-        Blob* blob = [self.tree blobAtIndex:indexPath.row];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d bytes", blob.size]; 
-        cell.textLabel.text = blob.name;
-        return cell;
-    } else {
-        @throw [NSString stringWithFormat:@"Section %d out of range", indexPath.section];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
-        
+    
+    if (indexPath.row < commits.count && ![commitUrls isEmpty]) {
+        Commit* commit = [commits objectAtIndex:indexPath.row];
+        cell.textLabel.text = commit.message;
+        cell.detailTextLabel.text = commit.author.name;
+    } else {
+        cell.textLabel.text = @"Load 10 More Commits...";
+        cell.detailTextLabel.text = nil;
+    }
+    return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"Trees";   
-    } else {
-        return @"Blobs";
-    }
-}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -191,18 +186,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        Tree* subtree = [self.tree treeAtIndex:indexPath.row];
-        NSString* treeUrl = subtree.url;
-        NSString* subtreeName = subtree.name;
-        TreeViewController* newController = [[[TreeViewController alloc] initWithUrl:treeUrl name:subtreeName] autorelease];
-        [self.navigationController pushViewController:newController animated:YES];
+    if (indexPath.row < commits.count) {
+        
     } else {
-        Blob* blob = [self.tree blobAtIndex:indexPath.row];
-        NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl name:blob.name] autorelease];
-        [self.navigationController pushViewController:blobViewController animated:YES];
+        if (!isLoading) {
+            isLoading = YES;
+            [self loadCommits:10];
+        }
     }
+    // Navigation logic may go here. Create and push another view controller.
+    /*
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+     [self.navigationController pushViewController:detailViewController animated:YES];
+     [detailViewController release];
+     */
 }
 
 @end

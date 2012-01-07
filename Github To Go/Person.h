@@ -10,9 +10,14 @@
 
 @interface Person : NSObject {
     NSString* login;
+    NSString* name;
+    NSString* email;
+
 }
 
 @property(strong) NSString* login;
+@property(strong) NSString* name;
+@property(strong) NSString* email;
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary;
 @end

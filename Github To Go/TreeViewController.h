@@ -13,7 +13,6 @@
     Tree* tree;
 }
 
-//@property(strong) NSArray* treeContent;
 @property(strong) Tree* tree;
 
 -(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;

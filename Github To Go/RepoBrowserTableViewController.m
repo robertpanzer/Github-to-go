@@ -9,10 +9,12 @@
 #import "RepoBrowserTableViewController.h"
 //#import "SBJson.h"
 #import "Repository.h"
+#import "RepositoryViewController.h"
 #import "Commit.h"
 #import "Tree.h"
 #import "NetworkProxy.h"
 #import "TreeViewController.h"
+#import "Branch.h"
 
 @implementation RepoBrowserTableViewController
 
@@ -24,7 +26,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = NSLocalizedString(@"First", @"First");
+        self.title = NSLocalizedString(@"Repositories", @"Repositories");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
         self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] 
                                                    initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh 
@@ -92,8 +94,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -197,9 +198,12 @@
     } else {
         return;
     }
-    NSString* masterBranchUrl = [repo urlOfMasterBranch];
-    if (masterBranchUrl == nil) {
-        NSString* urlString = [NSString stringWithFormat:@"https://api.github.com/repos/%@/%@/branches", repo.owner.login, repo.name];
+    repo.masterBranch = @"master";
+    if (repo.masterBranch == nil) {
+        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithUrl:repo.url name:repo.fullName] autorelease];
+        [self.navigationController pushViewController:repoViewController animated:YES];
+    } else {
+        NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
         [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, id data) {
             NSLog(@"StatusCode: %d", statusCode);
             if (statusCode == 200) {
@@ -209,12 +213,22 @@
             }
         } 
          ];
-    } else {
-        [self showBranch:[repo urlOfMasterBranch]];
     }
 }
 
-
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    Repository* repo = nil;
+    if (indexPath.section == 0) {
+        repo = [self.myRepos objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
+        repo = [self.watchedRepos objectAtIndex:indexPath.row];
+    } else {
+        return;
+    }
+    
+    RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithUrl:repo.url name:repo.fullName] autorelease];
+    [self.navigationController pushViewController:repoViewController animated:YES];
+}
 
 #pragma mark - fetch data
 
@@ -249,15 +263,15 @@
 }
 
 
--(void)showBranch:(NSString*)urlOfBranch {
-    [[NetworkProxy sharedInstance] loadStringFromURL:urlOfBranch block:^(int statusCode, id data) {
+-(void)showBranch:(NSString*)commitUrl {
+    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         NSDictionary* dict = (NSDictionary*)data;
         for (NSString* key in dict.keyEnumerator) {
             NSLog(@"Key: %@", key);
         }
         NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:[(NSDictionary*)data objectForKey:@"commit"]] autorelease];
+        Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
         TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 

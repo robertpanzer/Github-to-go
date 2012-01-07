@@ -14,8 +14,14 @@
 @synthesize name;
 @synthesize description;
 @synthesize masterBranch;
+@synthesize url;
 @synthesize owner;
 @synthesize branches;
+@synthesize repoId;
+@synthesize watchers;
+@synthesize private;
+@synthesize fork;
+@synthesize forks;
 
 -(id) initFromJSONObject:(NSDictionary*)jsonObject {
     self = [super init];
@@ -25,12 +31,27 @@
         if (![[jsonObject objectForKey:@"master_branch"] isKindOfClass:[NSNull class]]) {
             self.masterBranch = [jsonObject objectForKey:@"master_branch"];
         }
+
         self.branches = [[[NSMutableDictionary alloc] init] autorelease];
-        NSLog(@"Masterbranch: %@", masterBranch);
+
         NSDictionary* ownerObject = (NSDictionary*)[jsonObject objectForKey:@"owner"];
-        
         self.owner = [[[Person alloc] initWithJSONObject:ownerObject] autorelease];
+
+        self.repoId = [jsonObject valueForKey:@"id"];
+
+        self.private = [[jsonObject valueForKey:@"private"] boolValue];
         
+        self.watchers = [jsonObject valueForKey:@"watchers"];
+
+        self.fork = [[jsonObject valueForKey:@"fork"] boolValue];
+
+        self.forks = [jsonObject valueForKey:@"forks"];
+
+        self.url = [jsonObject valueForKey:@"url"];
+        
+        for (NSString* key in jsonObject.keyEnumerator) {
+            NSLog(@"Repo Key: %@", key);
+        }
         
     }
     return self;    
@@ -50,7 +71,7 @@
         return nil;
     }
     if (self.masterBranch == nil) {
-        self.masterBranch = @"master";
+        return nil;
     }
     return [branches valueForKey:self.masterBranch];
 }
@@ -62,6 +83,11 @@
     [name release];
     [description release];
     [masterBranch release];
+    [owner release];
+    [branches release];
+    [repoId release];
+    [forks release];
+    [url release];
     [super dealloc];
 }
 @end

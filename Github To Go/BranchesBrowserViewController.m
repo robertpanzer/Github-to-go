@@ -1,29 +1,33 @@
 //
-//  TreeViewController.m
+//  BranchesBrowserViewController.m
 //  Github To Go
 //
-//  Created by Robert Panzer on 04.01.12.
+//  Created by Robert Panzer on 06.01.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "TreeViewController.h"
-#import "BlobViewController.h"
+#import "BranchesBrowserViewController.h"
 #import "NetworkProxy.h"
-#import "Tree.h"
-#import "Blob.h"
+#import "Branch.h"
+#import "TreeViewController.h"
+#import "BranchViewController.h"
 
-@implementation TreeViewController
+@implementation BranchesBrowserViewController
 
-@synthesize tree;
+@synthesize branches;
 
 -(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
-    self = [super initWithNibName:@"TreeViewController" bundle:nil];
+    self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
     if (self) {
         self.navigationItem.title = aName;
         [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
             if (statusCode == 200) {
-                NSLog(@"Loaded tree %@", data);
-                self.tree = [[[Tree alloc] initWithJSONObject:data andName:aName] autorelease];
+                NSLog(@"Loaded branches %@", data);
+                NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
+                for (NSDictionary* jsonBranch in data) {
+                    [newBranches addObject:[[[Branch alloc] initWithJSONObject:jsonBranch] autorelease]];
+                }
+                self.branches = newBranches;
                 [(UITableView*)self.view reloadData];
             }
         }];
@@ -32,10 +36,9 @@
 }
 
 - (void)dealloc {
-    [tree release];
+    [branches release];
     [super dealloc];
 }
-
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -93,61 +96,36 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tree == nil) {
+    // Return the number of sections.
+    if (branches == nil) {
         return 0;
     } else {
-        return 2;
+        return 1;
     }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-//    return treeContent.count;
-    if (section == 0) {
-        return tree.subtreeCount;
-    } else if (section == 1) {
-        return tree.blobCount;
-    } else {
-        @throw [NSString stringWithFormat:@"Section %d out of range!", section];
-    }
+    return branches.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifierTree = @"TreeCell";
-    static NSString *CellIdentifierBlob = @"BlobCell";
+    static NSString *CellIdentifier = @"Cell";
     
-    if (indexPath.section == 0) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierTree];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree] autorelease];
-        }
-        Tree* file = [self.tree treeAtIndex:indexPath.row];
-        cell.textLabel.text = file.name;
-        return cell;
-    } else if (indexPath.section == 1) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierBlob];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob] autorelease];
-        }
-        Blob* blob = [self.tree blobAtIndex:indexPath.row];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d bytes", blob.size]; 
-        cell.textLabel.text = blob.name;
-        return cell;
-    } else {
-        @throw [NSString stringWithFormat:@"Section %d out of range", indexPath.section];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
-        
+    
+    Branch* branch = [branches objectAtIndex:indexPath.row];
+    cell.textLabel.text = branch.name;
+    
+    return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"Trees";   
-    } else {
-        return @"Blobs";
-    }
-}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -191,18 +169,31 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        Tree* subtree = [self.tree treeAtIndex:indexPath.row];
-        NSString* treeUrl = subtree.url;
-        NSString* subtreeName = subtree.name;
-        TreeViewController* newController = [[[TreeViewController alloc] initWithUrl:treeUrl name:subtreeName] autorelease];
-        [self.navigationController pushViewController:newController animated:YES];
-    } else {
-        Blob* blob = [self.tree blobAtIndex:indexPath.row];
-        NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl name:blob.name] autorelease];
-        [self.navigationController pushViewController:blobViewController animated:YES];
-    }
+    Branch* branch = [branches objectAtIndex:indexPath.row];
+    NSString* commitUrl = branch.commitUrl;
+
+    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
+        NSLog(@"StatusCode: %d", statusCode);
+        NSDictionary* dict = (NSDictionary*)data;
+        for (NSString* key in dict.keyEnumerator) {
+            NSLog(@"Key: %@", key);
+        }
+        NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
+        Commit* commit = [[[Commit alloc] initWithJSONObject:[(NSDictionary*)data objectForKey:@"commit"]] autorelease];
+        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
+        [self.navigationController pushViewController:treeViewController animated:YES];
+    } 
+     ];
+    
 }
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    Branch* branch = [branches objectAtIndex:indexPath.row];
+    NSString* commitUrl = branch.commitUrl;
+
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithUrl:commitUrl name:branch.name] autorelease];
+    [self.navigationController pushViewController:branchViewController animated:YES];
+}
+
 
 @end
