@@ -11,6 +11,7 @@
 #import "Repository.h"
 #import "NetworkProxy.h"
 #import "RepoBrowserTableViewController.h"
+#import "SettingsViewController.h"
 
 @implementation AppDelegate
 
@@ -35,9 +36,12 @@
     RepoBrowserTableViewController* repoBrowserController = [[[RepoBrowserTableViewController alloc] initWithNibName:@"RepoBrowserTableViewController" bundle:nil] autorelease];
     
     UINavigationController* navigationController = [[[UINavigationController alloc] initWithRootViewController:repoBrowserController] autorelease];
-    UIViewController *viewController2 = [[[SecondViewController alloc] initWithNibName:@"SecondViewController" bundle:nil] autorelease];
+    
+    SettingsViewController* settingsController = [[[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil] autorelease];
+    
+    
     self.tabBarController = [[[UITabBarController alloc] init] autorelease];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navigationController, viewController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navigationController, settingsController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;

@@ -11,6 +11,9 @@
 		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
 		942130C614B455C000969D38 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C314B455C000969D38 /* Repository.m */; };
 		942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */; };
+		9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5014B9D97300B6538E /* SettingsViewController.m */; };
+		9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9424DE5114B9D97300B6538E /* SettingsViewController.xib */; };
+		9424DE5614B9FEDF00B6538E /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5514B9FEDF00B6538E /* Settings.m */; };
 		942CBD6014B5A1B80047F712 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD5F14B5A1B80047F712 /* Tree.m */; };
 		942CBD6414B607990047F712 /* Blob.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6314B607990047F712 /* Blob.m */; };
 		942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6614B6116A0047F712 /* BlobViewController.m */; };
@@ -50,6 +53,11 @@
 		942130C214B455C000969D38 /* Repository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
 		942130C314B455C000969D38 /* Repository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Repository.m; sourceTree = "<group>"; };
 		942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoBrowserTableViewController.xib; sourceTree = "<group>"; };
+		9424DE4F14B9D97300B6538E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		9424DE5014B9D97300B6538E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		9424DE5114B9D97300B6538E /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		9424DE5414B9FEDF00B6538E /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		9424DE5514B9FEDF00B6538E /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		942CBD5E14B5A1B80047F712 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
 		942CBD5F14B5A1B80047F712 /* Tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tree.m; sourceTree = "<group>"; };
 		942CBD6214B607990047F712 /* Blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blob.h; sourceTree = "<group>"; };
@@ -112,6 +120,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9424DE4D14B9D95000B6538E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				9424DE4F14B9D97300B6538E /* SettingsViewController.h */,
+				9424DE5014B9D97300B6538E /* SettingsViewController.m */,
+				9424DE5114B9D97300B6538E /* SettingsViewController.xib */,
+				9424DE5414B9FEDF00B6538E /* Settings.h */,
+				9424DE5514B9FEDF00B6538E /* Settings.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		945FE32014B8BA7E0099FD84 /* General Data Structures */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +228,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				9424DE4D14B9D95000B6538E /* Settings */,
 				9466DBD114B7ACBC00238151 /* Branch */,
 				9466DBCD14B7AC2200238151 /* Blob */,
 				9466DBCF14B7AC8700238151 /* Tree */,
@@ -313,6 +334,7 @@
 				94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */,
 				94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */,
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
+				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +363,8 @@
 				9466DBD414B7ACCD00238151 /* Branch.m in Sources */,
 				9466DBD914B7B77800238151 /* BranchViewController.m in Sources */,
 				945FE31E14B866F60099FD84 /* StringQueue.m in Sources */,
+				9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */,
+				9424DE5614B9FEDF00B6538E /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
