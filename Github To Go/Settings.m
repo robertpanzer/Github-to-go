@@ -14,7 +14,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 @interface Settings()
 
-- (void)setCredentials;
+- (void)setCredentialsUser:(NSString*)aUsername password:(NSString*)aPassword;
 - (void)loadSettingsFromFile;
 - (void)storeSettingsToFile;
 @end
@@ -55,23 +55,26 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 - (void)setUsername:(NSString*)aUserName {
     [settings setValue:aUserName forKey:@"username"];
-    [self setCredentials];
+    [self setCredentialsUser:aUserName password:nil];
     [self storeSettingsToFile];
 }
 
 - (NSString*) password {
-    return password;
+    NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
+    NSURLCredential* credential = [credentialStorage defaultCredentialForProtectionSpace:protectionSpace];
+    NSLog(@"Password: %@", credential.password);
+    return credential.password;
 }
 
 - (void) setPassword:(NSString *)aPassword {
     if (password != aPassword) {
         [password release];
         password = [aPassword retain];
-        [self setCredentials];
+        [self setCredentialsUser:self.username password:aPassword];
     }
 }
 
-- (void)setCredentials {
+- (void)setCredentialsUser:(NSString*)aUserName password:(NSString*)aPassword {
     // First delete old credentials, so that prior, even working credentials do not work any more.
     NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
     NSDictionary* credentials = [credentialStorage credentialsForProtectionSpace:protectionSpace];
@@ -79,10 +82,10 @@ static NSURLProtectionSpace* protectionSpace = nil;
         [credentialStorage removeCredential:credential forProtectionSpace:protectionSpace];
     }
     
-    if (self.username != nil && self.username.length > 0 && self.password != nil && self.password.length > 0) {
+    if (aUserName != nil && aUserName.length > 0 && aPassword != nil && aPassword.length > 0) {
 
-        NSURLCredential* credential = [[[NSURLCredential alloc] initWithUser:self.username
-                                                                    password:password
+        NSURLCredential* credential = [[[NSURLCredential alloc] initWithUser:aUserName
+                                                                    password:aPassword
                                                                  persistence:NSURLCredentialPersistencePermanent]
                                        autorelease];
         
@@ -91,7 +94,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
     
     credentials = [credentialStorage credentialsForProtectionSpace:protectionSpace];
     for (NSURLCredential* credential in credentials.objectEnumerator) {
-        NSLog(@"Credential for %@", credential.user);
+        NSLog(@"Credential for %@:%@", credential.user, credential.password);
     }
 
     [[NSURLCache sharedURLCache] removeAllCachedResponses];

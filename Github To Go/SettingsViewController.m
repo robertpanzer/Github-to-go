@@ -109,8 +109,10 @@
         
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            usernameTextfield.text = [Settings sharedInstance].username;
             return userNameCell;
         } else if (indexPath.row == 1) {
+            passwordTextfield.text = [Settings sharedInstance].password;
             return passwordCell;
         }
     }
@@ -185,6 +187,7 @@
     UITextField* textfield = (UITextField*)sender;
     [Settings sharedInstance].username = textfield.text;
     [sender resignFirstResponder];
+    [(UITableView*)self.view reloadData];
 }
 
 -(void)passwordChanged:(id)sender {
