@@ -142,48 +142,27 @@ static NetworkProxy* networkProxyInstance;
     NSLog(@"Failed: %@", error);
     UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
     [alertView show];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 -(void)connection:(NSURLConnection *)connection
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     NSLog(@"didReceiveAuthenticationChallenge %@", challenge);
-//    if ([challenge previousFailureCount] == 0) {
-//        NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
-//        NSURLProtectionSpace* protectionSpace = challenge.protectionSpace;
-//        NSLog(@"AuthenticationMethod %@", protectionSpace.authenticationMethod);
-//        NSLog(@"DistinguishedNames %@", protectionSpace.distinguishedNames);
-//        NSLog(@"Host %@", protectionSpace.host);
-//        NSLog(@"Port %d", protectionSpace.port);
-//        NSLog(@"Realm %@", protectionSpace.realm);
-//        NSDictionary* credentials = [credentialStorage credentialsForProtectionSpace:[challenge protectionSpace]];
-//        NSURLCredential* credential = [credentials objectForKey:@"robertpanzer"];
-//        if (credential == nil) {
-////            UIAlertView* passwordView = [[UIAlertView alloc] initWithTitle:@"Authentication" message:@"Please enter authentication data" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-////            passwordView.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-////            [passwordView show];
-////            NSString* user = [[passwordView textFieldAtIndex:0] text];
-////            NSString* password = [[passwordView textFieldAtIndex:1] text];
-//            credential = [NSURLCredential credentialWithUser:@"robertpanzer"
-//                                                    password:@"Blaumeise42"
-//                                                 persistence:NSURLCredentialPersistenceForSession];
-////            NSLog(@"User: %@", user);
-////            [passwordView release];
-//        }
-////        newCredential = [NSURLCredential credentialWithUser:@"robertpanzer"
-////                                                   password:@"Blaumeise02"
-////                                                persistence:NSURLCredentialPersistenceNone];
-//        [[challenge sender] useCredential:credential
-//               forAuthenticationChallenge:challenge];
-//    } else {
-        [[challenge sender] cancelAuthenticationChallenge:challenge];
-////        UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:@"Authentication failed" message:@"Wrong password or unknown user!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
-////        [alertView show];
-//        // inform the user that the user name and password
-//        // in the preferences are incorrect
-//        // [self showPreferencesCredentialsAreIncorrectPanel:self];
-//    }
+    if ([challenge previousFailureCount] == 0) {
+        NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
+        NSURLCredential* credential = [credentialStorage defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+        if (credential != nil) {
+            [[challenge sender] useCredential:credential
+                   forAuthenticationChallenge:challenge];
+            return;
+        }
+    }
+    [[challenge sender] cancelAuthenticationChallenge:challenge];
+    UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:@"Authentication failed" message:@"Wrong password or unknown user!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
+    [alertView show];
 }
+
 - (void)dealloc {
     [self.connectionDataSet release];
     [super dealloc];

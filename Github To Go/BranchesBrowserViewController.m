@@ -174,12 +174,7 @@
 
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
         NSLog(@"StatusCode: %d", statusCode);
-        NSDictionary* dict = (NSDictionary*)data;
-        for (NSString* key in dict.keyEnumerator) {
-            NSLog(@"Key: %@", key);
-        }
-        NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:[(NSDictionary*)data objectForKey:@"commit"]] autorelease];
+        Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
         TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 
