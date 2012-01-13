@@ -10,46 +10,66 @@
 
 #import "NetworkProxy.h"
 #import "Commit.h"
+#import "CommitViewController.h"
+
+@interface BranchViewController()
+
+-(void)loadCommits;
+
+@end
 
 @implementation BranchViewController
 
 @synthesize commits;
-@synthesize commitUrls;
+@synthesize missingCommits;
+@synthesize repository;
+@synthesize branch;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
+-(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
     if (self) {
-        self.commits = [[[NSMutableArray alloc] init] autorelease];
-        self.commitUrls = [[[StringQueue alloc] init] autorelease];
-        self.navigationItem.title = aName;
-        [self.commitUrls enqueueString:anUrl];
-        [self loadCommits:10];
+        self.repository = aRepository;
+        self.branch = aBranch;
+        commits = [[NSMutableArray alloc] init];
+        missingCommits = [[NSMutableSet alloc] init];
+        self.navigationItem.title = aBranch.name;
+        [self loadCommits];
         
     }
     return self;
 }
 
--(void)loadCommits:(int)count {
-    NSString* url = [self.commitUrls dequeueString];
-    if (url != nil) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Loaded commit %@", data);
-                Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
+- (void)dealloc {
+    [commits release];
+    [missingCommits release];
+    [repository release];
+    [branch release];
+    [super dealloc];
+}
+
+-(void)loadCommits {
+    NSString* sha = nil;
+    if (self.commits.count == 0) {
+        sha = branch.sha;
+    } else {
+        sha = [self.missingCommits anyObject];
+        [(NSMutableSet*)self.missingCommits removeObject:sha];
+    }
+    NSString* url = [[[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha] autorelease];
+    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
+        if (statusCode == 200) {
+            NSArray * jsonCommits = (NSArray*)data;
+            for (NSDictionary* jsonCommit in jsonCommits) {
+                Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit] autorelease];
                 [(NSMutableArray*)self.commits addObject:commit];
-                for (NSString* parentUrl in commit.parentUrls) {
-                    [self.commitUrls enqueueString:parentUrl];
-                }
-                
-                if (![self.commitUrls isEmpty] && count > 0) {
-                    [self loadCommits:count - 1];
-                } else {
-                    [(UITableView*)self.view reloadData];
-                    isLoading = NO;
+                for (NSString* parent in commit.parentCommitShas) {
+                    [self.missingCommits addObject:parent];
                 }
             }
-        }];
-    }
+            isLoading = NO;
+            [(UITableView*)self.view reloadData];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -116,7 +136,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if ([commitUrls isEmpty]) {
+    if (self.missingCommits.count == 0 || self.commits == 0) {
         return commits.count;
     } else {
         return commits.count + 1;
@@ -132,13 +152,19 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    if (indexPath.row < commits.count && ![commitUrls isEmpty]) {
+    if (indexPath.row < commits.count) {
         Commit* commit = [commits objectAtIndex:indexPath.row];
         cell.textLabel.text = commit.message;
         cell.detailTextLabel.text = commit.author.name;
     } else {
-        cell.textLabel.text = @"Load 10 More Commits...";
+        cell.textLabel.text = @"Load More Commits...";
         cell.detailTextLabel.text = nil;
+        
+        if (!isLoading) {
+            isLoading = YES;
+            [self loadCommits];
+        }
+
     }
     return cell;
 }
@@ -188,11 +214,9 @@
 {
     if (indexPath.row < commits.count) {
         
-    } else {
-        if (!isLoading) {
-            isLoading = YES;
-            [self loadCommits:10];
-        }
+        Commit* commit = [commits objectAtIndex:indexPath.row];
+        CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message] autorelease];
+        [self.navigationController pushViewController:commitViewController animated:YES];
     }
     // Navigation logic may go here. Create and push another view controller.
     /*

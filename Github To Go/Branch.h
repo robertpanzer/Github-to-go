@@ -11,10 +11,12 @@
 @interface Branch : NSObject {
     NSString* name;
     NSString* commitUrl;
+    NSString* sha;
 }
 
 @property(strong) NSString* name;
 @property(strong) NSString* commitUrl;
+@property(strong) NSString* sha;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject;
 

@@ -12,6 +12,7 @@
 
 @synthesize name;
 @synthesize commitUrl;
+@synthesize sha;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject {
     self = [super init];
@@ -19,6 +20,7 @@
         self.name = [jsonObject objectForKey:@"name"];
         NSDictionary* commitObject = [jsonObject objectForKey:@"commit"];
         self.commitUrl = [commitObject objectForKey:@"url"];
+        self.sha = [commitObject objectForKey:@"sha"];
     }
     return self;
 }

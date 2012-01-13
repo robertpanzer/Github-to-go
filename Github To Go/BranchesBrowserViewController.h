@@ -7,13 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Repository.h"
 
 @interface BranchesBrowserViewController : UITableViewController {
     NSArray* branches;
+    Repository* repository;
 }
 
 @property(strong) NSArray* branches;
+@property(strong) Repository* repository;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;
+-(id)initWithRepository:(Repository*)repo;
 
 @end

@@ -14,17 +14,18 @@
 
 @synthesize repository;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
+-(id)initWithRepository:(Repository*)repo {
     self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
     if (self) {
-        self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Loaded repository %@", data);
-                self.repository = [[[Repository alloc] initFromJSONObject:data] autorelease];
-                [(UITableView*)self.view reloadData];
-            }
-        }];
+        self.navigationItem.title = repo.fullName;
+//        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
+//            if (statusCode == 200) {
+//                NSLog(@"Loaded repository %@", data);
+//                self.repository = [[[Repository alloc] initFromJSONObject:data] autorelease];
+//                [(UITableView*)self.view reloadData];
+//            }
+//        }];
+        self.repository = repo;
     }
     return self;
 }
@@ -225,18 +226,9 @@
 {
     
     if (indexPath.section == 1 && indexPath.row == 0) {
-        NSString* branchesUrl = [[[NSString alloc] initWithFormat:@"%@/branches", self.repository.url] autorelease];
-        BranchesBrowserViewController* branchesBrowserViewController = [[[BranchesBrowserViewController alloc] initWithUrl:branchesUrl name:@"Branches"] autorelease];
+        BranchesBrowserViewController* branchesBrowserViewController = [[[BranchesBrowserViewController alloc] initWithRepository:repository] autorelease];
         [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
     }
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
 }
 
 @end

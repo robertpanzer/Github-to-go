@@ -7,22 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Repository.h"
+#import "Branch.h"
 #import "StringQueue.h"
 
 @interface BranchViewController : UITableViewController {
     NSArray* commits;
 
-    StringQueue* commitUrls; 
+    NSMutableSet* missingCommits; 
+    
+    Repository* repository;
+    
+    Branch* branch;
     
     BOOL isLoading;
 }
 
 @property(strong) NSArray* commits;
-@property(strong) StringQueue* commitUrls;
+@property(strong) NSMutableSet* missingCommits;
+@property(strong) Repository* repository;
+@property(strong) Branch* branch;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;
+-(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch;
 
--(void)loadCommits:(int)count;
+//-(void)loadCommits:(int)count;
 
 @end

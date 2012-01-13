@@ -15,6 +15,6 @@
 
 @property(strong) Repository* repository;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;
+-(id)initWithRepository:(Repository*)repository;
 
 @end

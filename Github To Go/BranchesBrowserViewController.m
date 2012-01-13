@@ -15,12 +15,15 @@
 @implementation BranchesBrowserViewController
 
 @synthesize branches;
+@synthesize repository;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
+-(id)initWithRepository:(Repository*)aRepository {
     self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
     if (self) {
-        self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
+        self.repository = aRepository;
+        self.navigationItem.title = repository.fullName;
+        NSString* url = [[[NSString alloc] initWithFormat:@"%@/branches", repository.url] autorelease];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
             if (statusCode == 200) {
                 NSLog(@"Loaded branches %@", data);
                 NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
@@ -184,9 +187,9 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
     Branch* branch = [branches objectAtIndex:indexPath.row];
-    NSString* commitUrl = branch.commitUrl;
+//    NSString* commitUrl = branch.commitUrl;
 
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithUrl:commitUrl name:branch.name] autorelease];
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithRepository:repository andBranch:branch] autorelease];
     [self.navigationController pushViewController:branchViewController animated:YES];
 }
 

@@ -200,7 +200,7 @@
     }
     repo.masterBranch = @"master";
     if (repo.masterBranch == nil) {
-        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithUrl:repo.url name:repo.fullName] autorelease];
+        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
         [self.navigationController pushViewController:repoViewController animated:YES];
     } else {
         NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
@@ -226,7 +226,7 @@
         return;
     }
     
-    RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithUrl:repo.url name:repo.fullName] autorelease];
+    RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
     [self.navigationController pushViewController:repoViewController animated:YES];
 }
 

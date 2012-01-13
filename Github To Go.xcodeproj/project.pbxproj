@@ -41,6 +41,8 @@
 		949FB15014B3327800D3E713 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14F14B3327800D3E713 /* second.png */; };
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
 		949FB15814B3327800D3E713 /* SecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15614B3327800D3E713 /* SecondViewController.xib */; };
+		94A12FD914BB972A00453774 /* CommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A12FD714BB972A00453774 /* CommitViewController.m */; };
+		94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A12FD814BB972A00453774 /* CommitViewController.xib */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
 /* End PBXBuildFile section */
@@ -101,6 +103,9 @@
 		949FB14F14B3327800D3E713 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		949FB15114B3327800D3E713 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
 		949FB15714B3327800D3E713 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondViewController.xib; sourceTree = "<group>"; };
+		94A12FD614BB972A00453774 /* CommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitViewController.h; sourceTree = "<group>"; };
+		94A12FD714BB972A00453774 /* CommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitViewController.m; sourceTree = "<group>"; };
+		94A12FD814BB972A00453774 /* CommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitViewController.xib; sourceTree = "<group>"; };
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
@@ -194,6 +199,9 @@
 			children = (
 				946CB2A914B4796000BBFDAD /* Commit.h */,
 				946CB2AA14B4796000BBFDAD /* Commit.m */,
+				94A12FD614BB972A00453774 /* CommitViewController.h */,
+				94A12FD714BB972A00453774 /* CommitViewController.m */,
+				94A12FD814BB972A00453774 /* CommitViewController.xib */,
 			);
 			name = Commit;
 			sourceTree = "<group>";
@@ -335,6 +343,7 @@
 				94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */,
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
+				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +374,7 @@
 				945FE31E14B866F60099FD84 /* StringQueue.m in Sources */,
 				9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */,
 				9424DE5614B9FEDF00B6538E /* Settings.m in Sources */,
+				94A12FD914BB972A00453774 /* CommitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
