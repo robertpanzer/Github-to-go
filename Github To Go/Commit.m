@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "CommitFile.h"
 #import "Commit.h"
 #import <Foundation/Foundation.h>
 
@@ -18,17 +19,19 @@
 @synthesize message;
 @synthesize parentUrls;
 @synthesize parentCommitShas;
+@synthesize changedFiles;
 @synthesize sha;
 @synthesize deletions;
 @synthesize additions;
 @synthesize total;
 @synthesize committedDate;
 @synthesize authoredDate;
+@synthesize repository;
 
-
--(id)initMinimalDataWithJSONObject:(NSDictionary *)jsonObject {
+-(id)initMinimalDataWithJSONObject:(NSDictionary *)jsonObject repository:(Repository *)aRepository {
     self = [super init];
     if (self) {
+        self.repository = aRepository;
         self.commitUrl = [jsonObject objectForKey:@"url"];
 
         NSDictionary* jsonCommit = [jsonObject objectForKey:@"commit"];
@@ -57,9 +60,10 @@
     return self;
 }
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject {
+-(id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository *)aRepository {
     self = [super init];
     if (self) {
+        self.repository = aRepository;
         self.commitUrl = [jsonObject objectForKey:@"url"];
         self.sha = [jsonObject objectForKey:@"sha"];
         
@@ -81,7 +85,13 @@
         
         self.message = [jsonCommit objectForKey:@"message"];
         
-        NSDictionary* files = [jsonObject objectForKey:@"files"];
+        NSArray* files = [jsonObject objectForKey:@"files"];
+        NSMutableArray* newChangedFiles = [[[NSMutableArray alloc] init] autorelease];
+        for (NSDictionary* file in files) {
+            CommitFile* changedFile = [[[CommitFile alloc] initWithJSONObject:file commit:self] autorelease];
+            [newChangedFiles addObject:changedFile];
+        }
+        self.changedFiles = newChangedFiles;
 
         NSDictionary* stats = [jsonObject objectForKey:@"stats"];
         self.deletions = ((NSNumber*)[stats objectForKey:@"deletions"]).intValue;
@@ -107,14 +117,18 @@
 
 - (void)dealloc {
     [treeUrl release];
+    [commitUrl release];
     [author release];
     [committer release];
     [message release];
     [parentUrls release];
     [parentCommitShas release];
+    [changedFiles release];
     [sha release];
     [committedDate release];
     [authoredDate release];
+    
+    
     [super dealloc];
 }
 @end

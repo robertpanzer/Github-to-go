@@ -209,7 +209,7 @@
             if (statusCode == 200) {
                 [repo setBranchesFromJSONObject:(NSArray*)data];
                 NSLog(@"Master Branch URL: %@", [repo urlOfMasterBranch]);
-                [self showBranch:[repo urlOfMasterBranch]];
+                [self showMasterBranch:repo];
             }
         } 
          ];
@@ -263,7 +263,8 @@
 }
 
 
--(void)showBranch:(NSString*)commitUrl {
+-(void)showMasterBranch:(Repository*)repository {
+    NSString* commitUrl = [repository urlOfMasterBranch];
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         NSDictionary* dict = (NSDictionary*)data;
@@ -271,7 +272,7 @@
             NSLog(@"Key: %@", key);
         }
         NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
+        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
         TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 

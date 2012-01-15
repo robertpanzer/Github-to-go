@@ -11,12 +11,16 @@
 #import "Blob.h"
 
 @interface BlobViewController : UIViewController {
-    UITextView* textView;
+    UIScrollView* scrollView;
     Blob* blob;
+    NSString* url;
+    NSString* name;
 }
 
-@property(strong) IBOutlet UITextView* textView;
+@property(strong) IBOutlet UIScrollView* scrollView;
 @property(strong) Blob* blob;
+@property(strong) NSString* name;
+@property(strong) NSString* url;
 
 - (id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;
 

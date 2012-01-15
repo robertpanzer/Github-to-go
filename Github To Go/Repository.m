@@ -88,6 +88,7 @@
     [repoId release];
     [forks release];
     [url release];
+    [watchers release];
     [super dealloc];
 }
 @end

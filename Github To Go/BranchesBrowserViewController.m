@@ -177,7 +177,7 @@
 
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
         NSLog(@"StatusCode: %d", statusCode);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
+        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
         TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 

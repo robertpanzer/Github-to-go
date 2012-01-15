@@ -8,20 +8,24 @@
 
 #import "CommitViewController.h"
 #import "NetworkProxy.h"
+#import "CommitFile.h"
+#import "FileDiffViewController.h"
 
 @implementation CommitViewController
 
 @synthesize commit;
 @synthesize messageCell;
 @synthesize messageTextView;
+@synthesize repository;
 
--(id)initWithUrl:(NSString*)anUrl andName:(NSString*)aName {
+-(id)initWithUrl:(NSString*)anUrl andName:(NSString*)aName repository:(Repository*)aRepository {
     self = [super initWithNibName:@"CommitViewController" bundle:nil];
     if (self) {
+        self.repository = aRepository;
         self.navigationItem.title = aName;
         [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
             if (statusCode == 200) {
-                self.commit = [[[Commit alloc] initWithJSONObject:data] autorelease];
+                self.commit = [[[Commit alloc] initWithJSONObject:data repository:aRepository] autorelease];
                 [(UITableView*)self.view reloadData];
             }
         }];
@@ -31,6 +35,7 @@
 
 - (void)dealloc {
     [commit release];
+    [repository release];
     [super dealloc];
 }
 
@@ -95,7 +100,7 @@
     if (self.commit == nil) {
         return 0;
     } else {
-        return 5;
+        return 6;
     }
 }
 
@@ -114,20 +119,19 @@
         return 3;
     } else if (section == 4) {
         return 3;
+    } else if (section == 5) {
+        return commit.changedFiles.count;
+    } else {
+        return 0;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.section == 0 && indexPath.row == 1) {
-//        self.messageTextView.text = commit.message;
-//        [self.messageTextView layoutSubviews];
-//        self.messageTextView.frame = CGRectMake(0.0f, 0.0f, self.messageTextView.contentSize.width, self.messageTextView.contentSize.height);
-//        self.messageCell.frame = CGRectMake(0.0f, 0.0f, self.messageTextView.contentSize.width, self.messageTextView.contentSize.height);
-//        return self.messageCell;
-//    }
+
     static NSString *CellIdentifier = @"Cell";
     static NSString *MessageCellIdentifier = @"MessageCell";
+    static NSString *FilenameCellIdentifier = @"FilenameCell";
     
     UITableViewCell *cell = nil;
     if (indexPath.section == 1) {
@@ -135,6 +139,15 @@
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                            reuseIdentifier:MessageCellIdentifier] autorelease];
+        }
+    } else if (indexPath.section == 5) {
+        cell = [tableView dequeueReusableCellWithIdentifier:FilenameCellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                           reuseIdentifier:FilenameCellIdentifier] autorelease];
+            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+            cell.textLabel.numberOfLines = 0;
+
         }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -220,7 +233,13 @@
                     cell.detailTextLabel.text = commit.authoredDate;
                     break;
             }
+            break;
+        case 5: {
+            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
             
+            cell.textLabel.text = commitFile.fileName;
+        }
+            break;
         default:
             break;
     }
@@ -240,10 +259,10 @@
             return @"Committer";
         case 4:
             return @"Author";
-            
-            
+        case 5:
+            return @"Files";
         default:
-            break;
+            return @"???";
     }
 }
 
@@ -290,11 +309,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    NSLog(@"%@", ((UITableViewCell*)[tableView.visibleCells objectAtIndex:0]));
-    
-    UITableViewCell* tableViewCell = [tableView.visibleCells objectAtIndex:1];
-    NSLog(@"%@", tableViewCell.textLabel);
+    if (indexPath.section == 5) {
+        CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
+        FileDiffViewController* fileDiffViewController = [[[FileDiffViewController alloc] initWithCommitFile:commitFile] autorelease];
+        [self.navigationController pushViewController:fileDiffViewController animated:YES];
+        
+    }
     // Navigation logic may go here. Create and push another view controller.
     /*
      <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
@@ -308,13 +328,21 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 1) {
-
-        UIFont* font = [UIFont systemFontOfSize:17.0f];
+        UIFont* font = [UIFont boldSystemFontOfSize:17.0f];
         
         CGSize size = [commit.message sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
                 
         CGFloat height = size.height + 10;
 
+        return height > tableView.rowHeight ? height : tableView.rowHeight;
+    } else if (indexPath.section == 5) {
+        UIFont* font = [UIFont boldSystemFontOfSize:17.0f];
+
+        CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row];
+        CGSize size = [commitFile.fileName sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+        
+        CGFloat height = size.height + 10;
+        
         return height > tableView.rowHeight ? height : tableView.rowHeight;
     } else {
         return tableView.rowHeight;

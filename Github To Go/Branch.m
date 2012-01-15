@@ -28,6 +28,7 @@
 - (void)dealloc {
     [name release];
     [commitUrl release];
+    [sha release];
     [super dealloc];
 }
 

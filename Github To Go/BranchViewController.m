@@ -60,7 +60,7 @@
         if (statusCode == 200) {
             NSArray * jsonCommits = (NSArray*)data;
             for (NSDictionary* jsonCommit in jsonCommits) {
-                Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit] autorelease];
+                Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository] autorelease];
                 [(NSMutableArray*)self.commits addObject:commit];
                 for (NSString* parent in commit.parentCommitShas) {
                     [self.missingCommits addObject:parent];
@@ -215,7 +215,7 @@
     if (indexPath.row < commits.count) {
         
         Commit* commit = [commits objectAtIndex:indexPath.row];
-        CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message] autorelease];
+        CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message repository:repository] autorelease];
         [self.navigationController pushViewController:commitViewController animated:YES];
     }
     // Navigation logic may go here. Create and push another view controller.

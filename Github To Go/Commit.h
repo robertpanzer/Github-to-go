@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "Person.h"
+#import "Repository.h"
 
 @interface Commit : NSObject {
     NSString* treeUrl;
@@ -18,12 +19,15 @@
     NSString* message;
     NSArray* parentUrls;
     NSArray* parentCommitShas;
+    NSArray* changedFiles;
     NSString* sha;
     int deletions;
     int additions;
     int total;
     NSString* committedDate;
     NSString* authoredDate;
+    
+    Repository* repository;
 }
 
 @property(strong) NSString* treeUrl;
@@ -33,6 +37,7 @@
 @property(strong) NSString* message;
 @property(strong) NSArray* parentUrls;
 @property(strong) NSArray* parentCommitShas;
+@property(strong) NSArray* changedFiles;
 @property(strong) NSString* sha;
 
 @property int deletions;
@@ -42,9 +47,11 @@
 @property(strong) NSString* committedDate;
 @property(strong) NSString* authoredDate;
 
--(id)initMinimalDataWithJSONObject:(NSDictionary*)jsonObject;
+@property(strong) Repository* repository;
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject;
+-(id)initMinimalDataWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
+
+-(id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
 
 
 @end

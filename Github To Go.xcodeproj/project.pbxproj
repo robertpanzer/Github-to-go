@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9402273C14C167260036A676 /* CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402273B14C167260036A676 /* CommitFile.m */; };
+		9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402274014C1A1140036A676 /* FileDiffViewController.m */; };
+		9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9402274114C1A1140036A676 /* FileDiffViewController.xib */; };
 		942130C414B455C000969D38 /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130BF14B455C000969D38 /* NetworkProxy.m */; };
 		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
 		942130C614B455C000969D38 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C314B455C000969D38 /* Repository.m */; };
@@ -48,6 +51,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9402273A14C167260036A676 /* CommitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitFile.h; sourceTree = "<group>"; };
+		9402273B14C167260036A676 /* CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitFile.m; sourceTree = "<group>"; };
+		9402273F14C1A1140036A676 /* FileDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDiffViewController.h; sourceTree = "<group>"; };
+		9402274014C1A1140036A676 /* FileDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileDiffViewController.m; sourceTree = "<group>"; };
+		9402274114C1A1140036A676 /* FileDiffViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileDiffViewController.xib; sourceTree = "<group>"; };
 		942130BE14B455C000969D38 /* NetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkProxy.h; sourceTree = "<group>"; };
 		942130BF14B455C000969D38 /* NetworkProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkProxy.m; sourceTree = "<group>"; };
 		942130C014B455C000969D38 /* RepoBrowserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepoBrowserTableViewController.h; sourceTree = "<group>"; };
@@ -125,6 +133,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9402273E14C1A0D10036A676 /* CommitFile */ = {
+			isa = PBXGroup;
+			children = (
+				9402273A14C167260036A676 /* CommitFile.h */,
+				9402273B14C167260036A676 /* CommitFile.m */,
+				9402273F14C1A1140036A676 /* FileDiffViewController.h */,
+				9402274014C1A1140036A676 /* FileDiffViewController.m */,
+				9402274114C1A1140036A676 /* FileDiffViewController.xib */,
+			);
+			name = CommitFile;
+			sourceTree = "<group>";
+		};
 		9424DE4D14B9D95000B6538E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +256,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				9402273E14C1A0D10036A676 /* CommitFile */,
 				9424DE4D14B9D95000B6538E /* Settings */,
 				9466DBD114B7ACBC00238151 /* Branch */,
 				9466DBCD14B7AC2200238151 /* Blob */,
@@ -344,6 +365,7 @@
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
+				9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +397,8 @@
 				9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */,
 				9424DE5614B9FEDF00B6538E /* Settings.m in Sources */,
 				94A12FD914BB972A00453774 /* CommitViewController.m in Sources */,
+				9402273C14C167260036A676 /* CommitFile.m in Sources */,
+				9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

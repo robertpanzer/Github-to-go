@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Repository.h"
 
 @interface RepoBrowserTableViewController : UITableViewController {
-    NSMutableData* receivedData;
     NSArray* myRepos;
     NSArray* watchedRepos;
 }
 
 - (IBAction)onFetchRepos;
 
--(void)showBranch:(NSString*)urlOfBranch;
+-(void)showMasterBranch:(Repository*)repository;
 
 @property(strong) NSArray* myRepos;
 @property(strong) NSArray* watchedRepos;
