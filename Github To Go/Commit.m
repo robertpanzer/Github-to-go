@@ -33,6 +33,7 @@
     if (self) {
         self.repository = aRepository;
         self.commitUrl = [jsonObject objectForKey:@"url"];
+        self.sha = [jsonObject objectForKey:@"sha"];
 
         NSDictionary* jsonCommit = [jsonObject objectForKey:@"commit"];
         

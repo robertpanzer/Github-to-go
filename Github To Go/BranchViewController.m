@@ -62,9 +62,16 @@
             for (NSDictionary* jsonCommit in jsonCommits) {
                 Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository] autorelease];
                 [(NSMutableArray*)self.commits addObject:commit];
+                if ([missingCommits containsObject:commit.sha]) {
+                    [self.missingCommits removeObject:commit.sha];
+                }
                 for (NSString* parent in commit.parentCommitShas) {
                     [self.missingCommits addObject:parent];
                 }
+                
+            }
+            for (NSString* missingCommit in missingCommits) {
+                NSLog(@"Missing commit: %@", missingCommit);
             }
             isLoading = NO;
             [(UITableView*)self.view reloadData];
