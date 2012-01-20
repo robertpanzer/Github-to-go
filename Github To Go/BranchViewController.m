@@ -153,16 +153,61 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
+    static NSString *CommitCellIdentifier = @"CommitCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    static NSInteger MESSAGE_TAG = 1;
+    static NSInteger AUTHOR_TAG = 2;
+    static NSInteger SHA_TAG = 3;
+    UITableViewCell *cell = nil;
+    UILabel* messageLabel = nil;
+    UILabel* shaLabel = nil;
+    UILabel* authorLabel = nil;
+    
+    if (indexPath.row < commits.count) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CommitCellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier] autorelease];
+            
+            messageLabel = [[[UILabel alloc] initWithFrame:CGRectMake(3.0f, 3.0f, 314.0f, 15.0f)] autorelease];
+            messageLabel.font = [UIFont systemFontOfSize:14.0f];
+            messageLabel.tag = MESSAGE_TAG;
+            messageLabel.textAlignment = UITextAlignmentLeft;
+            messageLabel.textColor = [UIColor blackColor];
+            [cell.contentView addSubview:messageLabel];
+            
+            shaLabel = [[[UILabel alloc] initWithFrame:CGRectMake(240.0f, 20.0f, 77.0f, 15.0f)] autorelease];
+            shaLabel.font = [UIFont systemFontOfSize:11.0f];
+            shaLabel.tag = SHA_TAG;
+            shaLabel.textAlignment = UITextAlignmentRight;
+            shaLabel.textColor = [UIColor lightGrayColor];
+            [cell.contentView addSubview:shaLabel];
+            
+            
+            authorLabel = [[[UILabel alloc] initWithFrame:CGRectMake(3.0f, 20.0f, 200.0f, 14.0f)] autorelease];
+            authorLabel.font = [UIFont systemFontOfSize:11.0f];
+            authorLabel.tag = AUTHOR_TAG;
+            authorLabel.textAlignment = UITextAlignmentLeft;
+            authorLabel.textColor = [UIColor lightGrayColor];
+            [cell.contentView addSubview:authorLabel];
+            
+        } else {
+            messageLabel = (UILabel*)[cell.contentView viewWithTag:MESSAGE_TAG];
+            shaLabel = (UILabel*)[cell.contentView viewWithTag:SHA_TAG];
+            authorLabel =  (UILabel*)[cell.contentView viewWithTag:AUTHOR_TAG];
+            
+        }
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        }
     }
     
     if (indexPath.row < commits.count) {
         Commit* commit = [commits objectAtIndex:indexPath.row];
-        cell.textLabel.text = commit.message;
-        cell.detailTextLabel.text = commit.author.name;
+        messageLabel.text = commit.message;
+        shaLabel.text = [commit.sha substringToIndex:7];
+        authorLabel.text = commit.author.name;
     } else {
         cell.textLabel.text = @"Load More Commits...";
         cell.detailTextLabel.text = nil;
@@ -176,6 +221,13 @@
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row < commits.count) {
+        return 36;
+    } else {
+        return 50;
+    }
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

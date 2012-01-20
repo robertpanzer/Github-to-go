@@ -15,6 +15,7 @@
 #import "NetworkProxy.h"
 #import "TreeViewController.h"
 #import "Branch.h"
+#import "Settings.h"
 
 @implementation RepoBrowserTableViewController
 
@@ -28,10 +29,6 @@
     if (self) {
         self.title = NSLocalizedString(@"Repositories", @"Repositories");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
-        self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] 
-                                                   initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh 
-                                                   target:self 
-                                                   action:@selector(onFetchRepos)] autorelease];
     }
     return self;
 }
@@ -62,7 +59,13 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    [self onFetchRepos];
+    UITableView* tableView = (UITableView*)self.view;
+    UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(0.0f, -50.0f, tableView.bounds.size.width, 50.0f)] autorelease];
+    label.text = @"Drop to reload";
+    [tableView addSubview:label];
+
+    [tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)]; 
+    
 }
 
 - (void)viewDidUnload
@@ -232,6 +235,21 @@
 
 #pragma mark - fetch data
 
+-(void)swiped:(UIPanGestureRecognizer*)sender {
+    UITableView* tableView = (UITableView*)self.view;
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"Translation: %f", tableView.contentOffset.y);
+        if (tableView.contentOffset.y < -10.0f) {
+            [self onFetchRepos];
+        }
+    } else {
+        if (tableView.contentOffset.y < -50.0f) {
+            [tableView setContentOffset:CGPointMake(0.0f, -50.0f)];
+        }
+    }
+    
+}
+
 - (IBAction)onFetchRepos {
     NSLog(@"Get repositories");
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, id data) {
@@ -253,7 +271,10 @@
         NSArray* array = (NSArray*) data;
         NSLog(@"%d elements", [array count]);
         for (NSDictionary* repoObject in array) {
-            [newRepos addObject:[[[Repository alloc] initFromJSONObject:repoObject] autorelease]];
+            Repository* repo = [[[Repository alloc] initFromJSONObject:repoObject] autorelease];
+            if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
+                [newRepos addObject:repo];
+            }
         }
         self.watchedRepos = newRepos;
         [(UITableView*)self.view reloadData];
@@ -261,6 +282,8 @@
      ];
 
 }
+
+
 
 
 -(void)showMasterBranch:(Repository*)repository {

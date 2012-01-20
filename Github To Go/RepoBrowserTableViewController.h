@@ -15,7 +15,7 @@
 }
 
 - (IBAction)onFetchRepos;
-
+- (IBAction)swiped:(id)sender;
 -(void)showMasterBranch:(Repository*)repository;
 
 @property(strong) NSArray* myRepos;

@@ -104,7 +104,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
     NSString *path;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	path = [paths objectAtIndex:0];
-	path = [path stringByAppendingPathComponent:@"Settings"];
+	path = [path stringByAppendingPathComponent:@"Settings.plist"];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         settings = [[NSMutableDictionary alloc] initWithContentsOfFile:path];    
     } else {
@@ -116,7 +116,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
     NSString *path;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	path = [paths objectAtIndex:0];
-	path = [path stringByAppendingPathComponent:@"Settings"];
+	path = [path stringByAppendingPathComponent:@"Settings.plist"];
     [settings writeToFile:path atomically:YES];
 }
 

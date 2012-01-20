@@ -48,11 +48,6 @@
         self.forks = [jsonObject valueForKey:@"forks"];
 
         self.url = [jsonObject valueForKey:@"url"];
-        
-        for (NSString* key in jsonObject.keyEnumerator) {
-            NSLog(@"Repo Key: %@", key);
-        }
-        
     }
     return self;    
 }
