@@ -44,6 +44,11 @@
         if (jsonAuthor != [NSNull null]) {
             self.author = [[[Person alloc] initWithJSONObject:jsonAuthor] autorelease];
         }
+        id jsonCommitter = [jsonCommit valueForKey:@"author"];
+        if (jsonCommitter != [NSNull null]) {
+            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitter] autorelease];
+            self.committedDate = [jsonCommitter objectForKey:@"date"];
+        }
 
         self.message = [jsonCommit objectForKey:@"message"];
 

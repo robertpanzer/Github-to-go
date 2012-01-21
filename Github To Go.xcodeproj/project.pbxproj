@@ -21,6 +21,7 @@
 		942CBD6414B607990047F712 /* Blob.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6314B607990047F712 /* Blob.m */; };
 		942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6614B6116A0047F712 /* BlobViewController.m */; };
 		942CBD6914B6116A0047F712 /* BlobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942CBD6714B6116A0047F712 /* BlobViewController.xib */; };
+		9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9435DC2314C935D800E0B15B /* CommitHistoryList.m */; };
 		94435C1114B772BB0037CF87 /* BranchesBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */; };
 		94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */; };
 		9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9445E35A14B6198300BB929C /* NSData+Base64.m */; };
@@ -75,6 +76,8 @@
 		942CBD6514B6116A0047F712 /* BlobViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlobViewController.h; sourceTree = "<group>"; };
 		942CBD6614B6116A0047F712 /* BlobViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlobViewController.m; sourceTree = "<group>"; };
 		942CBD6714B6116A0047F712 /* BlobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlobViewController.xib; sourceTree = "<group>"; };
+		9435DC2214C935D800E0B15B /* CommitHistoryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitHistoryList.h; sourceTree = "<group>"; };
+		9435DC2314C935D800E0B15B /* CommitHistoryList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitHistoryList.m; sourceTree = "<group>"; };
 		94435C0E14B772BB0037CF87 /* BranchesBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchesBrowserViewController.h; sourceTree = "<group>"; };
 		94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BranchesBrowserViewController.m; sourceTree = "<group>"; };
 		94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BranchesBrowserViewController.xib; sourceTree = "<group>"; };
@@ -210,6 +213,8 @@
 				9466DBD614B7B77800238151 /* BranchViewController.h */,
 				9466DBD714B7B77800238151 /* BranchViewController.m */,
 				9466DBD814B7B77800238151 /* BranchViewController.xib */,
+				9435DC2214C935D800E0B15B /* CommitHistoryList.h */,
+				9435DC2314C935D800E0B15B /* CommitHistoryList.m */,
 			);
 			name = Branch;
 			sourceTree = "<group>";
@@ -399,6 +404,7 @@
 				94A12FD914BB972A00453774 /* CommitViewController.m in Sources */,
 				9402273C14C167260036A676 /* CommitFile.m in Sources */,
 				9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */,
+				9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

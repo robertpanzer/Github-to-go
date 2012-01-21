@@ -16,11 +16,15 @@
 
 -(void)loadCommits;
 
+-(Commit*)commitForIndexPath:(NSIndexPath*)indexPath;
+
 @end
+
+
+
 
 @implementation BranchViewController
 
-@synthesize commits;
 @synthesize missingCommits;
 @synthesize repository;
 @synthesize branch;
@@ -30,8 +34,8 @@
     if (self) {
         self.repository = aRepository;
         self.branch = aBranch;
-        commits = [[NSMutableArray alloc] init];
         missingCommits = [[NSMutableSet alloc] init];
+        commitHistoryList = [[CommitHistoryList alloc] init];
         self.navigationItem.title = aBranch.name;
         [self loadCommits];
         
@@ -40,16 +44,21 @@
 }
 
 - (void)dealloc {
-    [commits release];
     [missingCommits release];
     [repository release];
     [branch release];
+    [commitHistoryList release];
     [super dealloc];
+}
+
+-(Commit *)commitForIndexPath:(NSIndexPath *)indexPath {
+    NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
+    return [[commitHistoryList commitsForDay:date] objectAtIndex:indexPath.row];
 }
 
 -(void)loadCommits {
     NSString* sha = nil;
-    if (self.commits.count == 0) {
+    if (commitHistoryList.dates.count == 0) {
         sha = branch.sha;
     } else {
         sha = [self.missingCommits anyObject];
@@ -61,7 +70,8 @@
             NSArray * jsonCommits = (NSArray*)data;
             for (NSDictionary* jsonCommit in jsonCommits) {
                 Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository] autorelease];
-                [(NSMutableArray*)self.commits addObject:commit];
+                [commitHistoryList addCommit:commit];
+                
                 if ([missingCommits containsObject:commit.sha]) {
                     [self.missingCommits removeObject:commit.sha];
                 }
@@ -137,16 +147,23 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+//    return 1;
+    return commitHistoryList.dates.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSString* date = [commitHistoryList.dates objectAtIndex:section];
+    NSArray* commitsForDay = [commitHistoryList commitsForDay:date];
+    int commitCount = commitsForDay.count;
+    
     // Return the number of rows in the section.
-    if (self.missingCommits.count == 0 || self.commits == 0) {
-        return commits.count;
+    if (commitHistoryList == nil) {
+        return 0;
+    } else if (self.missingCommits.count == 0 || section < commitHistoryList.dates.count - 1) {
+        return commitCount;
     } else {
-        return commits.count + 1;
+        return commitCount + 1;
     }
 }
 
@@ -163,7 +180,13 @@
     UILabel* shaLabel = nil;
     UILabel* authorLabel = nil;
     
-    if (indexPath.row < commits.count) {
+    NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
+    NSArray* commitsForDay = [commitHistoryList commitsForDay:date];
+    
+    BOOL isCommit = indexPath.section < commitHistoryList.dates.count - 1 || 
+    (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < commitsForDay.count);
+    
+    if (isCommit) {
         cell = [tableView dequeueReusableCellWithIdentifier:CommitCellIdentifier];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier] autorelease];
@@ -203,8 +226,8 @@
         }
     }
     
-    if (indexPath.row < commits.count) {
-        Commit* commit = [commits objectAtIndex:indexPath.row];
+    if (isCommit) {
+        Commit* commit = [commitsForDay objectAtIndex:indexPath.row];
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
         authorLabel.text = commit.author.name;
@@ -222,12 +245,21 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < commits.count) {
+    NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
+    BOOL isCommit = indexPath.section < commitHistoryList.dates.count - 1 || 
+    (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
+
+    if (isCommit) {
         return 36;
     } else {
         return 50;
     }
 }
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [commitHistoryList.dates objectAtIndex:section];
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -271,9 +303,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < commits.count) {
+    NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
+    BOOL isCommit = indexPath.section < commitHistoryList.dates.count - 1 || 
+    (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
+
+    if (isCommit) {
         
-        Commit* commit = [commits objectAtIndex:indexPath.row];
+        Commit* commit = [self commitForIndexPath:indexPath];  //[commits objectAtIndex:indexPath.row];
         CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message repository:repository] autorelease];
         [self.navigationController pushViewController:commitViewController animated:YES];
     }

@@ -10,10 +10,12 @@
 #import "Repository.h"
 #import "Branch.h"
 #import "StringQueue.h"
+#import "CommitHistoryList.h"
+
 
 @interface BranchViewController : UITableViewController {
-    NSArray* commits;
-
+    CommitHistoryList* commitHistoryList;
+    
     NSMutableSet* missingCommits; 
     
     Repository* repository;
@@ -23,7 +25,6 @@
     BOOL isLoading;
 }
 
-@property(strong) NSArray* commits;
 @property(strong) NSMutableSet* missingCommits;
 @property(strong) Repository* repository;
 @property(strong) Branch* branch;
