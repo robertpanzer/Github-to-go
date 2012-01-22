@@ -8,7 +8,7 @@
 
 #import "BlobViewController.h"
 #import "NetworkProxy.h"
-
+#import "BranchViewController.h"
 
 static CGFloat widthLineNumberColumn = 50.0f;
 static CGFloat xOffsetContentColumn = 55.0f;
@@ -18,15 +18,20 @@ static CGFloat xOffsetContentColumn = 55.0f;
 @synthesize scrollView;
 @synthesize blob;
 @synthesize url;
-@synthesize name;
+@synthesize absolutePath;
+@synthesize commitSha;
+@synthesize repository;
 
-- (id)initWithUrl:(NSString*)anUrl name:(NSString*)aName
+- (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString *)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
-        self.navigationItem.title = aName;
         self.url = anUrl;
-        self.name = aName;
+        repository = [aRepository retain];
+        
+        absolutePath = [anAbsolutePath retain];
+        commitSha = [aCommitSha retain];
+        self.navigationItem.title = [absolutePath pathComponents].lastObject;
     }
     return self;
 }
@@ -35,7 +40,8 @@ static CGFloat xOffsetContentColumn = 55.0f;
     [scrollView release];
     [blob release];
     [url release];
-    [name release];
+    [absolutePath release];
+    [repository release];
     [super dealloc];
 }
 
@@ -52,11 +58,14 @@ static CGFloat xOffsetContentColumn = 55.0f;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showBlobHistory:)] autorelease];
+
     // Do any additional setup after loading the view from its nib.
     
-    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            self.blob = [[[Blob alloc] initWithJSONObject:data andName:name] autorelease];
+            self.blob = [[[Blob alloc] initWithJSONObject:data absolutePath:absolutePath] autorelease];
 
             NSUInteger lineNumber = 1;
             NSUInteger blockStart = 0;
@@ -146,5 +155,13 @@ static CGFloat xOffsetContentColumn = 55.0f;
     // Return YES for supported orientations
     return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
 }
+
+-(void)showBlobHistory:(id)sender {
+    
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithBlob:blob commitSha:self.commitSha repository:repository] autorelease];
+    [self.navigationController pushViewController:branchViewController animated:YES];
+    
+}
+
 
 @end

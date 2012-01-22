@@ -10,25 +10,30 @@
 
 @implementation Tree
 
-@synthesize name;
+@synthesize absolutePath;
 @synthesize url;
 @synthesize subtrees;
 @synthesize blobs;
+@synthesize commitSha;
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject andName:(NSString*)aName {
+-(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString *)aCommitSha {
     self = [super init];
     if (self) {
-        self.name = aName;
+        absolutePath = [anAbsolutePath retain];
+        commitSha = [aCommitSha retain];
+        NSLog(@"Absolute path: %@", absolutePath);
         self.url = [jsonObject valueForKey:@"url"];
         NSMutableArray* newSubTrees = [[[NSMutableArray alloc] init] autorelease];
         NSMutableArray* newBlobs = [[[NSMutableArray alloc] init] autorelease];
         NSArray* files = [jsonObject valueForKey:@"tree"];
         for (NSDictionary* file in files) {
             if ([@"tree" isEqualToString:[file objectForKey:@"type"]]) {
-                Tree* subtree = [[[Tree alloc] initWithJSONObject:file andName:[file objectForKey:@"path"]] autorelease];
+                NSString* subTreePath = [absolutePath stringByAppendingPathComponent:[file objectForKey:@"path"]];
+                Tree* subtree = [[[Tree alloc] initWithJSONObject:file absolutePath:subTreePath commitSha:self.commitSha] autorelease];
                 [newSubTrees addObject:subtree]; 
             } else if ([@"blob" isEqualToString:[file objectForKey:@"type"]]) {
-                Blob* blob = [[[Blob alloc] initWithJSONObject:file andName:[file objectForKey:@"path"]] autorelease];
+                NSString* filename = [file objectForKey:@"path"];
+                Blob* blob = [[[Blob alloc] initWithJSONObject:file absolutePath:[absolutePath stringByAppendingPathComponent:filename]] autorelease];
                 [newBlobs addObject:blob];
             }
         }
@@ -56,11 +61,16 @@
     return ret;
 }
 
+-(NSString*)name {
+    return [absolutePath pathComponents].lastObject;
+}
+
 - (void)dealloc {
-    [name release];
+    [absolutePath release];
     [url release];
     [subtrees release];
     [blobs release];
+    [commitSha release];
     [super dealloc];
 }
 @end

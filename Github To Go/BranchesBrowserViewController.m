@@ -23,7 +23,7 @@
         self.repository = aRepository;
         self.navigationItem.title = repository.fullName;
         NSString* url = [[[NSString alloc] initWithFormat:@"%@/branches", repository.url] autorelease];
-        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
                 NSLog(@"Loaded branches %@", data);
                 NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
@@ -175,10 +175,10 @@
     Branch* branch = [branches objectAtIndex:indexPath.row];
     NSString* commitUrl = branch.commitUrl;
 
-    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
-        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
+        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:branch.sha repository:repository] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 
      ];

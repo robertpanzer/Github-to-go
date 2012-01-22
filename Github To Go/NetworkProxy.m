@@ -17,13 +17,15 @@ static NetworkProxy* networkProxyInstance;
     NSURLConnection* connection;
     NSMutableData* receivedData;
     NSString* url;
-    void (^block)(int, id);
+    NSDictionary* headerFields;
+    void (^block)(int, NSDictionary*, id);
 }
 @property(strong) NSNumber* statusCode;
 @property(strong) NSURLConnection* connection;
 @property(strong) NSMutableData* receivedData;
 @property(strong) NSString* url;
-@property(weak) void (^block)(int, id);
+@property(strong) NSDictionary* headerFields;
+@property(weak) void (^block)(int, NSDictionary*, id);
 @end
 
 @implementation ConnectionData 
@@ -32,7 +34,9 @@ static NetworkProxy* networkProxyInstance;
 @synthesize connection;
 @synthesize receivedData;
 @synthesize url;
+@synthesize headerFields;
 @synthesize block;
+
 
 - (id)initWithUrl:(NSString*)anUrl {
     self = [super init];
@@ -74,7 +78,7 @@ static NetworkProxy* networkProxyInstance;
     return self;
 }
 
--(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, id data) ) block {
+-(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
     NSURL* url = [NSURL URLWithString:urlString];
     NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     NSLog(@"Request %@", request);
@@ -103,8 +107,8 @@ static NetworkProxy* networkProxyInstance;
     NSError* error = [[[NSError alloc] init] autorelease];
     id object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
                  
-    void(^block)(int statusCode, id data) = connectionData.block;
-    block([connectionData.statusCode intValue], object);
+    void(^block)(int statusCode, NSDictionary* headerFields, id data) = connectionData.block;
+    block([connectionData.statusCode intValue], connectionData.headerFields, object);
     
     // release the connection, and the data object
     Block_release(connectionData.block);
@@ -135,6 +139,7 @@ static NetworkProxy* networkProxyInstance;
     // receivedData is an instance variable declared elsewhere.
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
     connectionData.statusCode = [NSNumber numberWithInteger:httpResponse.statusCode];
+    connectionData.headerFields = httpResponse.allHeaderFields;
     [connectionData.receivedData setLength:0];
 }
 

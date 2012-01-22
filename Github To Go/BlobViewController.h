@@ -9,19 +9,24 @@
 #import <UIKit/UIKit.h>
 
 #import "Blob.h"
+#import "Repository.h"
 
 @interface BlobViewController : UIViewController {
     UIScrollView* scrollView;
     Blob* blob;
     NSString* url;
     NSString* name;
+    NSString* commitSha;
+    Repository* repository;
 }
 
 @property(strong) IBOutlet UIScrollView* scrollView;
 @property(strong) Blob* blob;
-@property(strong) NSString* name;
+@property(readonly, strong) NSString* absolutePath;
 @property(strong) NSString* url;
+@property(strong) NSString* commitSha;
+@property(strong, readonly) Repository* repository;
 
-- (id)initWithUrl:(NSString*)anUrl name:(NSString*)aName;
+- (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
 
 @end

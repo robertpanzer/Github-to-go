@@ -11,19 +11,27 @@
 #import "NetworkProxy.h"
 #import "Tree.h"
 #import "Blob.h"
+#import "BranchViewController.h"
 
 @implementation TreeViewController
 
 @synthesize tree;
+@synthesize commitSha;
+@synthesize repository;
 
--(id)initWithUrl:(NSString*)anUrl name:(NSString*)aName {
+-(id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+    
+    commitSha = [aCommitSha retain];
+    repository = [aRepository retain];
+    
     self = [super initWithNibName:@"TreeViewController" bundle:nil];
     if (self) {
-        self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
+        self.navigationItem.title = [anAbsolutePath pathComponents].lastObject;
+        
+        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
                 NSLog(@"Loaded tree %@", data);
-                self.tree = [[[Tree alloc] initWithJSONObject:data andName:aName] autorelease];
+                self.tree = [[[Tree alloc] initWithJSONObject:data absolutePath:anAbsolutePath commitSha:self.commitSha] autorelease];
                 [(UITableView*)self.view reloadData];
             }
         }];
@@ -33,6 +41,7 @@
 
 - (void)dealloc {
     [tree release];
+    [commitSha release];
     [super dealloc];
 }
 
@@ -49,12 +58,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showTreeHistory:)] autorelease];
+
 }
 
 - (void)viewDidUnload
@@ -194,15 +205,22 @@
     if (indexPath.section == 0) {
         Tree* subtree = [self.tree treeAtIndex:indexPath.row];
         NSString* treeUrl = subtree.url;
-        NSString* subtreeName = subtree.name;
-        TreeViewController* newController = [[[TreeViewController alloc] initWithUrl:treeUrl name:subtreeName] autorelease];
+        TreeViewController* newController = [[[TreeViewController alloc] initWithUrl:treeUrl absolutePath:subtree.absolutePath commitSha:commitSha repository:repository] autorelease];
         [self.navigationController pushViewController:newController animated:YES];
     } else {
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl name:blob.name] autorelease];
+        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commitSha repository:self.repository] autorelease];
         [self.navigationController pushViewController:blobViewController animated:YES];
     }
+}
+
+
+-(void)showTreeHistory:(id)sender {
+    
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithTree:tree commitSha:self.commitSha repository:repository] autorelease];
+    [self.navigationController pushViewController:branchViewController animated:YES];
+    
 }
 
 @end

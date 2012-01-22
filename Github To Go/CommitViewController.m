@@ -23,7 +23,7 @@
     if (self) {
         self.repository = aRepository;
         self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
                 self.commit = [[[Commit alloc] initWithJSONObject:data repository:aRepository] autorelease];
                 [(UITableView*)self.view reloadData];

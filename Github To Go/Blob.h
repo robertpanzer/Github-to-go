@@ -9,18 +9,19 @@
 #import <Foundation/Foundation.h>
 
 @interface Blob : NSObject {
-    NSString* name;
+    NSString* absolutePath;
     NSString* url;
     long size;
     NSString* content;
 
 }
 
-@property(strong) NSString* name;
+@property(readonly) NSString* name;
+@property(readonly, strong) NSString* absolutePath;
 @property(strong) NSString* url;
 @property(strong) NSString* content;
 @property(readonly) long size;
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject andName:(NSString*)aName;
+-(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath;
 
 @end

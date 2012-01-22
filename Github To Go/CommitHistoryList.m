@@ -17,11 +17,16 @@
     if (self) {
         dates = [[NSMutableArray alloc] init];
         commitsForDate = [[NSMutableDictionary alloc] init];
+        commitBySha = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
 - (void)addCommit:(Commit *)commit {
+    if ([commitBySha objectForKey:commit.sha] != nil) {
+        return;
+    }
+    [commitBySha setObject:commit forKey:commit.sha];
     NSString* date = [commit.committedDate substringToIndex:10];
     NSMutableArray* commitsForDay = [commitsForDate objectForKey:date];
     if (commitsForDay == nil) {
@@ -48,9 +53,24 @@
     return commitsForDay;
 }
 
+-(Commit *)lastCommit {
+    NSString* lastDate = dates.lastObject;
+    NSArray* commitsForLastDate = [commitsForDate objectForKey:lastDate];
+    return commitsForLastDate.lastObject;
+}
+
+-(Commit *)commitForSha:(NSString *)sha {
+    return [commitBySha objectForKey:sha];
+}
+
+- (NSInteger)count {
+    return commitBySha.count;
+}
+
 - (void)dealloc {
     [dates release];
     [commitsForDate release];
+    [commitBySha release];
     [super dealloc];
 }
 

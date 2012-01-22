@@ -16,6 +16,6 @@
 
 +(NetworkProxy*) sharedInstance;
 
--(void)loadStringFromURL:(NSString*)url block:(void(^)(int statusCode, id data) ) block;
+-(void)loadStringFromURL:(NSString*)url block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block;
 
 @end

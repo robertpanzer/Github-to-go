@@ -207,7 +207,7 @@
         [self.navigationController pushViewController:repoViewController animated:YES];
     } else {
         NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
-        [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, id data) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, NSDictionary* headerFields, id data) {
             NSLog(@"StatusCode: %d", statusCode);
             if (statusCode == 200) {
                 [repo setBranchesFromJSONObject:(NSArray*)data];
@@ -252,7 +252,7 @@
 
 - (IBAction)onFetchRepos {
     NSLog(@"Get repositories");
-    [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
             NSLog(@"StatusCode: %d", statusCode);
             NSMutableArray* newRepos = [[[NSMutableArray alloc] init] autorelease];
             NSArray* array = (NSArray*) data;
@@ -265,7 +265,7 @@
         } 
     ];
     
-    [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         NSMutableArray* newRepos = [[[NSMutableArray alloc] init] autorelease];
         NSArray* array = (NSArray*) data;
@@ -288,7 +288,7 @@
 
 -(void)showMasterBranch:(Repository*)repository {
     NSString* commitUrl = [repository urlOfMasterBranch];
-    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         NSDictionary* dict = (NSDictionary*)data;
         for (NSString* key in dict.keyEnumerator) {
@@ -296,7 +296,7 @@
         }
         NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
         Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
-        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl name:@"/"] autorelease];
+        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:commit.sha repository:repository] autorelease];
         [self.navigationController pushViewController:treeViewController animated:YES];
     } 
      ];

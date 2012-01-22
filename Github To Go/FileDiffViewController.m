@@ -76,7 +76,7 @@
     
     NSString* blobUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/git/blobs/%@", commitFile.commit.repository.fullName, commitFile.blobSha];
     
-    BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl name:commitFile.fileName] autorelease];
+    BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository] autorelease];
     [self.navigationController pushViewController:blobViewController animated:YES];
 }
 

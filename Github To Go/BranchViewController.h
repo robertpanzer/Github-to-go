@@ -11,26 +11,34 @@
 #import "Branch.h"
 #import "StringQueue.h"
 #import "CommitHistoryList.h"
-
+#import "Tree.h"
 
 @interface BranchViewController : UITableViewController {
     CommitHistoryList* commitHistoryList;
     
-    NSMutableSet* missingCommits; 
+    NSString* absolutePath;
     
     Repository* repository;
     
     Branch* branch;
     
+    NSString* commitSha;
+    
     BOOL isLoading;
+    
+    BOOL isComplete;
 }
 
-@property(strong) NSMutableSet* missingCommits;
 @property(strong) Repository* repository;
 @property(strong) Branch* branch;
+@property(strong, readonly) NSString* absolutePath;
+@property(strong, readonly) NSString* commitSha;
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch;
 
-//-(void)loadCommits:(int)count;
+-(id)initWithTree:(Tree*)tree commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+
+-(id)initWithBlob:(Blob*)blob commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+
 
 @end

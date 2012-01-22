@@ -25,16 +25,18 @@
 
 @implementation BranchViewController
 
-@synthesize missingCommits;
 @synthesize repository;
 @synthesize branch;
+@synthesize absolutePath;
+@synthesize commitSha;
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
     if (self) {
+        isComplete = NO;
         self.repository = aRepository;
         self.branch = aBranch;
-        missingCommits = [[NSMutableSet alloc] init];
+        commitSha = [branch.sha retain];
         commitHistoryList = [[CommitHistoryList alloc] init];
         self.navigationItem.title = aBranch.name;
         [self loadCommits];
@@ -43,11 +45,45 @@
     return self;
 }
 
+-(id)initWithTree:(Tree *)tree commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+    self = [super initWithNibName:@"BranchViewController" bundle:nil];
+    if (self) {
+        isComplete = NO;
+        self.repository = aRepository;
+        commitHistoryList = [[CommitHistoryList alloc] init];
+        absolutePath = [tree.absolutePath retain];
+        commitSha = [aCommitSha retain];
+        
+        self.navigationItem.title = tree.name;
+        [self loadCommits];
+        
+    }
+    return self;
+}
+
+
+-(id)initWithBlob:(Blob*)blob commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+    self = [super initWithNibName:@"BranchViewController" bundle:nil];
+    if (self) {
+        isComplete = NO;
+        self.repository = aRepository;
+        commitHistoryList = [[CommitHistoryList alloc] init];
+        absolutePath = [blob.absolutePath retain];
+        commitSha = [aCommitSha retain];
+        
+        self.navigationItem.title = blob.name;
+        [self loadCommits];
+        
+    }
+    return self;
+}
+
 - (void)dealloc {
-    [missingCommits release];
     [repository release];
     [branch release];
     [commitHistoryList release];
+    [absolutePath release];
+    [commitSha release];
     [super dealloc];
 }
 
@@ -59,31 +95,28 @@
 -(void)loadCommits {
     NSString* sha = nil;
     if (commitHistoryList.dates.count == 0) {
-        sha = branch.sha;
+        sha = commitSha;
     } else {
-        sha = [self.missingCommits anyObject];
-        [(NSMutableSet*)self.missingCommits removeObject:sha];
+        Commit* lastCommit = [commitHistoryList lastCommit];
+        sha = lastCommit.sha;
     }
     NSString* url = [[[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha] autorelease];
-    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, id data) {
+    if (absolutePath != nil) {
+        url = [url stringByAppendingFormat:@"&path=%@", absolutePath];
+    }
+    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
+            NSInteger oldCount = commitHistoryList.count;
+            
             NSArray * jsonCommits = (NSArray*)data;
             for (NSDictionary* jsonCommit in jsonCommits) {
                 Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository] autorelease];
                 [commitHistoryList addCommit:commit];
-                
-                if ([missingCommits containsObject:commit.sha]) {
-                    [self.missingCommits removeObject:commit.sha];
-                }
-                for (NSString* parent in commit.parentCommitShas) {
-                    [self.missingCommits addObject:parent];
-                }
-                
-            }
-            for (NSString* missingCommit in missingCommits) {
-                NSLog(@"Missing commit: %@", missingCommit);
             }
             isLoading = NO;
+            if (oldCount == commitHistoryList.count) {
+                isComplete = YES;
+            }
             [(UITableView*)self.view reloadData];
         }
     }];
@@ -108,6 +141,12 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UISearchBar* searchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
+    
+    self.tableView.tableHeaderView = searchBar;
+    
+    self.tableView.contentOffset = CGPointMake(0.0f, 45.0f);
 }
 
 - (void)viewDidUnload
@@ -160,7 +199,7 @@
     // Return the number of rows in the section.
     if (commitHistoryList == nil) {
         return 0;
-    } else if (self.missingCommits.count == 0 || section < commitHistoryList.dates.count - 1) {
+    } else if (section < commitHistoryList.dates.count - 1 || isComplete) {
         return commitCount;
     } else {
         return commitCount + 1;

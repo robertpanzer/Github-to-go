@@ -11,15 +11,15 @@
 
 @implementation Blob
 
-@synthesize name;
+@synthesize absolutePath;
 @synthesize url;
 @synthesize size;
 @synthesize content;
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject andName:(NSString*)aName {
+-(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath {
     self = [super init];
     if (self) {
-        self.name = aName;
+        absolutePath = [anAbsolutePath retain];
         self.url = [jsonObject objectForKey:@"url"];
         size = [(NSNumber*)[jsonObject objectForKey:@"size"] longValue]; 
         
@@ -37,8 +37,12 @@
     return self;
 }
 
+- (NSString *)name {
+    return [absolutePath pathComponents].lastObject;
+}
+
 - (void)dealloc {
-    [name release];
+    [absolutePath release];
     [url release];
     [content release];
     [super dealloc];
