@@ -53,5 +53,6 @@
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
 
+-(BOOL) matchesString:(NSString*)searchString;
 
 @end

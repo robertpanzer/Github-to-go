@@ -67,6 +67,20 @@
     return commitBySha.count;
 }
 
+-(CommitHistoryList *)commitHistoryListFilteredBySearchString:(NSString *)searchString {
+    
+    CommitHistoryList* ret = [[[CommitHistoryList alloc] init] autorelease];
+    
+    for (Commit* commit in commitBySha.objectEnumerator) {
+        if ([commit matchesString:searchString]) {
+            [ret addCommit:commit];
+        }
+    }
+    
+    return ret;
+    
+}
+
 - (void)dealloc {
     [dates release];
     [commitsForDate release];

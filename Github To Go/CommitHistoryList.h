@@ -33,4 +33,6 @@
 
 - (Commit*) commitForSha:(NSString*)sha;
 
+- (CommitHistoryList*) commitHistoryListFilteredBySearchString:(NSString*)searchString;
+
 @end

@@ -13,7 +13,7 @@
 #import "CommitHistoryList.h"
 #import "Tree.h"
 
-@interface BranchViewController : UITableViewController {
+@interface BranchViewController : UITableViewController <UISearchBarDelegate> {
     CommitHistoryList* commitHistoryList;
     
     NSString* absolutePath;
@@ -27,18 +27,23 @@
     BOOL isLoading;
     
     BOOL isComplete;
+    
+    BOOL letUserSelectCells;
+    
+    UISearchBar* searchBar;
 }
 
 @property(strong) Repository* repository;
 @property(strong) Branch* branch;
 @property(strong, readonly) NSString* absolutePath;
 @property(strong, readonly) NSString* commitSha;
+@property(strong) UISearchBar* searchBar;
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch;
 
--(id)initWithTree:(Tree*)tree commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+-(id)initWithGitObject:(id<GitObject>)gitObject commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
 
--(id)initWithBlob:(Blob*)blob commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+-(id)initWithCommitHistoryList:(CommitHistoryList*)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch;
 
 
 @end

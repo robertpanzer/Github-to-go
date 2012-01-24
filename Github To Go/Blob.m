@@ -15,11 +15,13 @@
 @synthesize url;
 @synthesize size;
 @synthesize content;
+@synthesize commitSha;
 
--(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath {
+-(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
     self = [super init];
     if (self) {
         absolutePath = [anAbsolutePath retain];
+        commitSha = [aCommitSha retain];
         self.url = [jsonObject objectForKey:@"url"];
         size = [(NSNumber*)[jsonObject objectForKey:@"size"] longValue]; 
         
@@ -43,6 +45,7 @@
 
 - (void)dealloc {
     [absolutePath release];
+    [commitSha release];
     [url release];
     [content release];
     [super dealloc];

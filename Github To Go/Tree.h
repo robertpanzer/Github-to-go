@@ -10,8 +10,9 @@
 
 #import "Blob.h"
 #import "Commit.h"
+#import "GitObject.h"
 
-@interface Tree : NSObject {
+@interface Tree : NSObject<GitObject> {
     NSString* absolutePath;
     NSString* url;
     

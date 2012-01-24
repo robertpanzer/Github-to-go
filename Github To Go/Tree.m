@@ -33,7 +33,7 @@
                 [newSubTrees addObject:subtree]; 
             } else if ([@"blob" isEqualToString:[file objectForKey:@"type"]]) {
                 NSString* filename = [file objectForKey:@"path"];
-                Blob* blob = [[[Blob alloc] initWithJSONObject:file absolutePath:[absolutePath stringByAppendingPathComponent:filename]] autorelease];
+                Blob* blob = [[[Blob alloc] initWithJSONObject:file absolutePath:[absolutePath stringByAppendingPathComponent:filename] commitSha:commitSha] autorelease];
                 [newBlobs addObject:blob];
             }
         }

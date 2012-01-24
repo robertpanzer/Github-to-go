@@ -120,6 +120,7 @@
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
+		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +292,7 @@
 				949FB13A14B3327800D3E713 /* Supporting Files */,
 				9445E35914B6198300BB929C /* NSData+Base64.h */,
 				9445E35A14B6198300BB929C /* NSData+Base64.m */,
+				94C0602614CE174600E28C5F /* GitObject.h */,
 			);
 			path = "Github To Go";
 			sourceTree = "<group>";

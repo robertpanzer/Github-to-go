@@ -65,7 +65,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
     
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            self.blob = [[[Blob alloc] initWithJSONObject:data absolutePath:absolutePath] autorelease];
+            self.blob = [[[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha] autorelease];
 
             NSUInteger lineNumber = 1;
             NSUInteger blockStart = 0;
@@ -158,7 +158,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
 
 -(void)showBlobHistory:(id)sender {
     
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithBlob:blob commitSha:self.commitSha repository:repository] autorelease];
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:blob commitSha:self.commitSha repository:repository] autorelease];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }

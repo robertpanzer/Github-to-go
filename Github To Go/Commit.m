@@ -121,6 +121,33 @@
     return self;
 }
 
+
+- (BOOL)matchesString:(NSString *)searchString {
+    if (author.name != nil && [author.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (author.email != nil && [author.email rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (author.login != nil && [author.login rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (committer.name != nil && [committer.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (committer.email != nil && [committer.email rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (committer.login != nil && [committer.login rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if (message != nil && [message rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void)dealloc {
     [treeUrl release];
     [commitUrl release];

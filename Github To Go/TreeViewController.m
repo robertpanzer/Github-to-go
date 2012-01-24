@@ -218,7 +218,7 @@
 
 -(void)showTreeHistory:(id)sender {
     
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithTree:tree commitSha:self.commitSha repository:repository] autorelease];
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commitSha repository:repository] autorelease];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }

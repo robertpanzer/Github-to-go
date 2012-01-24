@@ -11,6 +11,7 @@
 #import "NetworkProxy.h"
 #import "Commit.h"
 #import "CommitViewController.h"
+#import "GitObject.h"
 
 @interface BranchViewController()
 
@@ -21,14 +22,29 @@
 @end
 
 
-
-
 @implementation BranchViewController
 
 @synthesize repository;
 @synthesize branch;
 @synthesize absolutePath;
 @synthesize commitSha;
+@synthesize searchBar;
+
+-(id)initWithCommitHistoryList:(CommitHistoryList *)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch {
+    self = [super initWithNibName:@"BranchViewController" bundle:nil];
+    if (self) {
+        isComplete = YES;
+        self.repository = aRepository;
+        self.branch = aBranch;
+        commitSha = [branch.sha retain];
+        commitHistoryList = [aCommitHistoryList retain];
+        self.navigationItem.title = aBranch.name;
+        letUserSelectCells = YES;
+//        [self loadCommits];
+        
+    }
+    return self;
+}
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
@@ -39,44 +55,30 @@
         commitSha = [branch.sha retain];
         commitHistoryList = [[CommitHistoryList alloc] init];
         self.navigationItem.title = aBranch.name;
+        letUserSelectCells = YES;
         [self loadCommits];
         
     }
     return self;
 }
 
--(id)initWithTree:(Tree *)tree commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+-(id)initWithGitObject:(id<GitObject>)gitObject commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
     if (self) {
         isComplete = NO;
         self.repository = aRepository;
         commitHistoryList = [[CommitHistoryList alloc] init];
-        absolutePath = [tree.absolutePath retain];
+        absolutePath = [[gitObject absolutePath] retain];
         commitSha = [aCommitSha retain];
         
-        self.navigationItem.title = tree.name;
+        self.navigationItem.title = [gitObject name];
+        letUserSelectCells = YES;
         [self loadCommits];
         
     }
     return self;
 }
 
-
--(id)initWithBlob:(Blob*)blob commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
-    self = [super initWithNibName:@"BranchViewController" bundle:nil];
-    if (self) {
-        isComplete = NO;
-        self.repository = aRepository;
-        commitHistoryList = [[CommitHistoryList alloc] init];
-        absolutePath = [blob.absolutePath retain];
-        commitSha = [aCommitSha retain];
-        
-        self.navigationItem.title = blob.name;
-        [self loadCommits];
-        
-    }
-    return self;
-}
 
 - (void)dealloc {
     [repository release];
@@ -142,9 +144,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    UISearchBar* searchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
+    UISearchBar* aSearchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
     
-    self.tableView.tableHeaderView = searchBar;
+    aSearchBar.delegate = self;
+    
+    self.tableView.tableHeaderView = aSearchBar;
     
     self.tableView.contentOffset = CGPointMake(0.0f, 45.0f);
 }
@@ -342,15 +346,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
-    BOOL isCommit = indexPath.section < commitHistoryList.dates.count - 1 || 
-    (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
-
-    if (isCommit) {
+    
+    if (letUserSelectCells) {
+        NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
+        BOOL isCommit = indexPath.section < commitHistoryList.dates.count - 1 || 
+        (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
         
-        Commit* commit = [self commitForIndexPath:indexPath];  //[commits objectAtIndex:indexPath.row];
-        CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message repository:repository] autorelease];
-        [self.navigationController pushViewController:commitViewController animated:YES];
+        if (isCommit) {
+            
+            Commit* commit = [self commitForIndexPath:indexPath];  //[commits objectAtIndex:indexPath.row];
+            CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message repository:repository] autorelease];
+            [self.navigationController pushViewController:commitViewController animated:YES];
+        }
+    } else {
+        [self.searchBar resignFirstResponder];
+        letUserSelectCells = YES;
     }
     // Navigation logic may go here. Create and push another view controller.
     /*
@@ -360,6 +370,22 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      [detailViewController release];
      */
+}
+
+#pragma mark - UISearchBarDelegate methods
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {
+    NSLog(@"Jetzt suchen? %@", aSearchBar.text);
+    
+    CommitHistoryList* searchResult = [commitHistoryList commitHistoryListFilteredBySearchString:searchBar.text];
+    BranchViewController* searchResultController = [[[BranchViewController alloc] initWithCommitHistoryList:searchResult repository:repository branch:branch] autorelease];
+    [self.navigationController pushViewController:searchResultController animated:YES];
+                        
+}
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)aSearchBar {
+    letUserSelectCells = NO;
+    self.searchBar = aSearchBar;
 }
 
 @end
