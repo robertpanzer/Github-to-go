@@ -55,4 +55,6 @@
 
 -(BOOL) matchesString:(NSString*)searchString;
 
+- (void)loadObjectWithAbsolutePath:(NSString*)absolutePath;
+
 @end

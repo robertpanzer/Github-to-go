@@ -10,19 +10,27 @@
 #import "Tree.h"
 #import "Repository.h"
 
-@interface TreeViewController : UITableViewController {
+@interface TreeViewController : UITableViewController <UIActionSheetDelegate> {
     Tree* tree;
     
-    NSString* commitSha;
+    Commit* commit;
+    
+    NSString* branchName;
     
     Repository* repository;
+
+    NSString* absolutePath;
 }
 
 @property(strong) Tree* tree;
-@property(strong, readonly) NSString* commitSha;
+@property(strong, readonly) Commit* commit;
 @property(strong, readonly) Repository* repository;
+@property(strong) NSString* branchName;
+@property(strong) NSString* absolutePath;
 
--(id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+-(id)initWithTree:(Tree*)aTree absolutePath:(NSString*)anAbsolutePath commit:(Commit*)aCommit repository:(Repository*)aRepository branchName:(NSString*)aBranchName;
 
 -(IBAction)showTreeHistory:(id)sender;
+
+-(IBAction)offerTreeActions:(id)sender;
 @end

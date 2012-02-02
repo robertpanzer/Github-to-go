@@ -12,36 +12,36 @@
 #import "Tree.h"
 #import "Blob.h"
 #import "BranchViewController.h"
+#import "BranchesBrowserViewController.h"
+#import "UITreeRootViewController.h"
 
 @implementation TreeViewController
 
 @synthesize tree;
-@synthesize commitSha;
+@synthesize commit;
 @synthesize repository;
+@synthesize branchName;
+@synthesize absolutePath;
 
--(id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+-(id)initWithTree:(Tree*)aTree absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName {
     
-    commitSha = [aCommitSha retain];
-    repository = [aRepository retain];
-    
-    self = [super initWithNibName:@"TreeViewController" bundle:nil];
+    self = [super init];
     if (self) {
-        self.navigationItem.title = [anAbsolutePath pathComponents].lastObject;
-        
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Loaded tree %@", data);
-                self.tree = [[[Tree alloc] initWithJSONObject:data absolutePath:anAbsolutePath commitSha:self.commitSha] autorelease];
-                [(UITableView*)self.view reloadData];
-            }
-        }];
+        commit = [aCommit retain];
+        repository = [aRepository retain];
+        self.tree = aTree;
+        self.branchName = aBranchName;
+        self.absolutePath = anAbsolutePath;
     }
     return self;
 }
 
 - (void)dealloc {
     [tree release];
-    [commitSha release];
+    [commit release];
+    [branchName release];
+    [repository release];
+    [absolutePath release];
     [super dealloc];
 }
 
@@ -64,7 +64,35 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showTreeHistory:)] autorelease];
+//    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(offerTreeActions:)] autorelease];
+//    self.navigationItem.title = self.branchName;
+//    
+//    [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
+//        if (statusCode == 200) {
+//            NSLog(@"Loaded tree %@", data);
+//            self.tree = [[[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commitSha] autorelease];
+//            
+//            NSString* headerText = [NSString stringWithFormat:@"Path: %@", absolutePath];
+//            
+//            CGSize headerSize = [headerText sizeWithFont:[UIFont systemFontOfSize:16.0f] 
+//                                              constrainedToSize:CGSizeMake(320.0f, 1000.0f) 
+//                                                  lineBreakMode:UILineBreakModeWordWrap];
+//            
+//            UILabel* header = [[[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, headerSize.width, headerSize.height + 10.0f)] autorelease];
+//            header.numberOfLines = 0;
+//            header.lineBreakMode = UILineBreakModeWordWrap;
+//            header.text = headerText;
+//            header.opaque = YES;
+//            header.backgroundColor = [UIColor clearColor];
+//            header.font = [UIFont systemFontOfSize:16.0f];
+//            
+//            self.tableView.tableHeaderView = header;
+//            
+//            [self.tableView reloadData];
+//        }
+//    }];
+ 
+
 
 }
 
@@ -133,6 +161,7 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierTree];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         Tree* file = [self.tree treeAtIndex:indexPath.row];
         cell.textLabel.text = file.name;
@@ -141,6 +170,7 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierBlob];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%d bytes", blob.size]; 
@@ -159,6 +189,12 @@
         return @"Blobs";
     }
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 40.0f;
+}
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -205,12 +241,17 @@
     if (indexPath.section == 0) {
         Tree* subtree = [self.tree treeAtIndex:indexPath.row];
         NSString* treeUrl = subtree.url;
-        TreeViewController* newController = [[[TreeViewController alloc] initWithUrl:treeUrl absolutePath:subtree.absolutePath commitSha:commitSha repository:repository] autorelease];
-        [self.navigationController pushViewController:newController animated:YES];
+        UITreeRootViewController* treeRootViewController = 
+            [[[UITreeRootViewController alloc] initWithUrl:treeUrl
+                                              absolutePath:subtree.absolutePath
+                                                    commit:self.commit
+                                                repository:repository
+                                                branchName:branchName] autorelease];
+        [self.navigationController pushViewController:treeRootViewController animated:YES];
     } else {
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commitSha repository:self.repository] autorelease];
+        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commit.sha repository:self.repository] autorelease];
         [self.navigationController pushViewController:blobViewController animated:YES];
     }
 }
@@ -218,9 +259,33 @@
 
 -(void)showTreeHistory:(id)sender {
     
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commitSha repository:repository] autorelease];
+    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository] autorelease];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
+}
+
+-(void)offerTreeActions:(id)sender {
+    
+    UIActionSheet* actionSheet = [[[UIActionSheet alloc] initWithTitle:nil 
+                                                              delegate:self 
+                                                     cancelButtonTitle:nil 
+                                                destructiveButtonTitle:nil 
+                                                     otherButtonTitles:@"Show history", @"Switch branch", nil] autorelease];
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0) {
+        BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository] autorelease];
+        [self.navigationController pushViewController:branchViewController animated:YES];
+    } else if (buttonIndex == 1) {
+        UINavigationController* navigationController = self.navigationController;
+        [navigationController popToRootViewControllerAnimated:NO];
+        BranchesBrowserViewController* branchesBrowserViewController = [[[BranchesBrowserViewController alloc] initWithRepository:repository] autorelease];
+        [navigationController pushViewController:branchesBrowserViewController animated:NO];
+    }
 }
 
 @end

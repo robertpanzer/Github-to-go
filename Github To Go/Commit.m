@@ -8,7 +8,16 @@
 
 #import "CommitFile.h"
 #import "Commit.h"
+#import "GitObject.h"
+#import "NetworkProxy.h"
+#import "Tree.h"
 #import <Foundation/Foundation.h>
+
+@interface Commit() 
+
+-(void)loadObjectWithAbsolutePath:(NSArray*)pathElements fromTree:(Tree*)tree;
+
+@end
 
 @implementation Commit
 
@@ -146,6 +155,41 @@
     }
     
     return NO;
+}
+
+- (void)loadObjectWithAbsolutePath:(NSString*)absolutePath {
+    NSArray* pathElements = [absolutePath pathComponents];
+    [[NetworkProxy sharedInstance] loadStringFromURL:treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        if (statusCode == 200) {
+            Tree* rootTree = [[[Tree alloc] initWithJSONObject:data absolutePath:@"" commitSha:self.sha] autorelease];
+            [self loadObjectWithAbsolutePath:pathElements fromTree:rootTree];
+        }
+    }];
+}
+
+-(void)loadObjectWithAbsolutePath:(NSArray *)pathElements fromTree:(Tree *)tree {
+    for (Tree* subtree in tree.subtrees) {
+        if ([[pathElements objectAtIndex:0] isEqual:subtree.name]) {
+            [[NetworkProxy sharedInstance] loadStringFromURL:subtree.url block:^(int statusCode, NSDictionary* headerFields, id data) {
+                if (statusCode == 200) {
+//                    NSString* absolutePath = [tree.absolutePath stringByAppendingPathComponent:subtree.name];
+                    Tree* fullSubTree = [[[Tree alloc] initWithJSONObject:data absolutePath:subtree.absolutePath commitSha:self.sha] autorelease];
+                    [self loadObjectWithAbsolutePath:[pathElements subarrayWithRange:NSMakeRange(1, pathElements.count - 1)]  fromTree:fullSubTree];
+                }
+            }];
+        }
+    }
+    for (Blob* blob in tree.blobs) {
+        if ([[pathElements objectAtIndex:0] isEqual:blob.name]) {
+            [[NetworkProxy sharedInstance] loadStringFromURL:blob.url block:^(int statusCode, NSDictionary* headerFields, id data) {
+                if (statusCode == 200) {
+                    Blob* fullBlob = [[[Blob alloc] initWithJSONObject:data absolutePath:blob.absolutePath commitSha:blob.commitSha] autorelease];
+                    NSLog(@"Blob: %@", fullBlob);
+                }
+            }];
+            
+        }
+    }
 }
 
 - (void)dealloc {

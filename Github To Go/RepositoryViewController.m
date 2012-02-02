@@ -17,14 +17,6 @@
 -(id)initWithRepository:(Repository*)repo {
     self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
     if (self) {
-        self.navigationItem.title = repo.fullName;
-//        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, id data) {
-//            if (statusCode == 200) {
-//                NSLog(@"Loaded repository %@", data);
-//                self.repository = [[[Repository alloc] initFromJSONObject:data] autorelease];
-//                [(UITableView*)self.view reloadData];
-//            }
-//        }];
         self.repository = repo;
     }
     return self;
@@ -92,93 +84,66 @@
     if (repository == nil) {
         return 0;
     } else {
-        return 2;
+        return 1;
     }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == 0) {
-        return 8;
-    } else if (section == 1) {
-        return 1;
-    } else {
-        return -1;
-    }
+    return 8;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* InfoCellIdentifier = @"InfoCell";
-    static NSString* DetailCellIdentifier = @"DetailCell";
 
-    if (indexPath.section == 0) {
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier] autorelease];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"Name";
-                cell.detailTextLabel.text = repository.name;
-                break;
-            case 1:
-                cell.textLabel.text = @"Description";
-                cell.detailTextLabel.text = repository.description;
-                break;
-            case 2:
-                cell.textLabel.text = @"Owner";
-                cell.detailTextLabel.text = repository.owner.login;
-                cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-                break;
-            case 3:
-                cell.textLabel.text = @"ID";
-                cell.detailTextLabel.text = repository.repoId.description;
-                break;
-            case 4:
-                cell.textLabel.text = @"Private";
-                cell.detailTextLabel.text = repository.private ? @"Yes" : @"No";
-                break;
-            case 5:
-                cell.textLabel.text = @"Watchers";
-                cell.detailTextLabel.text = repository.watchers.description;
-                break;
-            case 6:
-                cell.textLabel.text = @"Fork";
-                cell.detailTextLabel.text = repository.fork ? @"Yes" : @"No";
-                break;
-            case 7:
-                cell.textLabel.text = @"Forks";
-                cell.detailTextLabel.text = repository.forks.description;
-                break;
-                
-            default:
-                break;
-        }
-        return cell;
-    } else if (indexPath.section == 1) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DetailCellIdentifier];
-        if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DetailCellIdentifier] autorelease];
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        }
-
-        switch (indexPath.row) {
-            case 0:
-                cell.textLabel.text = @"Branches";
-                break;
-                
-            default:
-                break;
-        }
-        return cell;
-    } else {
-        return nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier] autorelease];
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+    switch (indexPath.row) {
+        case 0:
+            cell.textLabel.text = @"Name";
+            cell.detailTextLabel.text = repository.name;
+            break;
+        case 1:
+            cell.textLabel.text = @"Description";
+            cell.detailTextLabel.text = repository.description;
+            break;
+        case 2:
+            cell.textLabel.text = @"Owner";
+            cell.detailTextLabel.text = repository.owner.login;
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+            break;
+        case 3:
+            cell.textLabel.text = @"ID";
+            cell.detailTextLabel.text = repository.repoId.description;
+            break;
+        case 4:
+            cell.textLabel.text = @"Private";
+            cell.detailTextLabel.text = repository.private ? @"Yes" : @"No";
+            break;
+        case 5:
+            cell.textLabel.text = @"Watchers";
+            cell.detailTextLabel.text = repository.watchers.description;
+            break;
+        case 6:
+            cell.textLabel.text = @"Fork";
+            cell.detailTextLabel.text = repository.fork ? @"Yes" : @"No";
+            break;
+        case 7:
+            cell.textLabel.text = @"Forks";
+            cell.detailTextLabel.text = repository.forks.description;
+            break;
+            
+        default:
+            break;
+    }
+    return cell;    
 }
 
 /*
@@ -230,5 +195,7 @@
         [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
     }
 }
+
+
 
 @end

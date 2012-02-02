@@ -16,6 +16,7 @@
 #import "TreeViewController.h"
 #import "Branch.h"
 #import "Settings.h"
+#import "UIRepositoryRootViewController.h"
 
 @implementation RepoBrowserTableViewController
 
@@ -23,9 +24,9 @@
 @synthesize watchedRepos;
 
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.title = NSLocalizedString(@"Repositories", @"Repositories");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
@@ -127,6 +128,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
+
     }
     
     // Configure the cell...
@@ -149,6 +153,16 @@
     } else {
         return @"Watched Repositories";
     }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UILabel* headerLabel = [[[UILabel alloc] init] autorelease];
+    headerLabel.font = [UIFont systemFontOfSize:14.0f];
+    headerLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    headerLabel.textAlignment = UITextAlignmentCenter;
+    headerLabel.opaque = NO;
+    headerLabel.backgroundColor = [UIColor clearColor];
+    return headerLabel;
 }
 
 /*
@@ -201,9 +215,10 @@
     } else {
         return;
     }
-    repo.masterBranch = @"master";
     if (repo.masterBranch == nil) {
-        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
+//        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
+//        [self.navigationController pushViewController:repoViewController animated:YES];
+        UIRepositoryRootViewController* repoViewController = [[[UIRepositoryRootViewController alloc] initWithRepository:repo] autorelease];
         [self.navigationController pushViewController:repoViewController animated:YES];
     } else {
         NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
@@ -288,18 +303,18 @@
 
 -(void)showMasterBranch:(Repository*)repository {
     NSString* commitUrl = [repository urlOfMasterBranch];
-    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-        NSLog(@"StatusCode: %d", statusCode);
-        NSDictionary* dict = (NSDictionary*)data;
-        for (NSString* key in dict.keyEnumerator) {
-            NSLog(@"Key: %@", key);
-        }
-        NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
-        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:commit.sha repository:repository] autorelease];
-        [self.navigationController pushViewController:treeViewController animated:YES];
-    } 
-     ];
+//    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+//        NSLog(@"StatusCode: %d", statusCode);
+//        NSDictionary* dict = (NSDictionary*)data;
+//        for (NSString* key in dict.keyEnumerator) {
+//            NSLog(@"Key: %@", key);
+//        }
+//        NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
+//        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
+//        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:commit.sha repository:repository branchName:repository.masterBranch] autorelease];
+//        [self.navigationController pushViewController:treeViewController animated:YES];
+//    } 
+//     ];
 
 }
 

@@ -11,6 +11,7 @@
 
 @interface RepositoryViewController : UITableViewController {
     Repository* repository;
+    
 }
 
 @property(strong) Repository* repository;

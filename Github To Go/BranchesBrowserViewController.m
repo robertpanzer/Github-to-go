@@ -11,6 +11,7 @@
 #import "Branch.h"
 #import "TreeViewController.h"
 #import "BranchViewController.h"
+#import "UITreeRootViewController.h"
 
 @implementation BranchesBrowserViewController
 
@@ -18,22 +19,9 @@
 @synthesize repository;
 
 -(id)initWithRepository:(Repository*)aRepository {
-    self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
+    self = [super initWithNibName:@"BranchesBrowserViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
-        self.navigationItem.title = repository.fullName;
-        NSString* url = [[[NSString alloc] initWithFormat:@"%@/branches", repository.url] autorelease];
-        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Loaded branches %@", data);
-                NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
-                for (NSDictionary* jsonBranch in data) {
-                    [newBranches addObject:[[[Branch alloc] initWithJSONObject:jsonBranch] autorelease]];
-                }
-                self.branches = newBranches;
-                [(UITableView*)self.view reloadData];
-            }
-        }];
     }
     return self;
 }
@@ -61,6 +49,22 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.title = repository.fullName;
+    NSString* url = [[[NSString alloc] initWithFormat:@"%@/branches", repository.url] autorelease];
+    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
+        if (statusCode == 200) {
+            NSLog(@"Loaded branches %@", data);
+            NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
+            for (NSDictionary* jsonBranch in data) {
+                [newBranches addObject:[[[Branch alloc] initWithJSONObject:jsonBranch] autorelease]];
+            }
+            self.branches = newBranches;
+            [(UITableView*)self.view reloadData];
+        }
+    }];
+    
+//    self.tableView.tableHeaderView = self.tableHeader;
+
 }
 
 - (void)viewDidUnload
@@ -121,6 +125,7 @@
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
     }
     
     Branch* branch = [branches objectAtIndex:indexPath.row];
@@ -178,8 +183,12 @@
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
-        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:branch.sha repository:repository] autorelease];
+        
+        UITreeRootViewController* treeViewController = [[[UITreeRootViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commit:commit repository:repository branchName:branch.name] autorelease];
+
         [self.navigationController pushViewController:treeViewController animated:YES];
+//        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:branch.sha repository:repository branchName:branch.name] autorelease];
+//        [self.navigationController pushViewController:treeViewController animated:YES];
     } 
      ];
     

@@ -139,6 +139,7 @@
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                            reuseIdentifier:MessageCellIdentifier] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
     } else if (indexPath.section == 5) {
         cell = [tableView dequeueReusableCellWithIdentifier:FilenameCellIdentifier];
@@ -147,13 +148,15 @@
                                            reuseIdentifier:FilenameCellIdentifier] autorelease];
             cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
             cell.textLabel.numberOfLines = 0;
-
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
                                            reuseIdentifier:CellIdentifier] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         
     }
@@ -311,9 +314,10 @@
 {
     if (indexPath.section == 5) {
         CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-        FileDiffViewController* fileDiffViewController = [[[FileDiffViewController alloc] initWithCommitFile:commitFile] autorelease];
-        [self.navigationController pushViewController:fileDiffViewController animated:YES];
-        
+//        FileDiffViewController* fileDiffViewController = [[[FileDiffViewController alloc] initWithCommitFile:commitFile] autorelease];
+//        [self.navigationController pushViewController:fileDiffViewController animated:YES];
+          
+        [commitFile loadFile];
     }
     // Navigation logic may go here. Create and push another view controller.
     /*
@@ -328,7 +332,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 1) {
-        UIFont* font = [UIFont boldSystemFontOfSize:17.0f];
+        UIFont* font = [UIFont systemFontOfSize:14.0f];
         
         CGSize size = [commit.message sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
                 
@@ -336,7 +340,7 @@
 
         return height > tableView.rowHeight ? height : tableView.rowHeight;
     } else if (indexPath.section == 5) {
-        UIFont* font = [UIFont boldSystemFontOfSize:17.0f];
+        UIFont* font = [UIFont systemFontOfSize:14.0f];
 
         CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row];
         CGSize size = [commitFile.fileName sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];

@@ -25,6 +25,10 @@
 		94435C1114B772BB0037CF87 /* BranchesBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */; };
 		94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */; };
 		9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9445E35A14B6198300BB929C /* NSData+Base64.m */; };
+		945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */; };
+		945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */; };
+		945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271C414D74A3100F5610D /* UITreeRootViewController.m */; };
+		945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271C514D74A3100F5610D /* UITreeRootViewController.xib */; };
 		945FE31E14B866F60099FD84 /* StringQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 945FE31D14B866F60099FD84 /* StringQueue.m */; };
 		9466DBD414B7ACCD00238151 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD314B7ACCD00238151 /* Branch.m */; };
 		9466DBD914B7B77800238151 /* BranchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD714B7B77800238151 /* BranchViewController.m */; };
@@ -83,6 +87,12 @@
 		94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BranchesBrowserViewController.xib; sourceTree = "<group>"; };
 		9445E35914B6198300BB929C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		9445E35A14B6198300BB929C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRepositoryRootViewController.h; sourceTree = "<group>"; };
+		945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRepositoryRootViewController.m; sourceTree = "<group>"; };
+		945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIRepositoryRootViewController.xib; sourceTree = "<group>"; };
+		945271C314D74A3100F5610D /* UITreeRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITreeRootViewController.h; sourceTree = "<group>"; };
+		945271C414D74A3100F5610D /* UITreeRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITreeRootViewController.m; sourceTree = "<group>"; };
+		945271C514D74A3100F5610D /* UITreeRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UITreeRootViewController.xib; sourceTree = "<group>"; };
 		945FE31C14B866F60099FD84 /* StringQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringQueue.h; sourceTree = "<group>"; };
 		945FE31D14B866F60099FD84 /* StringQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringQueue.m; sourceTree = "<group>"; };
 		9466DBD214B7ACCD00238151 /* Branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Branch.h; sourceTree = "<group>"; };
@@ -190,6 +200,9 @@
 				946CB2AC14B48E6000BBFDAD /* TreeViewController.h */,
 				946CB2AD14B48E6000BBFDAD /* TreeViewController.m */,
 				946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */,
+				945271C314D74A3100F5610D /* UITreeRootViewController.h */,
+				945271C414D74A3100F5610D /* UITreeRootViewController.m */,
+				945271C514D74A3100F5610D /* UITreeRootViewController.xib */,
 			);
 			name = Tree;
 			sourceTree = "<group>";
@@ -202,6 +215,12 @@
 				94B9880514B72986007AA6A6 /* RepositoryViewController.h */,
 				94B9880614B72986007AA6A6 /* RepositoryViewController.m */,
 				94B9880714B72986007AA6A6 /* RepositoryViewController.xib */,
+				94435C0E14B772BB0037CF87 /* BranchesBrowserViewController.h */,
+				94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */,
+				94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */,
+				945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */,
+				945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */,
+				945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */,
 			);
 			name = Repository;
 			sourceTree = "<group>";
@@ -277,9 +296,6 @@
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
 				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
-				94435C0E14B772BB0037CF87 /* BranchesBrowserViewController.h */,
-				94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */,
-				94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
 				949FB14814B3327800D3E713 /* first.png */,
@@ -373,6 +389,8 @@
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
 				9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */,
+				945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */,
+				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +425,8 @@
 				9402273C14C167260036A676 /* CommitFile.m in Sources */,
 				9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */,
 				9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */,
+				945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */,
+				945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

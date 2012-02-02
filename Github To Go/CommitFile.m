@@ -34,6 +34,11 @@
     return self;
 }
 
+-(void)loadFile {
+    [commit loadObjectWithAbsolutePath:self.fileName];
+}
+
+
 - (void)dealloc {
     [status release];
     [patch release];
