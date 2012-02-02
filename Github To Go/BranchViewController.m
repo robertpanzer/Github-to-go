@@ -40,6 +40,7 @@
         commitHistoryList = [aCommitHistoryList retain];
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
+        isSearchResult = YES;
 //        [self loadCommits];
         
     }
@@ -56,6 +57,8 @@
         commitHistoryList = [[CommitHistoryList alloc] init];
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
+        isSearchResult = NO;
+
         [self loadCommits];
         
     }
@@ -73,6 +76,7 @@
         
         self.navigationItem.title = [gitObject name];
         letUserSelectCells = YES;
+        isSearchResult = NO;
         [self loadCommits];
         
     }
@@ -144,13 +148,12 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    UISearchBar* aSearchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
-    
-    aSearchBar.delegate = self;
-    
-    self.tableView.tableHeaderView = aSearchBar;
-    
-    self.tableView.contentOffset = CGPointMake(0.0f, 45.0f);
+    if (!isSearchResult) {
+        UISearchBar* aSearchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
+        aSearchBar.delegate = self;
+        self.tableView.tableHeaderView = aSearchBar;
+        self.tableView.contentOffset = CGPointMake(0.0f, 45.0f);
+    }
 }
 
 - (void)viewDidUnload

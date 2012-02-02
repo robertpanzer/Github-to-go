@@ -28,6 +28,8 @@
     
     BOOL isComplete;
     
+    BOOL isSearchResult;
+    
     BOOL letUserSelectCells;
     
     UISearchBar* searchBar;
