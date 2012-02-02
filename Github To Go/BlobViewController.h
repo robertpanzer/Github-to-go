@@ -11,8 +11,8 @@
 #import "Blob.h"
 #import "Repository.h"
 
-@interface BlobViewController : UIViewController {
-    UIScrollView* scrollView;
+@interface BlobViewController : UIViewController <UIWebViewDelegate> {
+    UIWebView* webView;
     Blob* blob;
     NSString* url;
     NSString* name;
@@ -20,7 +20,7 @@
     Repository* repository;
 }
 
-@property(strong) IBOutlet UIScrollView* scrollView;
+@property(strong) IBOutlet UIWebView* webView;
 @property(strong) Blob* blob;
 @property(readonly, strong) NSString* absolutePath;
 @property(strong) NSString* url;

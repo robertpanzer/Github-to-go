@@ -15,7 +15,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
 
 @implementation BlobViewController
 
-@synthesize scrollView;
+@synthesize webView;
 @synthesize blob;
 @synthesize url;
 @synthesize absolutePath;
@@ -37,7 +37,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
 }
 
 - (void)dealloc {
-    [scrollView release];
+    [webView release];
     [blob release];
     [url release];
     [absolutePath release];
@@ -67,77 +67,36 @@ static CGFloat xOffsetContentColumn = 55.0f;
         if (statusCode == 200) {
             self.blob = [[[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha] autorelease];
 
-            NSUInteger lineNumber = 1;
-            NSUInteger blockStart = 0;
-            CGFloat yOffset = 0;
-            CGFloat maxWidth = 0;
-            NSString* s = blob.content;
-            NSMutableString* lineNumberString = [[[NSMutableString alloc] init] autorelease];
-            [lineNumberString appendFormat:@"%d\n", lineNumber];
-            for (int i = 0; i < s.length; i++) {
-                unichar zeichen = [s characterAtIndex:i];
-                if ([[NSCharacterSet newlineCharacterSet] characterIsMember:zeichen]) {
-                    lineNumber++;
-                    [lineNumberString appendFormat:@"%d\n", lineNumber];
-                    if ((lineNumber % 10) == 0) {
-                        NSString* block = [s substringWithRange:NSMakeRange(blockStart, i - blockStart)];
-                        blockStart = i + 1;
-                        UILabel* label = [[[UILabel alloc] init] autorelease];
-                        label.text = block;
-                        label.numberOfLines = 0;
-                        label.lineBreakMode = UILineBreakModeWordWrap;
-                        [label sizeToFit];
-                        label.frame = CGRectMake(xOffsetContentColumn, yOffset, label.frame.size.width, label.frame.size.height);
-
-                        UILabel* lineNumberLabel = [[[UILabel alloc] init] autorelease];
-                        lineNumberLabel.text = lineNumberString;
-                        lineNumberLabel.numberOfLines = 0;
-                        lineNumberLabel.lineBreakMode = UILineBreakModeWordWrap;
-                        [lineNumberLabel sizeToFit];
-                        lineNumberLabel.textAlignment = UITextAlignmentRight;
-                        lineNumberLabel.frame = CGRectMake(0.0f, yOffset, widthLineNumberColumn, label.frame.size.height);
-                        lineNumberString = [[[NSMutableString alloc] init] autorelease];
-                        [lineNumberString appendFormat:@"%d\n", lineNumber];
-                        
-                        yOffset += label.frame.size.height;
-                        [scrollView addSubview:label];
-                        [scrollView addSubview:lineNumberLabel];
-
-                        if (label.frame.size.width > maxWidth) {
-                            maxWidth = label.frame.size.width;
-                        }
-                        NSLog(@"%f, %f", label.frame.size.width, label.frame.size.height);
-                    }
-                }
+            NSMutableString* html = [[[NSMutableString alloc] initWithCapacity:self.blob.content.length + 1000] autorelease];
+            
+            [html appendString:@"<!DOCTYPE html>\n"];
+            [html appendString:@"<html><head><style>\n"];
+            [html appendString:@".l { min-width: 100px; display: inline-block; text-align: right}\n"];
+            [html appendString:@"body { font-family: Arial;}\n"];
+            [html appendString:@"</style></head><body>\n"];
+            
+            NSArray* lines = [self.blob.content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            int lineNo = 1;
+            for (NSString* line in lines) {
+                line = [line stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+                line = [line stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+                
+                [html appendFormat:@"<span class=\"l\"><a href=\"open?line=%d\">%d</a></span>%@<br>", lineNo, lineNo++, line];
             }
             
-            NSString* lastBlock = [s substringWithRange:NSMakeRange(blockStart, s.length - blockStart)];
-            UILabel* label = [[[UILabel alloc] init] autorelease];
-            label.text = lastBlock;
-            label.numberOfLines = 0;
-            label.lineBreakMode = UILineBreakModeWordWrap;
-            [label sizeToFit];
-            label.frame = CGRectMake(xOffsetContentColumn, yOffset, label.frame.size.width, label.frame.size.height);
-            
-            UILabel* lineNumberLabel = [[[UILabel alloc] init] autorelease];
-            lineNumberLabel.text = lineNumberString;
-            lineNumberLabel.numberOfLines = 0;
-            lineNumberLabel.lineBreakMode = UILineBreakModeWordWrap;
-            [lineNumberLabel sizeToFit];
-            lineNumberLabel.textAlignment = UITextAlignmentRight;
-            lineNumberLabel.frame = CGRectMake(0.0f, yOffset, widthLineNumberColumn, label.frame.size.height);
-            lineNumberString = [[[NSMutableString alloc] init] autorelease];
-            
-            
-            yOffset += label.frame.size.height;
-            [scrollView addSubview:label];
-            [scrollView addSubview:lineNumberLabel];
-            if (label.frame.size.width > maxWidth) {
-                maxWidth = label.frame.size.width;
-            }
-            
-            [scrollView setContentSize:CGSizeMake(maxWidth + 30.0f, yOffset)];
-            
+            [html appendString:@"<script>\n"];
+            [html appendString:@"document.querySelector(\"body\").innerHtml = \"Hallo Welt\";\n"];
+            [html appendString:@"  function f(evt) {\n"];
+            [html appendString:@"    location.href = \"http://www.heise.de\";"];
+            [html appendString:@"      evt.target.innerHtml=\"42\";\n"];
+            [html appendString:@"  }\n"];
+            [html appendString:@"  document.querySelector(\"body\").addEventListener(\"mouseup\", f);\n"];
+            [html appendString:@"</script>\n"];
+            [html appendString:@"</body>\n"];
+            [html appendString:@"</html>\n"];
+            [self.webView setScalesPageToFit:YES];
+            [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
+            self.webView.delegate = self;
         }
     }];
     
@@ -152,16 +111,25 @@ static CGFloat xOffsetContentColumn = 55.0f;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return YES;//(interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
--(void)showBlobHistory:(id)sender {
-    
+-(void)showBlobHistory:(id)sender {    
     BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:blob commitSha:self.commitSha repository:repository] autorelease];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }
 
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    NSLog(@"Hier! %@", request.URL);
+    if ([request.URL.path isEqualToString:@"/open"]) {
+        NSLog(@"Params %@", request.URL.description );
+        NSRange range = [request.URL.description rangeOfString:@"line="];
+        NSString* lineno = [request.URL.description substringFromIndex:range.location + range.length ];
+        NSLog(@"Hier %@ ", lineno);
+    }
+    return YES;
+}
 
 @end
