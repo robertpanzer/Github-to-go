@@ -15,8 +15,6 @@
 
 @interface BranchViewController()
 
--(void)loadCommits;
-
 -(Commit*)commitForIndexPath:(NSIndexPath*)indexPath;
 
 @end
@@ -41,8 +39,6 @@
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
         isSearchResult = YES;
-//        [self loadCommits];
-        
     }
     return self;
 }
@@ -58,9 +54,6 @@
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
         isSearchResult = NO;
-
-        [self loadCommits];
-        
     }
     return self;
 }
@@ -77,8 +70,6 @@
         self.navigationItem.title = [gitObject name];
         letUserSelectCells = YES;
         isSearchResult = NO;
-        [self loadCommits];
-        
     }
     return self;
 }

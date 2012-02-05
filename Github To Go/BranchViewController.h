@@ -47,5 +47,7 @@
 
 -(id)initWithCommitHistoryList:(CommitHistoryList*)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch;
 
+-(void)loadCommits;
+
 
 @end

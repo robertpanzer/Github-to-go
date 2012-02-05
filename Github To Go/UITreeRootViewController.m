@@ -23,6 +23,7 @@
         self.absolutePath = anAbsolutePath;
         self.commit = aCommit;
         self.repository = aRepository;
+        loadedInitialHistory = NO;
     }
     return self;
 }
@@ -104,6 +105,10 @@
             treeViewController.view.hidden = YES;
             branchViewController.view.hidden = NO;
             branchViewController.tableView.tableHeaderView = self.headerView;
+            if (!loadedInitialHistory) {
+                [branchViewController loadCommits];
+                loadedInitialHistory = YES;
+            }
             break;
     }
 }
