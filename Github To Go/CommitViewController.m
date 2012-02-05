@@ -116,7 +116,7 @@
     } else  if (section == 2) {
         return 3;
     } else if (section == 3) {
-        return 3;
+        return 4;
     } else if (section == 4) {
         return 3;
     } else if (section == 5) {
@@ -132,6 +132,7 @@
     static NSString *CellIdentifier = @"Cell";
     static NSString *MessageCellIdentifier = @"MessageCell";
     static NSString *FilenameCellIdentifier = @"FilenameCell";
+    static NSString *imageCellIdentifier = @"ImageCell";
     
     UITableViewCell *cell = nil;
     if (indexPath.section == 1) {
@@ -149,6 +150,14 @@
             cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
             cell.textLabel.numberOfLines = 0;
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+        }
+    } else if (indexPath.section == 3 && indexPath.row == 3) {
+        cell = [tableView dequeueReusableCellWithIdentifier:imageCellIdentifier];
+        if (cell == nil) {
+            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                           reuseIdentifier:imageCellIdentifier] autorelease];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+            cell.imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
         }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -218,6 +227,16 @@
                 case 2:
                     cell.textLabel.text = @"Date"; 
                     cell.detailTextLabel.text = commit.committedDate;
+                    break;
+                case 3:
+                    cell.textLabel.text = @"Image"; 
+                    if (commit.committer.avatarUrl != nil) {
+                        [[NetworkProxy sharedInstance] loadStringFromURL:commit.committer.avatarUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+                            if (statusCode == 200) {
+                                cell.imageView.image = data;
+                            }
+                        }];
+                    }
                     break;
             }
             break;

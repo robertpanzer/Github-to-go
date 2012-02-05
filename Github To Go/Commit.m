@@ -49,14 +49,16 @@
         NSDictionary* tree = [jsonCommit objectForKey:@"tree"];
         self.treeUrl = [tree objectForKey:@"url"];
         
-        id jsonAuthor = [jsonCommit valueForKey:@"author"];
-        if (jsonAuthor != [NSNull null]) {
-            self.author = [[[Person alloc] initWithJSONObject:jsonAuthor] autorelease];
+        id jsonCommitAuthor = [jsonCommit valueForKey:@"author"];
+        id jsonAuthor = [jsonObject valueForKey:@"author"];
+        if (![jsonCommitAuthor isEqual:[NSNull null]]) {
+            self.author = [[[Person alloc] initWithJSONObject:jsonCommitAuthor JSONObject:jsonAuthor] autorelease];
         }
-        id jsonCommitter = [jsonCommit valueForKey:@"committer"];
-        if (jsonCommitter != [NSNull null]) {
-            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitter] autorelease];
-            self.committedDate = [jsonCommitter objectForKey:@"date"];
+        id jsonCommitCommitter = [jsonCommit valueForKey:@"committer"];
+        id jsonCommitter = [jsonObject valueForKey:@"committer"];
+        if (![jsonCommitCommitter isEqual:[NSNull null]]) {
+            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitCommitter JSONObject:jsonCommitter] autorelease];
+            self.committedDate = [jsonCommitCommitter objectForKey:@"date"];
         }
 
         self.message = [jsonCommit objectForKey:@"message"];
@@ -87,15 +89,17 @@
         NSDictionary* tree = [jsonCommit objectForKey:@"tree"];
         self.treeUrl = [tree objectForKey:@"url"];
 
-        id jsonAuthor = [jsonCommit valueForKey:@"author"];
-        if (jsonAuthor != [NSNull null]) {
-            self.author = [[[Person alloc] initWithJSONObject:jsonAuthor] autorelease];
-            self.authoredDate = [jsonAuthor objectForKey:@"date"];
+        id jsonAuthor = [jsonObject valueForKey:@"author"];
+        id jsonCommitAuthor = [jsonCommit valueForKey:@"author"];
+        if (jsonCommitAuthor != [NSNull null]) {
+            self.author = [[[Person alloc] initWithJSONObject:jsonCommitAuthor JSONObject:jsonAuthor] autorelease];
+            self.authoredDate = [jsonCommitAuthor objectForKey:@"date"];
         }
-        id jsonCommitter = [jsonCommit valueForKey:@"committer"];
-        if (jsonCommitter != [NSNull null]) {
-            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitter] autorelease];
-            self.committedDate = [jsonCommitter objectForKey:@"date"];
+        id jsonCommitter = [jsonObject valueForKey:@"committer"];
+        id jsonCommitCommitter = [jsonCommit valueForKey:@"committer"];
+        if (jsonCommitCommitter != [NSNull null]) {
+            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitCommitter JSONObject:jsonCommitter] autorelease];
+            self.committedDate = [jsonCommitCommitter objectForKey:@"date"];
         }
         
         self.message = [jsonCommit objectForKey:@"message"];

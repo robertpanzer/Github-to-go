@@ -221,10 +221,12 @@
     static NSInteger MESSAGE_TAG = 1;
     static NSInteger AUTHOR_TAG = 2;
     static NSInteger SHA_TAG = 3;
+    static NSInteger IMAGE_TAG = 4;
     UITableViewCell *cell = nil;
     UILabel* messageLabel = nil;
     UILabel* shaLabel = nil;
     UILabel* authorLabel = nil;
+    UIImageView* imageView = nil;
     
     NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
     NSArray* commitsForDay = [commitHistoryList commitsForDay:date];
@@ -237,14 +239,20 @@
         if (cell == nil) {
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier] autorelease];
             
-            messageLabel = [[[UILabel alloc] initWithFrame:CGRectMake(3.0f, 3.0f, 314.0f, 15.0f)] autorelease];
+            imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(2.0f, 2.0f, 51.0f, 51.0f)] autorelease];
+            imageView.tag = IMAGE_TAG;
+            [cell.contentView addSubview:imageView];
+            
+            messageLabel = [[[UILabel alloc] initWithFrame:CGRectMake(55.0f, 2.0f, 264.0f, 38.0f)] autorelease];
             messageLabel.font = [UIFont systemFontOfSize:14.0f];
             messageLabel.tag = MESSAGE_TAG;
+            messageLabel.numberOfLines = 2;
+            messageLabel.lineBreakMode = UILineBreakModeWordWrap;
             messageLabel.textAlignment = UITextAlignmentLeft;
             messageLabel.textColor = [UIColor blackColor];
             [cell.contentView addSubview:messageLabel];
             
-            shaLabel = [[[UILabel alloc] initWithFrame:CGRectMake(240.0f, 20.0f, 77.0f, 15.0f)] autorelease];
+            shaLabel = [[[UILabel alloc] initWithFrame:CGRectMake(240.0f, 39.0f, 77.0f, 15.0f)] autorelease];
             shaLabel.font = [UIFont systemFontOfSize:11.0f];
             shaLabel.tag = SHA_TAG;
             shaLabel.textAlignment = UITextAlignmentRight;
@@ -252,7 +260,7 @@
             [cell.contentView addSubview:shaLabel];
             
             
-            authorLabel = [[[UILabel alloc] initWithFrame:CGRectMake(3.0f, 20.0f, 200.0f, 14.0f)] autorelease];
+            authorLabel = [[[UILabel alloc] initWithFrame:CGRectMake(55.0f, 39.0f, 150.0f, 14.0f)] autorelease];
             authorLabel.font = [UIFont systemFontOfSize:11.0f];
             authorLabel.tag = AUTHOR_TAG;
             authorLabel.textAlignment = UITextAlignmentLeft;
@@ -263,8 +271,11 @@
             messageLabel = (UILabel*)[cell.contentView viewWithTag:MESSAGE_TAG];
             shaLabel = (UILabel*)[cell.contentView viewWithTag:SHA_TAG];
             authorLabel =  (UILabel*)[cell.contentView viewWithTag:AUTHOR_TAG];
-            
+            imageView = (UIImageView*)[cell.contentView viewWithTag:IMAGE_TAG];
         }
+        imageView.image = nil;
+        imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
+
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
@@ -277,6 +288,8 @@
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
         authorLabel.text = commit.author.name;
+        
+        [commit.author loadImageIntoImageView:imageView];
     } else {
         cell.textLabel.text = @"Load More Commits...";
         cell.detailTextLabel.text = nil;
@@ -296,7 +309,7 @@
     (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
 
     if (isCommit) {
-        return 36;
+        return 55;
     } else {
         return 50;
     }

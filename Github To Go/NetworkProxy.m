@@ -105,7 +105,14 @@ static NetworkProxy* networkProxyInstance;
 //    SBJsonParser* parser = [[SBJsonParser alloc] init];
 //    id object = [parser objectWithData:receivedData];
     NSError* error = [[[NSError alloc] init] autorelease];
-    id object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
+    NSLog(@"HeaderFields: \n%@", connectionData.headerFields);
+    NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
+    id object = nil;
+    if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
+        object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
+    } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
+        object = [UIImage imageWithData:receivedData];
+    }
                  
     void(^block)(int statusCode, NSDictionary* headerFields, id data) = connectionData.block;
     block([connectionData.statusCode intValue], connectionData.headerFields, object);

@@ -12,12 +12,16 @@
     NSString* login;
     NSString* name;
     NSString* email;
-
+    NSString* avatarUrl;
+    
 }
 
 @property(strong) NSString* login;
 @property(strong) NSString* name;
 @property(strong) NSString* email;
+@property(strong) NSString* avatarUrl;
 
--(id)initWithJSONObject:(NSDictionary*)dictionary;
+-(id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondObject;
+
+-(void)loadImageIntoImageView:(UIImageView*)imageView;
 @end
