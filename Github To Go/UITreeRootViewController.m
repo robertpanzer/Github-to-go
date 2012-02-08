@@ -23,7 +23,6 @@
         self.absolutePath = anAbsolutePath;
         self.commit = aCommit;
         self.repository = aRepository;
-        loadedInitialHistory = NO;
     }
     return self;
 }
@@ -54,24 +53,17 @@
                                                                branchName:self.branchName];
             
             [self addChildViewController:treeViewController];
-            
+
+            [self.view addSubview:treeViewController.view];
+            treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+
             branchViewController = [[BranchViewController alloc] initWithGitObject:tree
                                                                          commitSha:self.commit.sha
                                                                         repository:repository];
             
-            [self addChildViewController:branchViewController];
-
-            
-            [self.view addSubview:treeViewController.view];
-            treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-            
-            [self.view addSubview:branchViewController.view];
             branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
             
             treeViewController.tableView.tableHeaderView = self.headerView;
-            
-            treeViewController.view.hidden = NO;
-            branchViewController.view.hidden = YES;
 
         }
     }];
@@ -97,18 +89,18 @@
     branchViewController.tableView.tableHeaderView = nil;
     switch (segmentedControl.selectedSegmentIndex) {
         case 0:
-            treeViewController.view.hidden = NO;
-            branchViewController.view.hidden = YES;
+            [self addChildViewController:treeViewController];
+            [self.view addSubview:treeViewController.view];
+            [branchViewController removeFromParentViewController];
+            [branchViewController.view removeFromSuperview];
             treeViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 1:
-            treeViewController.view.hidden = YES;
-            branchViewController.view.hidden = NO;
+            [treeViewController removeFromParentViewController];
+            [treeViewController.view removeFromSuperview];
+            [self addChildViewController:branchViewController];
+            [self.view addSubview:branchViewController.view];
             branchViewController.tableView.tableHeaderView = self.headerView;
-            if (!loadedInitialHistory) {
-                [branchViewController loadCommits];
-                loadedInitialHistory = YES;
-            }
             break;
     }
 }

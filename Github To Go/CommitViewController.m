@@ -18,15 +18,22 @@
 @synthesize messageTextView;
 @synthesize repository;
 
--(id)initWithUrl:(NSString*)anUrl andName:(NSString*)aName repository:(Repository*)aRepository {
+-(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository {
     self = [super initWithNibName:@"CommitViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
-        self.navigationItem.title = aName;
-        [[NetworkProxy sharedInstance] loadStringFromURL:anUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        self.navigationItem.title = aCommit.message;
+        [[NetworkProxy sharedInstance] loadStringFromURL:aCommit.commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
                 self.commit = [[[Commit alloc] initWithJSONObject:data repository:aRepository] autorelease];
                 [(UITableView*)self.view reloadData];
+            }
+        }];
+        NSString* commentsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@/comments", repository.fullName, aCommit.sha];
+        NSLog(@"Comments URL: %@", commentsUrl);
+        [[NetworkProxy sharedInstance] loadStringFromURL:commentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+            if (statusCode == 200) {
+                NSLog(@"Comments %@", data);
             }
         }];
     }

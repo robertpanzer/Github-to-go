@@ -105,7 +105,6 @@ static NetworkProxy* networkProxyInstance;
 //    SBJsonParser* parser = [[SBJsonParser alloc] init];
 //    id object = [parser objectWithData:receivedData];
     NSError* error = [[[NSError alloc] init] autorelease];
-    NSLog(@"HeaderFields: \n%@", connectionData.headerFields);
     NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
     id object = nil;
     if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {

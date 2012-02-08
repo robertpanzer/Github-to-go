@@ -29,9 +29,7 @@
     TreeViewController* treeViewController;
     
     BranchViewController* branchViewController;
-    
-    BOOL loadedInitialHistory;
-}
+    }
 
 @property(strong) IBOutlet UIView* headerView;
 @property(strong) NSString* treeUrl;

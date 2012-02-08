@@ -27,5 +27,5 @@
 @property(strong) IBOutlet UITextView* messageTextView;
 
 
--(id)initWithUrl:(NSString*)url andName:(NSString*)aName repository:(Repository*)aRepository;
+-(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository;
 @end

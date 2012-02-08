@@ -162,6 +162,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if (commitHistoryList.count == 0) {
+        [self loadCommits];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -360,9 +363,8 @@
         (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < [commitHistoryList commitsForDay:date].count);
         
         if (isCommit) {
-            
             Commit* commit = [self commitForIndexPath:indexPath];  //[commits objectAtIndex:indexPath.row];
-            CommitViewController* commitViewController = [[[CommitViewController alloc] initWithUrl:commit.commitUrl andName:commit.message repository:repository] autorelease];
+            CommitViewController* commitViewController = [[[CommitViewController alloc] initWithCommit:commit repository:repository] autorelease];
             [self.navigationController pushViewController:commitViewController animated:YES];
         }
     } else {

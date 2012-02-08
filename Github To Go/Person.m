@@ -9,7 +9,11 @@
 #import "Person.h"
 #import "NetworkProxy.h"
 
-static NSDictionary* url2Image;
+static NSMutableDictionary* url2Image;
+
+static NSMutableDictionary* image2SequenceNumber;
+
+static long sequenceCounter = 0;
 
 @implementation Person 
 
@@ -20,6 +24,7 @@ static NSDictionary* url2Image;
 
 + (void)initialize {
     url2Image = [[NSMutableDictionary alloc] init];
+    image2SequenceNumber = [[NSMutableDictionary alloc] init];
 }
 
 - (id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondDictionary {
@@ -43,6 +48,9 @@ static NSDictionary* url2Image;
 
 -(void)loadImageIntoImageView:(UIImageView*)imageView {
     if (avatarUrl != nil) {
+        long mySequenceNumber = sequenceCounter++;
+        
+        [image2SequenceNumber setObject:[NSNumber numberWithLong:mySequenceNumber] forKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
         UIImage* image = [url2Image objectForKey:self.avatarUrl];
         if (image != nil) {
             imageView.image = image;
@@ -52,7 +60,11 @@ static NSDictionary* url2Image;
         [[NetworkProxy sharedInstance] loadStringFromURL:avatarUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if ([data isKindOfClass:[UIImage class]]) {
                 [url2Image setValue:data forKey:self.avatarUrl];
-                imageView.image = data;
+                NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
+                if ([sequenceNumber longValue] == mySequenceNumber) {
+                    imageView.image = data;
+                    [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
+                }
             }
         }];
     }
