@@ -11,7 +11,7 @@
 
 @implementation UIRepositoryRootViewController
 
-@synthesize repository, repositoryViewController, branchesBrowserViewController, headerView;
+@synthesize repository, repositoryViewController, branchesBrowserViewController, headerView, eventTableViewController;
 
 - (id)initWithRepository:(Repository*)aRepository
 {
@@ -19,14 +19,6 @@
     if (self) {
         // Custom initialization
         self.repository = aRepository;
-//        self.tabBarItem.title = @"Repo";
-
-        repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
-        branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
-        [self addChildViewController:repositoryViewController];
-        [self addChildViewController:branchesBrowserViewController];
-
-        
     }
     return self;
 }
@@ -47,16 +39,19 @@
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = repository.fullName;
     
-    [self.view addSubview:repositoryViewController.view];
+    repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
+    branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
+    eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
+
     repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-
-    [self.view addSubview:branchesBrowserViewController.view];
     branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
-    repositoryViewController.tableView.tableHeaderView = self.headerView;
+    [self.view addSubview:eventTableViewController.view];
+    [self addChildViewController:eventTableViewController];
+    eventTableViewController.tableView.tableHeaderView = self.headerView;
+
     
-    repositoryViewController.view.hidden = NO;
-    branchesBrowserViewController.view.hidden = YES;
 }
 
 - (void)viewDidUnload
@@ -64,6 +59,10 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    self.eventTableViewController = nil;
+    self.branchesBrowserViewController = nil;
+    self.repositoryViewController = nil;
+    self.headerView = nil;
 }
 
 
@@ -77,16 +76,34 @@
     UISegmentedControl* segmentedControl = sender;
     repositoryViewController.tableView.tableHeaderView = nil;
     branchesBrowserViewController.tableView.tableHeaderView = nil;
+    eventTableViewController.tableView.tableHeaderView = nil;
     switch (segmentedControl.selectedSegmentIndex) {
         case 0:
-            repositoryViewController.view.hidden = NO;
-            branchesBrowserViewController.view.hidden = YES;
-            repositoryViewController.tableView.tableHeaderView = self.headerView;
+            [repositoryViewController removeFromParentViewController];
+            [repositoryViewController.view removeFromSuperview];
+            [branchesBrowserViewController removeFromParentViewController];
+            [branchesBrowserViewController.view removeFromSuperview];
+            [self addChildViewController:eventTableViewController];
+            [self.view addSubview:eventTableViewController.view];
+            eventTableViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 1:
-            repositoryViewController.view.hidden = YES;
-            branchesBrowserViewController.view.hidden = NO;
+            [repositoryViewController removeFromParentViewController];
+            [repositoryViewController.view removeFromSuperview];
+            [eventTableViewController removeFromParentViewController];
+            [eventTableViewController.view removeFromSuperview];
+            [self addChildViewController:branchesBrowserViewController];
+            [self.view addSubview:branchesBrowserViewController.view];
             branchesBrowserViewController.tableView.tableHeaderView = self.headerView;
+            break;
+        case 2:
+            [branchesBrowserViewController removeFromParentViewController];
+            [branchesBrowserViewController.view removeFromSuperview];
+            [eventTableViewController removeFromParentViewController];
+            [eventTableViewController.view removeFromSuperview];
+            [self addChildViewController:repositoryViewController];
+            [self.view addSubview:repositoryViewController.view];
+            repositoryViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
 }
@@ -94,9 +111,6 @@
 
 - (void)dealloc {
     [repository release];
-    [repositoryViewController release];
-    [branchesBrowserViewController release];
-    [headerView release];
     [super dealloc];
 }
 

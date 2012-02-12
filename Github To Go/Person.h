@@ -20,6 +20,9 @@
 @property(strong) NSString* name;
 @property(strong) NSString* email;
 @property(strong) NSString* avatarUrl;
+@property(readonly) NSString* displayname;
+
+-(id)initWithJSONObject:(NSDictionary*)dictionary;
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondObject;
 

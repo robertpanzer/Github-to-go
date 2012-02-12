@@ -63,6 +63,8 @@
             
             branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
             
+            
+            
             treeViewController.tableView.tableHeaderView = self.headerView;
 
         }
@@ -76,6 +78,8 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     self.headerView = nil;
+    [branchViewController release];
+    [treeViewController release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

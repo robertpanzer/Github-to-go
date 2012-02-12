@@ -11,6 +11,7 @@
 
 #import "RepositoryViewController.h"
 #import "BranchesBrowserViewController.h"
+#import "EventTableViewController.h"
 
 @interface UIRepositoryRootViewController : UIViewController {
     Repository* repository;
@@ -19,12 +20,15 @@
     
     BranchesBrowserViewController* branchesBrowserViewController;
     
+    EventTableViewController* eventTableViewController;
+    
     UIView* headerView;
 }
 
 @property(strong) Repository* repository;
 @property(strong) RepositoryViewController* repositoryViewController;
 @property(strong) BranchesBrowserViewController* branchesBrowserViewController;
+@property(strong) EventTableViewController* eventTableViewController;
 @property(strong) IBOutlet UIView* headerView;
 
 - (id)initWithRepository:(Repository*)aRepository;

@@ -54,6 +54,9 @@
 		94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
+		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
+		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
+		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +136,11 @@
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
 		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
+		94D50E0714E472D6000C92E2 /* EventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewController.h; sourceTree = "<group>"; };
+		94D50E0814E472D6000C92E2 /* EventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewController.m; sourceTree = "<group>"; };
+		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
+		94D50E0C14E478D7000C92E2 /* GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubEvent.h; sourceTree = "<group>"; };
+		94D50E0D14E478D7000C92E2 /* GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubEvent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,6 +291,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				94D50E0514E472B9000C92E2 /* Events */,
 				94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */,
 				9402273E14C1A0D10036A676 /* CommitFile */,
 				9424DE4D14B9D95000B6538E /* Settings */,
@@ -325,6 +334,18 @@
 				949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		94D50E0514E472B9000C92E2 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				94D50E0714E472D6000C92E2 /* EventTableViewController.h */,
+				94D50E0814E472D6000C92E2 /* EventTableViewController.m */,
+				94D50E0914E472D6000C92E2 /* EventTableViewController.xib */,
+				94D50E0C14E478D7000C92E2 /* GithubEvent.h */,
+				94D50E0D14E478D7000C92E2 /* GithubEvent.m */,
+			);
+			name = Events;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -395,6 +416,7 @@
 				945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */,
 				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 				94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */,
+				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +453,8 @@
 				9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */,
 				945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */,
 				945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */,
+				94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */,
+				94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
