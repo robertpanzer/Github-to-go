@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Repository.h"
+#import "HistoryList.h"
 
 @interface EventTableViewController : UITableViewController {
     
     Repository* repository;
     
-    NSMutableArray* events;
+    HistoryList* eventHistory;
     
     int pagesLoaded;
     
@@ -24,7 +25,7 @@
 }
 
 @property(strong) Repository* repository;
-@property(strong) NSMutableArray* events;
+@property(strong) HistoryList* eventHistory;
 
 -(id)initWithRepository:(Repository*)aRepository;
 

@@ -19,13 +19,13 @@
 @implementation EventTableViewController;
 
 @synthesize repository;
-@synthesize events;
+@synthesize eventHistory;
 
 - (id)initWithRepository:(Repository *)aRepository {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
-        self.events = [[[NSMutableArray alloc] init] autorelease];
+        self.eventHistory = [[[HistoryList alloc] init] autorelease];
         isLoading = NO;
         complete = NO;
         pagesLoaded = 0;
@@ -87,22 +87,24 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
     return YES;
+}
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+    return eventHistory.dates.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return events.count;
+    NSString* date = [eventHistory.dates objectAtIndex:section];
+    return [eventHistory objectsForDate:date].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -115,13 +117,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        
         imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)] autorelease];
         label = [[[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)] autorelease];
         label.font = [UIFont systemFontOfSize:14.0f];
         label.numberOfLines = 0;
         label.lineBreakMode = UILineBreakModeWordWrap;
-//        label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
         imageView.tag = 1;
         label.tag = 2;
         
@@ -133,66 +133,37 @@
     }
     imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
     // Configure the cell...
-    GithubEvent* event = [events objectAtIndex:indexPath.row];
+    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
+    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
     label.text = event.text;
-    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(tableView.frame.size.width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    label.frame = CGRectMake(55.0f, 2.0f, 265.0f, size.height);
+
+    CGFloat width = self.tableView.frame.size.width;
+
+    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+    label.frame = CGRectMake(55.0f, 2.0f, width - 57.0f, size.height);
     [event.person loadImageIntoImageView:imageView];
     
-    if (indexPath.row == events.count - 1) {
+    if (indexPath.section == eventHistory.dates.count - 1 && indexPath.row == [eventHistory objectsForDate:date].count - 1) {
         [self loadEvents];
     }
     
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString* date = [eventHistory.dates objectAtIndex:section];
+    return date;
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 
+#pragma mark - Table view delegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    GithubEvent* event = [events objectAtIndex:indexPath.row];
+    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
+    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row] ;
     CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
     return labelHeight > 55.0f ? labelHeight : 55.0f;
 }
-#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -219,7 +190,9 @@
                     return;
                 }
                 for (NSDictionary* event in eventArray) {
-                    [events addObject:[[[GithubEvent alloc] initWithJSON:event] autorelease]];
+                    GithubEvent* eventObject = [[[GithubEvent alloc] initWithJSON:event] autorelease];
+                    [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
+                    
                 }
                 pagesLoaded++;
                 isLoading = NO;

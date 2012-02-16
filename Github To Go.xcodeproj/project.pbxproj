@@ -29,6 +29,7 @@
 		945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */; };
 		945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271C414D74A3100F5610D /* UITreeRootViewController.m */; };
 		945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271C514D74A3100F5610D /* UITreeRootViewController.xib */; };
+		945C25F614E86D6F00479D21 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 945C25F514E86D6F00479D21 /* HistoryList.m */; };
 		945FE31E14B866F60099FD84 /* StringQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 945FE31D14B866F60099FD84 /* StringQueue.m */; };
 		9466DBD414B7ACCD00238151 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD314B7ACCD00238151 /* Branch.m */; };
 		9466DBD914B7B77800238151 /* BranchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD714B7B77800238151 /* BranchViewController.m */; };
@@ -97,6 +98,8 @@
 		945271C314D74A3100F5610D /* UITreeRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITreeRootViewController.h; sourceTree = "<group>"; };
 		945271C414D74A3100F5610D /* UITreeRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITreeRootViewController.m; sourceTree = "<group>"; };
 		945271C514D74A3100F5610D /* UITreeRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UITreeRootViewController.xib; sourceTree = "<group>"; };
+		945C25F414E86D6F00479D21 /* HistoryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryList.h; sourceTree = "<group>"; };
+		945C25F514E86D6F00479D21 /* HistoryList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryList.m; sourceTree = "<group>"; };
 		945FE31C14B866F60099FD84 /* StringQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringQueue.h; sourceTree = "<group>"; };
 		945FE31D14B866F60099FD84 /* StringQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringQueue.m; sourceTree = "<group>"; };
 		9466DBD214B7ACCD00238151 /* Branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Branch.h; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 			children = (
 				945FE31C14B866F60099FD84 /* StringQueue.h */,
 				945FE31D14B866F60099FD84 /* StringQueue.m */,
+				945C25F414E86D6F00479D21 /* HistoryList.h */,
+				945C25F514E86D6F00479D21 /* HistoryList.m */,
 			);
 			name = "General Data Structures";
 			sourceTree = "<group>";
@@ -455,6 +460,7 @@
 				945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */,
 				94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */,
 				94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */,
+				945C25F614E86D6F00479D21 /* HistoryList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

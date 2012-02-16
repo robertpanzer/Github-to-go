@@ -8,20 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Commit.h"
+#import "HistoryList.h"
 
-@interface CommitHistoryList : NSObject {
 
-@private
-    NSMutableArray* dates;
-    
-    NSMutableDictionary* commitsForDate;
-    
-    NSMutableDictionary* commitBySha;
-}
+@interface CommitHistoryList : HistoryList
 
-@property(strong, readonly) NSArray* dates; 
-
-@property(readonly) NSInteger count;
 
 - (id)init;
 

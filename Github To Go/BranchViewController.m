@@ -281,7 +281,7 @@
         Commit* commit = [commitsForDay objectAtIndex:indexPath.row];
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
-        authorLabel.text = commit.author.name;
+        authorLabel.text = [commit.author displayname];
         
         [commit.author loadImageIntoImageView:imageView];
     } else {

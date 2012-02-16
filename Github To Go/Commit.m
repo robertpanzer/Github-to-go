@@ -44,24 +44,20 @@
         self.commitUrl = [jsonObject objectForKey:@"url"];
         self.sha = [jsonObject objectForKey:@"sha"];
 
-        NSDictionary* jsonCommit = [jsonObject objectForKey:@"commit"];
-        
-        NSDictionary* tree = [jsonCommit objectForKey:@"tree"];
-        self.treeUrl = [tree objectForKey:@"url"];
-        
-        id jsonCommitAuthor = [jsonCommit valueForKey:@"author"];
-        id jsonAuthor = [jsonObject valueForKey:@"author"];
-        if (![jsonCommitAuthor isEqual:[NSNull null]]) {
-            self.author = [[[Person alloc] initWithJSONObject:jsonCommitAuthor JSONObject:jsonAuthor] autorelease];
-        }
-        id jsonCommitCommitter = [jsonCommit valueForKey:@"committer"];
-        id jsonCommitter = [jsonObject valueForKey:@"committer"];
-        if (![jsonCommitCommitter isEqual:[NSNull null]]) {
-            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitCommitter JSONObject:jsonCommitter] autorelease];
-            self.committedDate = [jsonCommitCommitter objectForKey:@"date"];
-        }
+        self.treeUrl = [jsonObject valueForKeyPath:@"commit.tree.url"];
 
-        self.message = [jsonCommit objectForKey:@"message"];
+        self.committedDate = [jsonObject valueForKeyPath:@"commit.committer.date"];
+        self.authoredDate = [jsonObject valueForKeyPath:@"commit.author.date"];
+        self.author = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]] autorelease];
+        if (author.displayname == nil) {
+            self.author = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.author"]] autorelease];
+        }
+        self.committer = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]] autorelease];
+        if (committer.displayname == nil) {
+            self.committer = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.committer"]] autorelease];            
+        }
+        
+        self.message = [jsonObject valueForKeyPath:@"commit.message"];
 
         NSArray* parents = [jsonObject objectForKey:@"parents"];
         NSMutableArray* newParentUrls = [[[NSMutableArray alloc] init] autorelease];
@@ -78,31 +74,8 @@
 }
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository *)aRepository {
-    self = [super init];
+    self = [self initMinimalDataWithJSONObject:jsonObject repository:aRepository];
     if (self) {
-        self.repository = aRepository;
-        self.commitUrl = [jsonObject objectForKey:@"url"];
-        self.sha = [jsonObject objectForKey:@"sha"];
-        
-        NSDictionary* jsonCommit = [jsonObject objectForKey:@"commit"];
-
-        NSDictionary* tree = [jsonCommit objectForKey:@"tree"];
-        self.treeUrl = [tree objectForKey:@"url"];
-
-        id jsonAuthor = [jsonObject valueForKey:@"author"];
-        id jsonCommitAuthor = [jsonCommit valueForKey:@"author"];
-        if (jsonCommitAuthor != [NSNull null]) {
-            self.author = [[[Person alloc] initWithJSONObject:jsonCommitAuthor JSONObject:jsonAuthor] autorelease];
-            self.authoredDate = [jsonCommitAuthor objectForKey:@"date"];
-        }
-        id jsonCommitter = [jsonObject valueForKey:@"committer"];
-        id jsonCommitCommitter = [jsonCommit valueForKey:@"committer"];
-        if (jsonCommitCommitter != [NSNull null]) {
-            self.committer = [[[Person alloc] initWithJSONObject:jsonCommitCommitter JSONObject:jsonCommitter] autorelease];
-            self.committedDate = [jsonCommitCommitter objectForKey:@"date"];
-        }
-        
-        self.message = [jsonCommit objectForKey:@"message"];
         
         NSArray* files = [jsonObject objectForKey:@"files"];
         NSMutableArray* newChangedFiles = [[[NSMutableArray alloc] init] autorelease];
@@ -117,19 +90,6 @@
         self.additions = ((NSNumber*)[stats objectForKey:@"additions"]).intValue;
         self.total = ((NSNumber*)[stats objectForKey:@"total"]).intValue;
         
-//        for (NSString* key in jsonObject.keyEnumerator) {
-//            NSLog(@"Key: %@", key);
-//            NSObject* value = [jsonObject objectForKey:key];
-//            NSLog(@"Value: %@", value);
-//        }
-        
-        NSArray* parents = [jsonObject objectForKey:@"parents"];
-        NSMutableArray* newParentUrls = [[[NSMutableArray alloc] init] autorelease];
-        
-        for (NSDictionary* parent in parents) {
-            [newParentUrls addObject:[parent objectForKey:@"url"]];
-        }
-        self.parentUrls = newParentUrls;
     }
     return self;
 }
