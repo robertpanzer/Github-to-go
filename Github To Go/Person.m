@@ -96,6 +96,11 @@ static long sequenceCounter = 0;
 
 }
 
++(void)clearCache {
+    [url2Image removeAllObjects];
+    [image2SequenceNumber removeAllObjects];
+}
+
 -(NSString*)displayname {
     if (self.name) {
         return self.name;
@@ -106,11 +111,6 @@ static long sequenceCounter = 0;
     }
 }
 
-- (void)dealloc {
-    [login release];
-    [name release];
-    [email release];
-    [avatarUrl release];
-    [super dealloc];
-}
+
+
 @end

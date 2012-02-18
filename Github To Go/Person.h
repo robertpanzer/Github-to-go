@@ -20,11 +20,13 @@
 @property(strong) NSString* name;
 @property(strong) NSString* email;
 @property(strong) NSString* avatarUrl;
-@property(readonly) NSString* displayname;
+@property(unsafe_unretained, readonly) NSString* displayname;
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary;
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondObject;
 
 -(void)loadImageIntoImageView:(UIImageView*)imageView;
+
++(void)clearCache;
 @end

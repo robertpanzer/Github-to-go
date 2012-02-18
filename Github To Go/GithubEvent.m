@@ -37,7 +37,7 @@
         NSString* type = [jsonObject objectForKey:@"type"];
         
         @try {
-            self.person = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]] autorelease];
+            self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
             self.date = [jsonObject objectForKey:@"created_at"];
             NSLog(@"%@", type);
             if ([type isEqualToString:@"PushEvent"]) {
@@ -65,12 +65,6 @@
     return self;
 }
 
-- (void)dealloc {
-    self.person = nil;
-    self.text = nil;
-    self.date = nil;
-    [super dealloc];
-}
 
 -(void)parsePushEvent:(NSDictionary*)jsonObject {
 

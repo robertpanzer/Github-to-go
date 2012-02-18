@@ -16,16 +16,11 @@
 - (id)initWithValue:(NSString*)aValue {
     self = [super init];
     if (self) {
-        value = [aValue retain];
+        value = aValue;
     }
     return self;
 }
 
-- (void)dealloc {
-    [value release];
-    [nextElement release];
-    [super dealloc];
-}
 @end
 
 @implementation StringQueue
@@ -51,22 +46,17 @@
         firstElement = [[StringQueueListElement alloc] initWithValue:value];
         lastElement = firstElement;
     } else {
-        lastElement.nextElement = [[[StringQueueListElement alloc] initWithValue:value] autorelease];
+        lastElement.nextElement = [[StringQueueListElement alloc] initWithValue:value];
         lastElement = lastElement.nextElement;
     }
 }
 
 - (NSString *)dequeueString {
     NSString* value = firstElement.value;
-    StringQueueListElement* newFirstElement = [firstElement.nextElement retain];
-    [firstElement release];
+    StringQueueListElement* newFirstElement = firstElement.nextElement;
     firstElement = newFirstElement;
     return value;
 }
 
-- (void)dealloc {
-    [firstElement release];
-    [super dealloc];
-}
 
 @end

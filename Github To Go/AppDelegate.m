@@ -18,26 +18,19 @@
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
 
-- (void)dealloc
-{
-    [_window release];
-    [_tabBarController release];
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[NetworkProxy alloc] init];
     
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    RepoBrowserTableViewController* repoBrowserController = [[[RepoBrowserTableViewController alloc] init] autorelease];
+    RepoBrowserTableViewController* repoBrowserController = [[RepoBrowserTableViewController alloc] init];
     
-    UINavigationController* navigationController = [[[UINavigationController alloc] initWithRootViewController:repoBrowserController] autorelease];
+    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:repoBrowserController];
     
-    SettingsViewController* settingsController = [[[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil] autorelease];
+    SettingsViewController* settingsController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
     
-    self.tabBarController = [[[UITabBarController alloc] init] autorelease];
+    self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:navigationController, settingsController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
@@ -83,6 +76,9 @@
      */
 }
 
+-(void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    [Person clearCache];
+}
 /*
 // Optional UITabBarControllerDelegate method.
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController

@@ -44,7 +44,7 @@
     [[NetworkProxy sharedInstance] loadStringFromURL:self.treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             NSLog(@"Loaded tree %@", data);
-            Tree* tree = [[[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commit.sha] autorelease];
+            Tree* tree = [[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commit.sha];
             
             treeViewController = [[TreeViewController alloc] initWithTree:tree
                                                              absolutePath:self.absolutePath
@@ -78,8 +78,6 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     self.headerView = nil;
-    [branchViewController release];
-    [treeViewController release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -110,12 +108,4 @@
 }
 
 
-- (void)dealloc {
-    [treeUrl release];
-    [absolutePath release];
-    [branchName release];
-    [commit release];
-    [repository release];
-    [super dealloc];
-}
 @end

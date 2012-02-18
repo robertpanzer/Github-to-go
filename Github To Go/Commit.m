@@ -48,20 +48,20 @@
 
         self.committedDate = [jsonObject valueForKeyPath:@"commit.committer.date"];
         self.authoredDate = [jsonObject valueForKeyPath:@"commit.author.date"];
-        self.author = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]] autorelease];
+        self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]];
         if (author.displayname == nil) {
-            self.author = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.author"]] autorelease];
+            self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.author"]];
         }
-        self.committer = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]] autorelease];
+        self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]];
         if (committer.displayname == nil) {
-            self.committer = [[[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.committer"]] autorelease];            
+            self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.committer"]];            
         }
         
         self.message = [jsonObject valueForKeyPath:@"commit.message"];
 
         NSArray* parents = [jsonObject objectForKey:@"parents"];
-        NSMutableArray* newParentUrls = [[[NSMutableArray alloc] init] autorelease];
-        NSMutableArray* newParentShas = [[[NSMutableArray alloc] init] autorelease];
+        NSMutableArray* newParentUrls = [[NSMutableArray alloc] init];
+        NSMutableArray* newParentShas = [[NSMutableArray alloc] init];
         
         for (NSDictionary* parent in parents) {
             [newParentUrls addObject:[parent objectForKey:@"url"]];
@@ -78,9 +78,9 @@
     if (self) {
         
         NSArray* files = [jsonObject objectForKey:@"files"];
-        NSMutableArray* newChangedFiles = [[[NSMutableArray alloc] init] autorelease];
+        NSMutableArray* newChangedFiles = [[NSMutableArray alloc] init];
         for (NSDictionary* file in files) {
-            CommitFile* changedFile = [[[CommitFile alloc] initWithJSONObject:file commit:self] autorelease];
+            CommitFile* changedFile = [[CommitFile alloc] initWithJSONObject:file commit:self];
             [newChangedFiles addObject:changedFile];
         }
         self.changedFiles = newChangedFiles;
@@ -125,7 +125,7 @@
     NSArray* pathElements = [absolutePath pathComponents];
     [[NetworkProxy sharedInstance] loadStringFromURL:treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            Tree* rootTree = [[[Tree alloc] initWithJSONObject:data absolutePath:@"" commitSha:self.sha] autorelease];
+            Tree* rootTree = [[Tree alloc] initWithJSONObject:data absolutePath:@"" commitSha:self.sha];
             [self loadObjectWithAbsolutePath:pathElements fromTree:rootTree];
         }
     }];
@@ -137,7 +137,7 @@
             [[NetworkProxy sharedInstance] loadStringFromURL:subtree.url block:^(int statusCode, NSDictionary* headerFields, id data) {
                 if (statusCode == 200) {
 //                    NSString* absolutePath = [tree.absolutePath stringByAppendingPathComponent:subtree.name];
-                    Tree* fullSubTree = [[[Tree alloc] initWithJSONObject:data absolutePath:subtree.absolutePath commitSha:self.sha] autorelease];
+                    Tree* fullSubTree = [[Tree alloc] initWithJSONObject:data absolutePath:subtree.absolutePath commitSha:self.sha];
                     [self loadObjectWithAbsolutePath:[pathElements subarrayWithRange:NSMakeRange(1, pathElements.count - 1)]  fromTree:fullSubTree];
                 }
             }];
@@ -147,7 +147,7 @@
         if ([[pathElements objectAtIndex:0] isEqual:blob.name]) {
             [[NetworkProxy sharedInstance] loadStringFromURL:blob.url block:^(int statusCode, NSDictionary* headerFields, id data) {
                 if (statusCode == 200) {
-                    Blob* fullBlob = [[[Blob alloc] initWithJSONObject:data absolutePath:blob.absolutePath commitSha:blob.commitSha] autorelease];
+                    Blob* fullBlob = [[Blob alloc] initWithJSONObject:data absolutePath:blob.absolutePath commitSha:blob.commitSha];
                     NSLog(@"Blob: %@", fullBlob);
                 }
             }];
@@ -156,20 +156,4 @@
     }
 }
 
-- (void)dealloc {
-    [treeUrl release];
-    [commitUrl release];
-    [author release];
-    [committer release];
-    [message release];
-    [parentUrls release];
-    [parentCommitShas release];
-    [changedFiles release];
-    [sha release];
-    [committedDate release];
-    [authoredDate release];
-    
-    
-    [super dealloc];
-}
 @end

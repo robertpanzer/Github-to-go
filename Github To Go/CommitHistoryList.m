@@ -40,7 +40,7 @@
 
 -(CommitHistoryList *)commitHistoryListFilteredBySearchString:(NSString *)searchString {
     
-    CommitHistoryList* ret = [[[CommitHistoryList alloc] init] autorelease];
+    CommitHistoryList* ret = [[CommitHistoryList alloc] init];
     
     for (Commit* commit in self.objectsByPrimaryKey.objectEnumerator) {
         if ([commit matchesString:searchString]) {

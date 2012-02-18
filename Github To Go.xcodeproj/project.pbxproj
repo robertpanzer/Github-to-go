@@ -379,7 +379,7 @@
 		949FB12614B3327700D3E713 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Github To Go" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -532,10 +532,11 @@
 		949FB15C14B3327800D3E713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -544,10 +545,11 @@
 		949FB15D14B3327800D3E713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

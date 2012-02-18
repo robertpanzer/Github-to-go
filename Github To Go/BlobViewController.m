@@ -10,9 +10,6 @@
 #import "NetworkProxy.h"
 #import "BranchViewController.h"
 
-static CGFloat widthLineNumberColumn = 50.0f;
-static CGFloat xOffsetContentColumn = 55.0f;
-
 @implementation BlobViewController
 
 @synthesize webView;
@@ -27,23 +24,15 @@ static CGFloat xOffsetContentColumn = 55.0f;
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
         self.url = anUrl;
-        repository = [aRepository retain];
+        repository = aRepository;
         
-        absolutePath = [anAbsolutePath retain];
-        commitSha = [aCommitSha retain];
+        absolutePath = anAbsolutePath;
+        commitSha = aCommitSha;
         self.navigationItem.title = [absolutePath pathComponents].lastObject;
     }
     return self;
 }
 
-- (void)dealloc {
-    [webView release];
-    [blob release];
-    [url release];
-    [absolutePath release];
-    [repository release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -59,15 +48,15 @@ static CGFloat xOffsetContentColumn = 55.0f;
 {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showBlobHistory:)] autorelease];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showBlobHistory:)];
 
     // Do any additional setup after loading the view from its nib.
     
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            self.blob = [[[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha] autorelease];
+            self.blob = [[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha];
 
-            NSMutableString* html = [[[NSMutableString alloc] initWithCapacity:self.blob.content.length + 1000] autorelease];
+            NSMutableString* html = [[NSMutableString alloc] initWithCapacity:self.blob.content.length + 1000];
             
             [html appendString:@"<!DOCTYPE html>\n"];
             [html appendString:@"<html><head><style>\n"];
@@ -77,7 +66,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
             
             NSArray* lines = [self.blob.content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
             int lineNo = 1;
-            for (NSString* line in lines) {
+            for (__strong NSString* line in lines) {
                 line = [line stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
                 line = [line stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
                 
@@ -115,7 +104,7 @@ static CGFloat xOffsetContentColumn = 55.0f;
 }
 
 -(void)showBlobHistory:(id)sender {    
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:blob commitSha:self.commitSha repository:repository] autorelease];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:blob commitSha:self.commitSha repository:repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }

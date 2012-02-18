@@ -23,17 +23,11 @@
         // Custom initialization
         self.commitFile = aCommitFile;
         
-        [self.navigationItem setRightBarButtonItem:[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showFile:)] autorelease]];
+        [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showFile:)]];
     }
     return self;
 }
 
-- (void)dealloc {
-    [label release];
-    [commitFile release];
-    [scrollView release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -76,7 +70,7 @@
     
     NSString* blobUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/git/blobs/%@", commitFile.commit.repository.fullName, commitFile.blobSha];
     
-    BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository] autorelease];
+    BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:blobUrl absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository];
     [self.navigationController pushViewController:blobViewController animated:YES];
 }
 

@@ -34,8 +34,8 @@
         isComplete = YES;
         self.repository = aRepository;
         self.branch = aBranch;
-        commitSha = [branch.sha retain];
-        commitHistoryList = [aCommitHistoryList retain];
+        commitSha = branch.sha;
+        commitHistoryList = aCommitHistoryList;
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
         isSearchResult = YES;
@@ -49,7 +49,7 @@
         isComplete = NO;
         self.repository = aRepository;
         self.branch = aBranch;
-        commitSha = [branch.sha retain];
+        commitSha = branch.sha;
         commitHistoryList = [[CommitHistoryList alloc] init];
         self.navigationItem.title = aBranch.name;
         letUserSelectCells = YES;
@@ -64,8 +64,8 @@
         isComplete = NO;
         self.repository = aRepository;
         commitHistoryList = [[CommitHistoryList alloc] init];
-        absolutePath = [[gitObject absolutePath] retain];
-        commitSha = [aCommitSha retain];
+        absolutePath = [gitObject absolutePath];
+        commitSha = aCommitSha;
         
         self.navigationItem.title = [gitObject name];
         letUserSelectCells = YES;
@@ -75,14 +75,6 @@
 }
 
 
-- (void)dealloc {
-    [repository release];
-    [branch release];
-    [commitHistoryList release];
-    [absolutePath release];
-    [commitSha release];
-    [super dealloc];
-}
 
 -(Commit *)commitForIndexPath:(NSIndexPath *)indexPath {
     NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
@@ -97,7 +89,7 @@
         Commit* lastCommit = [commitHistoryList lastCommit];
         sha = lastCommit.sha;
     }
-    NSString* url = [[[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha] autorelease];
+    NSString* url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha];
     if (absolutePath != nil) {
         url = [url stringByAppendingFormat:@"&path=%@", absolutePath];
     }
@@ -107,7 +99,7 @@
             
             NSArray * jsonCommits = (NSArray*)data;
             for (NSDictionary* jsonCommit in jsonCommits) {
-                Commit* commit = [[[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository] autorelease];
+                Commit* commit = [[Commit alloc] initMinimalDataWithJSONObject:jsonCommit repository:repository];
                 [commitHistoryList addCommit:commit];
             }
             isLoading = NO;
@@ -140,7 +132,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     if (!isSearchResult) {
-        UISearchBar* aSearchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)] autorelease];
+        UISearchBar* aSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)];
         aSearchBar.delegate = self;
         self.tableView.tableHeaderView = aSearchBar;
         self.tableView.contentOffset = CGPointMake(0.0f, 45.0f);
@@ -231,13 +223,13 @@
     if (isCommit) {
         cell = [tableView dequeueReusableCellWithIdentifier:CommitCellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier];
             
-            imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(2.0f, 2.0f, 51.0f, 51.0f)] autorelease];
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2.0f, 2.0f, 51.0f, 51.0f)];
             imageView.tag = IMAGE_TAG;
             [cell.contentView addSubview:imageView];
             
-            messageLabel = [[[UILabel alloc] initWithFrame:CGRectMake(55.0f, 2.0f, 264.0f, 38.0f)] autorelease];
+            messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(55.0f, 2.0f, 264.0f, 38.0f)];
             messageLabel.font = [UIFont systemFontOfSize:14.0f];
             messageLabel.tag = MESSAGE_TAG;
             messageLabel.numberOfLines = 2;
@@ -246,7 +238,7 @@
             messageLabel.textColor = [UIColor blackColor];
             [cell.contentView addSubview:messageLabel];
             
-            shaLabel = [[[UILabel alloc] initWithFrame:CGRectMake(240.0f, 39.0f, 77.0f, 15.0f)] autorelease];
+            shaLabel = [[UILabel alloc] initWithFrame:CGRectMake(240.0f, 39.0f, 77.0f, 15.0f)];
             shaLabel.font = [UIFont systemFontOfSize:11.0f];
             shaLabel.tag = SHA_TAG;
             shaLabel.textAlignment = UITextAlignmentRight;
@@ -254,7 +246,7 @@
             [cell.contentView addSubview:shaLabel];
             
             
-            authorLabel = [[[UILabel alloc] initWithFrame:CGRectMake(55.0f, 39.0f, 150.0f, 14.0f)] autorelease];
+            authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(55.0f, 39.0f, 150.0f, 14.0f)];
             authorLabel.font = [UIFont systemFontOfSize:11.0f];
             authorLabel.tag = AUTHOR_TAG;
             authorLabel.textAlignment = UITextAlignmentLeft;
@@ -273,7 +265,7 @@
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         }
     }
     
@@ -364,7 +356,7 @@
         
         if (isCommit) {
             Commit* commit = [self commitForIndexPath:indexPath];  //[commits objectAtIndex:indexPath.row];
-            CommitViewController* commitViewController = [[[CommitViewController alloc] initWithCommit:commit repository:repository] autorelease];
+            CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:commit repository:repository];
             [self.navigationController pushViewController:commitViewController animated:YES];
         }
     } else {
@@ -387,7 +379,7 @@
     NSLog(@"Jetzt suchen? %@", aSearchBar.text);
     
     CommitHistoryList* searchResult = [commitHistoryList commitHistoryListFilteredBySearchString:searchBar.text];
-    BranchViewController* searchResultController = [[[BranchViewController alloc] initWithCommitHistoryList:searchResult repository:repository branch:branch] autorelease];
+    BranchViewController* searchResultController = [[BranchViewController alloc] initWithCommitHistoryList:searchResult repository:repository branch:branch];
     [self.navigationController pushViewController:searchResultController animated:YES];
                         
 }

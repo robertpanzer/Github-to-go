@@ -21,11 +21,12 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 @implementation Settings
 
++(void)initialize {
+    Settings* newSettings = [[Settings alloc] init];
+    sharedInstance = newSettings;
+}
+
 + (Settings *)sharedInstance {
-    if (sharedInstance == nil) {
-        Settings* newSettings = [[Settings alloc] init];
-        sharedInstance = newSettings;
-    }
     return sharedInstance;
 }
 
@@ -44,7 +45,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
                           
         
         NSURLCredential* credential = [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:protectionSpace];
-        password = [credential.password retain];
+        password = credential.password;
     }
     return self;
 }
@@ -68,8 +69,7 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 - (void) setPassword:(NSString *)aPassword {
     if (password != aPassword) {
-        [password release];
-        password = [aPassword retain];
+        password = aPassword;
         [self setCredentialsUser:self.username password:aPassword];
     }
 }
@@ -84,10 +84,9 @@ static NSURLProtectionSpace* protectionSpace = nil;
     
     if (aUserName != nil && aUserName.length > 0 && aPassword != nil && aPassword.length > 0) {
 
-        NSURLCredential* credential = [[[NSURLCredential alloc] initWithUser:aUserName
+        NSURLCredential* credential = [[NSURLCredential alloc] initWithUser:aUserName
                                                                     password:aPassword
-                                                                 persistence:NSURLCredentialPersistencePermanent]
-                                       autorelease];
+                                                                 persistence:NSURLCredentialPersistencePermanent];
         
         [credentialStorage setDefaultCredential:credential forProtectionSpace:protectionSpace];        
     }
@@ -120,8 +119,8 @@ static NSURLProtectionSpace* protectionSpace = nil;
     [settings writeToFile:path atomically:YES];
 }
 
--(NSUInteger)retainCount {
-    return NSIntegerMax;
-}
+//-(NSUInteger)retainCount {
+//    return NSIntegerMax;
+//}
 
 @end

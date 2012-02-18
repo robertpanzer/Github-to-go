@@ -17,12 +17,12 @@
     NSString* commitSha;
 }
 
-@property(readonly) NSString* name;
+@property(unsafe_unretained, readonly) NSString* name;
 @property(readonly, strong) NSString* absolutePath;
 @property(strong) NSString* url;
 @property(strong) NSString* content;
 @property(readonly) long size;
-@property(readonly) NSString* commitSha;
+@property(readonly, strong) NSString* commitSha;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha;
 

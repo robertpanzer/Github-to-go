@@ -25,7 +25,7 @@ static NetworkProxy* networkProxyInstance;
 @property(strong) NSMutableData* receivedData;
 @property(strong) NSString* url;
 @property(strong) NSDictionary* headerFields;
-@property(weak) void (^block)(int, NSDictionary*, id);
+@property(nonatomic, copy) void (^block)(int, NSDictionary*, id);
 @end
 
 @implementation ConnectionData 
@@ -46,13 +46,6 @@ static NetworkProxy* networkProxyInstance;
     return self;
 }
 
-- (void)dealloc {
-    [statusCode release];
-    [connection release];
-    [receivedData release];
-    [url release];
-    [super dealloc];
-}
 
 @end
 
@@ -64,6 +57,10 @@ static NetworkProxy* networkProxyInstance;
 
 @synthesize connectionDataSet;
 
++(void)initialize {
+    networkProxyInstance = [[NetworkProxy alloc] init];
+}
+
 +(NetworkProxy*) sharedInstance {
     return networkProxyInstance;
 }
@@ -73,7 +70,7 @@ static NetworkProxy* networkProxyInstance;
     if (self) {
         NSLog(@"Init %@", self);
         networkProxyInstance = self;
-        self.connectionDataSet = [[[NSMutableSet alloc] init] autorelease];
+        self.connectionDataSet = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -84,10 +81,10 @@ static NetworkProxy* networkProxyInstance;
     NSLog(@"Request %@", request);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
-    ConnectionData* connectionData = [[[ConnectionData alloc] initWithUrl:urlString] autorelease];
-    connectionData.connection = [[[NSURLConnection alloc] initWithRequest:request delegate:self] autorelease];    
-    connectionData.receivedData = [[[NSMutableData alloc] init] autorelease];
-    connectionData.block = Block_copy(block);
+    ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
+    connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];    
+    connectionData.receivedData = [[NSMutableData alloc] init];
+    connectionData.block = block;//Block_copy(block);
     [connectionDataSet addObject:connectionData];
 }
 
@@ -104,7 +101,7 @@ static NetworkProxy* networkProxyInstance;
     NSLog(@"Received %d bytes", receivedData.length);
 //    SBJsonParser* parser = [[SBJsonParser alloc] init];
 //    id object = [parser objectWithData:receivedData];
-    NSError* error = [[[NSError alloc] init] autorelease];
+    NSError* error = [[NSError alloc] init];
     NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
     id object = nil;
     if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
@@ -117,7 +114,8 @@ static NetworkProxy* networkProxyInstance;
     block([connectionData.statusCode intValue], connectionData.headerFields, object);
     
     // release the connection, and the data object
-    Block_release(connectionData.block);
+    //Block_release(connectionData.block);
+    connectionData.block = nil;
     [connectionDataSet removeObject:connectionData];
 }
 
@@ -151,7 +149,7 @@ static NetworkProxy* networkProxyInstance;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     NSLog(@"Failed: %@", error);
-    UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alertView show];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
@@ -170,13 +168,8 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
         }
     }
     [[challenge sender] cancelAuthenticationChallenge:challenge];
-    UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:@"Authentication failed" message:@"Wrong password or unknown user!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil] autorelease];
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Authentication failed" message:@"Wrong password or unknown user!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alertView show];
-}
-
-- (void)dealloc {
-    [self.connectionDataSet release];
-    [super dealloc];
 }
                            
 - (ConnectionData*)connectionDataForConnection:(NSURLConnection*)connection {

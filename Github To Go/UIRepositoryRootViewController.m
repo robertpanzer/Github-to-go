@@ -109,9 +109,5 @@
 }
 
 
-- (void)dealloc {
-    [repository release];
-    [super dealloc];
-}
 
 @end

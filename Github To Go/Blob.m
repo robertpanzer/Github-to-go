@@ -20,8 +20,8 @@
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
     self = [super init];
     if (self) {
-        absolutePath = [anAbsolutePath retain];
-        commitSha = [aCommitSha retain];
+        absolutePath = anAbsolutePath;
+        commitSha = aCommitSha;
         self.url = [jsonObject objectForKey:@"url"];
         size = [(NSNumber*)[jsonObject objectForKey:@"size"] longValue]; 
         
@@ -32,7 +32,7 @@
                 self.content = aContent;
             } else if ([@"base64" isEqualToString:encoding]) {
 //                self.content = aContent;
-                self.content = [[[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:aContent] encoding:NSUTF8StringEncoding] autorelease];
+                self.content = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:aContent] encoding:NSUTF8StringEncoding];
             }
         }
     }
@@ -43,11 +43,4 @@
     return [absolutePath pathComponents].lastObject;
 }
 
-- (void)dealloc {
-    [absolutePath release];
-    [commitSha release];
-    [url release];
-    [content release];
-    [super dealloc];
-}
 @end

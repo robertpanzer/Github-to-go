@@ -27,8 +27,8 @@
     
     self = [super init];
     if (self) {
-        commit = [aCommit retain];
-        repository = [aRepository retain];
+        commit = aCommit;
+        repository = aRepository;
         self.tree = aTree;
         self.branchName = aBranchName;
         self.absolutePath = anAbsolutePath;
@@ -36,14 +36,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [tree release];
-    [commit release];
-    [branchName release];
-    [repository release];
-    [absolutePath release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -160,7 +152,7 @@
     if (indexPath.section == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierTree];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifierTree];
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         Tree* file = [self.tree treeAtIndex:indexPath.row];
@@ -169,7 +161,7 @@
     } else if (indexPath.section == 1) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierBlob];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifierBlob];
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
@@ -242,16 +234,16 @@
         Tree* subtree = [self.tree treeAtIndex:indexPath.row];
         NSString* treeUrl = subtree.url;
         UITreeRootViewController* treeRootViewController = 
-            [[[UITreeRootViewController alloc] initWithUrl:treeUrl
+            [[UITreeRootViewController alloc] initWithUrl:treeUrl
                                               absolutePath:subtree.absolutePath
                                                     commit:self.commit
                                                 repository:repository
-                                                branchName:branchName] autorelease];
+                                                branchName:branchName];
         [self.navigationController pushViewController:treeRootViewController animated:YES];
     } else {
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commit.sha repository:self.repository] autorelease];
+        BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commit.sha repository:self.repository];
         [self.navigationController pushViewController:blobViewController animated:YES];
     }
 }
@@ -259,18 +251,18 @@
 
 -(void)showTreeHistory:(id)sender {
     
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository] autorelease];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }
 
 -(void)offerTreeActions:(id)sender {
     
-    UIActionSheet* actionSheet = [[[UIActionSheet alloc] initWithTitle:nil 
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil 
                                                               delegate:self 
                                                      cancelButtonTitle:nil 
                                                 destructiveButtonTitle:nil 
-                                                     otherButtonTitles:@"Show history", @"Switch branch", nil] autorelease];
+                                                     otherButtonTitles:@"Show history", @"Switch branch", nil];
     [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
     
 }
@@ -278,12 +270,12 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == 0) {
-        BranchViewController* branchViewController = [[[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository] autorelease];
+        BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository];
         [self.navigationController pushViewController:branchViewController animated:YES];
     } else if (buttonIndex == 1) {
         UINavigationController* navigationController = self.navigationController;
         [navigationController popToRootViewControllerAnimated:NO];
-        BranchesBrowserViewController* branchesBrowserViewController = [[[BranchesBrowserViewController alloc] initWithRepository:repository] autorelease];
+        BranchesBrowserViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
         [navigationController pushViewController:branchesBrowserViewController animated:NO];
     }
 }

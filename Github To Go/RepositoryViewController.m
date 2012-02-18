@@ -100,7 +100,7 @@
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier];
         cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -191,7 +191,7 @@
 {
     
     if (indexPath.section == 1 && indexPath.row == 0) {
-        BranchesBrowserViewController* branchesBrowserViewController = [[[BranchesBrowserViewController alloc] initWithRepository:repository] autorelease];
+        BranchesBrowserViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
         [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
     }
 }

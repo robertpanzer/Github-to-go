@@ -25,7 +25,7 @@
         self.navigationItem.title = aCommit.message;
         [[NetworkProxy sharedInstance] loadStringFromURL:aCommit.commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
-                self.commit = [[[Commit alloc] initWithJSONObject:data repository:aRepository] autorelease];
+                self.commit = [[Commit alloc] initWithJSONObject:data repository:aRepository];
                 [(UITableView*)self.view reloadData];
             }
         }];
@@ -40,11 +40,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [commit release];
-    [repository release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -145,15 +140,15 @@
     if (indexPath.section == 1) {
         cell = [tableView dequeueReusableCellWithIdentifier:MessageCellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                           reuseIdentifier:MessageCellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                           reuseIdentifier:MessageCellIdentifier];
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
     } else if (indexPath.section == 5) {
         cell = [tableView dequeueReusableCellWithIdentifier:FilenameCellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                           reuseIdentifier:FilenameCellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                           reuseIdentifier:FilenameCellIdentifier];
             cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
             cell.textLabel.numberOfLines = 0;
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
@@ -161,16 +156,16 @@
     } else if (indexPath.section == 3 && indexPath.row == 3) {
         cell = [tableView dequeueReusableCellWithIdentifier:imageCellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                           reuseIdentifier:imageCellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
+                                           reuseIdentifier:imageCellIdentifier];
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
             cell.imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
         }
     } else {
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
-                                           reuseIdentifier:CellIdentifier] autorelease];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
+                                           reuseIdentifier:CellIdentifier];
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
         }
@@ -206,15 +201,15 @@
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = @"Deletions"; 
-                    cell.detailTextLabel.text = [[[NSString alloc] initWithFormat:@"%d", commit.deletions] autorelease];
+                    cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", commit.deletions];
                     break;
                 case 1:
                     cell.textLabel.text = @"Additions"; 
-                    cell.detailTextLabel.text = [[[NSString alloc] initWithFormat:@"%d", commit.additions] autorelease];
+                    cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", commit.additions];
                     break;
                 case 2:
                     cell.textLabel.text = @"Total"; 
-                    cell.detailTextLabel.text = [[[NSString alloc] initWithFormat:@"%d", commit.total] autorelease];
+                    cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", commit.total];
                     break;
                     
                 default:

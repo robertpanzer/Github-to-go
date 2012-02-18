@@ -25,7 +25,7 @@
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
-        self.eventHistory = [[[HistoryList alloc] init] autorelease];
+        self.eventHistory = [[HistoryList alloc] init];
         isLoading = NO;
         complete = NO;
         pagesLoaded = 0;
@@ -116,9 +116,9 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)] autorelease];
-        label = [[[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)];
+        label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
         label.numberOfLines = 0;
         label.lineBreakMode = UILineBreakModeWordWrap;
@@ -190,7 +190,7 @@
                     return;
                 }
                 for (NSDictionary* event in eventArray) {
-                    GithubEvent* eventObject = [[[GithubEvent alloc] initWithJSON:event] autorelease];
+                    GithubEvent* eventObject = [[GithubEvent alloc] initWithJSON:event];
                     [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
                     
                 }

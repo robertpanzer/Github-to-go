@@ -29,8 +29,8 @@
 @property(strong) NSArray* blobs;
 @property(readonly) int subtreeCount;
 @property(readonly) int blobCount;
-@property(readonly) NSString* name;
-@property(readonly) NSString* commitSha;
+@property(strong, readonly) NSString* name;
+@property(strong, readonly) NSString* commitSha;
 
 
 

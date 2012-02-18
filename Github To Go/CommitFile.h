@@ -18,7 +18,7 @@
     NSString* blobUrl;
     NSString* fileName;
     NSString* blobSha;
-    Commit* commit;
+//    Commit* commit;
 }
 
 @property(strong) NSString* status;

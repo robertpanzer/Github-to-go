@@ -26,10 +26,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [branches release];
-    [super dealloc];
-}
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
@@ -50,13 +46,13 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.navigationItem.title = repository.fullName;
-    NSString* url = [[[NSString alloc] initWithFormat:@"%@/branches", repository.url] autorelease];
+    NSString* url = [[NSString alloc] initWithFormat:@"%@/branches", repository.url];
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             NSLog(@"Loaded branches %@", data);
-            NSMutableArray* newBranches = [[[NSMutableArray alloc] init] autorelease];
+            NSMutableArray* newBranches = [[NSMutableArray alloc] init];
             for (NSDictionary* jsonBranch in data) {
-                [newBranches addObject:[[[Branch alloc] initWithJSONObject:jsonBranch] autorelease]];
+                [newBranches addObject:[[Branch alloc] initWithJSONObject:jsonBranch]];
             }
             self.branches = newBranches;
             [(UITableView*)self.view reloadData];
@@ -123,7 +119,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
     }
@@ -182,9 +178,9 @@
 
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
-        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
+        Commit* commit = [[Commit alloc] initWithJSONObject:data repository:repository];
         
-        UITreeRootViewController* treeViewController = [[[UITreeRootViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commit:commit repository:repository branchName:branch.name] autorelease];
+        UITreeRootViewController* treeViewController = [[UITreeRootViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commit:commit repository:repository branchName:branch.name];
 
         [self.navigationController pushViewController:treeViewController animated:YES];
 //        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:branch.sha repository:repository branchName:branch.name] autorelease];
@@ -198,7 +194,7 @@
     Branch* branch = [branches objectAtIndex:indexPath.row];
 //    NSString* commitUrl = branch.commitUrl;
 
-    BranchViewController* branchViewController = [[[BranchViewController alloc] initWithRepository:repository andBranch:branch] autorelease];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithRepository:repository andBranch:branch];
     [self.navigationController pushViewController:branchViewController animated:YES];
 }
 

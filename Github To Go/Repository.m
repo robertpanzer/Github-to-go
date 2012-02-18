@@ -32,10 +32,10 @@
             self.masterBranch = [jsonObject objectForKey:@"master_branch"];
         }
 
-        self.branches = [[[NSMutableDictionary alloc] init] autorelease];
+        self.branches = [[NSMutableDictionary alloc] init];
 
         NSDictionary* ownerObject = (NSDictionary*)[jsonObject objectForKey:@"owner"];
-        self.owner = [[[Person alloc] initWithJSONObject:ownerObject JSONObject:nil] autorelease];
+        self.owner = [[Person alloc] initWithJSONObject:ownerObject JSONObject:nil];
 
         self.repoId = [jsonObject valueForKey:@"id"];
 
@@ -73,17 +73,5 @@
 
 - (NSString*)fullName {
     return [NSString stringWithFormat:@"%@/%@", self.owner.login, self.name];
-}
-- (void)dealloc {
-    [name release];
-    [description release];
-    [masterBranch release];
-    [owner release];
-    [branches release];
-    [repoId release];
-    [forks release];
-    [url release];
-    [watchers release];
-    [super dealloc];
 }
 @end

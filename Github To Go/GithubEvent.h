@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 
-@interface GithubEvent : NSObject {
-    
-}
+@interface GithubEvent : NSObject 
 
 @property(strong) NSString* text;
 @property(strong) Person* person;

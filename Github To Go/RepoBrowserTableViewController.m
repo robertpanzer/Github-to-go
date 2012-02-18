@@ -34,11 +34,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [myRepos release];
-    [watchedRepos release];
-    [super dealloc];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -61,7 +56,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     UITableView* tableView = (UITableView*)self.view;
-    UILabel* label = [[[UILabel alloc] initWithFrame:CGRectMake(0.0f, -50.0f, tableView.bounds.size.width, 50.0f)] autorelease];
+    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, -50.0f, tableView.bounds.size.width, 50.0f)];
     label.text = @"Drop to reload";
     [tableView addSubview:label];
 
@@ -127,7 +122,7 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
 
@@ -156,7 +151,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel* headerLabel = [[[UILabel alloc] init] autorelease];
+    UILabel* headerLabel = [[UILabel alloc] init];
     headerLabel.font = [UIFont systemFontOfSize:14.0f];
     headerLabel.text = [self tableView:tableView titleForHeaderInSection:section];
     headerLabel.textAlignment = UITextAlignmentCenter;
@@ -218,7 +213,7 @@
     if (repo.masterBranch == nil) {
 //        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
 //        [self.navigationController pushViewController:repoViewController animated:YES];
-        UIRepositoryRootViewController* repoViewController = [[[UIRepositoryRootViewController alloc] initWithRepository:repo] autorelease];
+        UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
         [self.navigationController pushViewController:repoViewController animated:YES];
     } else {
         NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
@@ -244,7 +239,7 @@
         return;
     }
     
-    RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
+    RepositoryViewController* repoViewController = [[RepositoryViewController alloc] initWithRepository:repo];
     [self.navigationController pushViewController:repoViewController animated:YES];
 }
 
@@ -269,11 +264,11 @@
     NSLog(@"Get repositories");
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
             NSLog(@"StatusCode: %d", statusCode);
-            NSMutableArray* newRepos = [[[NSMutableArray alloc] init] autorelease];
+            NSMutableArray* newRepos = [[NSMutableArray alloc] init];
             NSArray* array = (NSArray*) data;
             NSLog(@"%d elements", [array count]);
             for (NSDictionary* repoObject in array) {
-                [newRepos addObject:[[[Repository alloc] initFromJSONObject:repoObject] autorelease]];
+                [newRepos addObject:[[Repository alloc] initFromJSONObject:repoObject]];
             }
             self.myRepos = newRepos;
             [(UITableView*)self.view reloadData];
@@ -282,11 +277,11 @@
     
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
-        NSMutableArray* newRepos = [[[NSMutableArray alloc] init] autorelease];
+        NSMutableArray* newRepos = [[NSMutableArray alloc] init];
         NSArray* array = (NSArray*) data;
         NSLog(@"%d elements", [array count]);
         for (NSDictionary* repoObject in array) {
-            Repository* repo = [[[Repository alloc] initFromJSONObject:repoObject] autorelease];
+            Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
             if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
                 [newRepos addObject:repo];
             }
@@ -302,7 +297,7 @@
 
 
 -(void)showMasterBranch:(Repository*)repository {
-    NSString* commitUrl = [repository urlOfMasterBranch];
+//    NSString* commitUrl = [repository urlOfMasterBranch];
 //    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
 //        NSLog(@"StatusCode: %d", statusCode);
 //        NSDictionary* dict = (NSDictionary*)data;

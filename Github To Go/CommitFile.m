@@ -39,13 +39,5 @@
 }
 
 
-- (void)dealloc {
-    [status release];
-    [patch release];
-    [blobUrl release];
-    [fileName release];
-    [blobSha release];
-    [super dealloc];
-}
 
 @end

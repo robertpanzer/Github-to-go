@@ -72,11 +72,5 @@
 }
 
 
-- (void)dealloc {
-    self.dates = nil;
-    self.objectsForDate = nil;
-    self.objectsByPrimaryKey = nil;
-    [super dealloc];
-}
 
 @end
