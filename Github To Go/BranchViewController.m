@@ -174,6 +174,10 @@
     return YES;
 }
 
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self.tableView reloadData];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -225,11 +229,11 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier];
             
-            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(2.0f, 2.0f, 51.0f, 51.0f)];
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)];
             imageView.tag = IMAGE_TAG;
             [cell.contentView addSubview:imageView];
             
-            messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(55.0f, 2.0f, 264.0f, 38.0f)];
+            messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, self.tableView.frame.size.width - 57.0f, 38.0f)];
             messageLabel.font = [UIFont systemFontOfSize:14.0f];
             messageLabel.tag = MESSAGE_TAG;
             messageLabel.numberOfLines = 2;
@@ -238,7 +242,7 @@
             messageLabel.textColor = [UIColor blackColor];
             [cell.contentView addSubview:messageLabel];
             
-            shaLabel = [[UILabel alloc] initWithFrame:CGRectMake(240.0f, 39.0f, 77.0f, 15.0f)];
+            shaLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 80.0f, 39.0f, 77.0f, 15.0f)];
             shaLabel.font = [UIFont systemFontOfSize:11.0f];
             shaLabel.tag = SHA_TAG;
             shaLabel.textAlignment = UITextAlignmentRight;
@@ -270,11 +274,14 @@
     }
     
     if (isCommit) {
+        messageLabel.frame = CGRectMake(57.0f, 2.0f, self.tableView.frame.size.width - 57.0f, 38.0f);
+        shaLabel.frame = CGRectMake(self.tableView.frame.size.width - 80.0f, 39.0f, 77.0f, 15.0f);
+        authorLabel.frame = CGRectMake(55.0f, 39.0f, 150.0f, 14.0f);
+
         Commit* commit = [commitsForDay objectAtIndex:indexPath.row];
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
         authorLabel.text = [commit.author displayname];
-        
         [commit.author loadImageIntoImageView:imageView];
     } else {
         cell.textLabel.text = @"Load More Commits...";
@@ -305,44 +312,6 @@
     return [commitHistoryList.dates objectAtIndex:section];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -363,14 +332,6 @@
         [self.searchBar resignFirstResponder];
         letUserSelectCells = YES;
     }
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
 }
 
 #pragma mark - UISearchBarDelegate methods
