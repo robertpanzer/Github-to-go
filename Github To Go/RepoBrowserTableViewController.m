@@ -17,19 +17,23 @@
 #import "Branch.h"
 #import "Settings.h"
 #import "UIRepositoryRootViewController.h"
+#import "RepositoryStorage.h"
 
 @implementation RepoBrowserTableViewController
 
 @synthesize myRepos;
 @synthesize watchedRepos;
+@synthesize repoSearchTableViewController;
+@synthesize initialized;
 
 
 - (id)init
 {
-    self = [super initWithNibName:nil bundle:nil];
+    self = [super initWithNibName:@"RepoBrowserTableViewController" bundle:nil];
     if (self) {
         self.title = NSLocalizedString(@"Repositories", @"Repositories");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
+        self.initialized = NO;
     }
     return self;
 }
@@ -55,12 +59,9 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    UITableView* tableView = (UITableView*)self.view;
-    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, -50.0f, tableView.bounds.size.width, 50.0f)];
-    label.text = @"Drop to reload";
-    [tableView addSubview:label];
-
-    [tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)]; 
+//    self.tableView.tableHeaderView = self.searchBar;
+//    self.searchBar.delegate = self;
+    
     
 }
 
@@ -69,11 +70,14 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    self.repoSearchTableViewController = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self onFetchRepos];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -100,17 +104,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     if (section == 0) {
-        return [myRepos count];
+        return [myRepos count] + 1;
     } else if (section == 1) {
-        return [watchedRepos count];
+        return [watchedRepos count] + 1;
+    } else if (section == 2) {
+        return 1;
     } else {
         return -1;
     }
@@ -123,125 +127,76 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
 
     }
     
+    if (indexPath.section == 2) {
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        cell.textLabel.text = @"Find";
+        cell.detailTextLabel.text = nil;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+        return cell;
+    }
+    
+    if (indexPath.row == 0) {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        if (indexPath.section == 0) {
+            cell.textLabel.text = @"My Repositories";
+        } else {
+            cell.textLabel.text = @"Watched Repositories";
+        }
+        return cell;
+    } 
+
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
+
     // Configure the cell...
     Repository* repo = nil;
     if (indexPath.section == 0) {
-        repo = (Repository*)[myRepos objectAtIndex:indexPath.row];
+        repo = (Repository*)[myRepos objectAtIndex:indexPath.row - 1];
     } else if (indexPath.section == 1) {
-        repo = (Repository*)[watchedRepos objectAtIndex:indexPath.row];
+        repo = (Repository*)[watchedRepos objectAtIndex:indexPath.row - 1];
     }
     cell.textLabel.text = repo.fullName;
     cell.detailTextLabel.text = repo.description;
-    
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return @"My Repositories";   
-    } else {
-        return @"Watched Repositories";
-    }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UILabel* headerLabel = [[UILabel alloc] init];
-    headerLabel.font = [UIFont systemFontOfSize:14.0f];
-    headerLabel.text = [self tableView:tableView titleForHeaderInSection:section];
-    headerLabel.textAlignment = UITextAlignmentCenter;
-    headerLabel.opaque = NO;
-    headerLabel.backgroundColor = [UIColor clearColor];
-    return headerLabel;
-}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
+
+-(NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ((indexPath.section == 0 || indexPath.section == 1) && indexPath.row == 0) {
+        return 0;
+    }
+    if (indexPath.section == 2) {
+        return 0;
+    }
+    return 1;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Repository* repo = nil;
-    if (indexPath.section == 0) {
-        repo = [self.myRepos objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        repo = [self.watchedRepos objectAtIndex:indexPath.row];
-    } else {
+    if (indexPath.section == 0 && indexPath.row > 0) {
+        repo = [self.myRepos objectAtIndex:indexPath.row - 1];
+    } else if (indexPath.section == 1 && indexPath.row > 0) {
+        repo = [self.watchedRepos objectAtIndex:indexPath.row - 1];
+    } else if (indexPath.section == 2) {
+        [self.navigationController pushViewController:repoSearchTableViewController animated:YES];
         return;
-    }
-    if (repo.masterBranch == nil) {
-//        RepositoryViewController* repoViewController = [[[RepositoryViewController alloc] initWithRepository:repo] autorelease];
-//        [self.navigationController pushViewController:repoViewController animated:YES];
-        UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
-        [self.navigationController pushViewController:repoViewController animated:YES];
-    } else {
-        NSString* urlString = [NSString stringWithFormat:@"%@/branches", repo.url];
-        [[NetworkProxy sharedInstance] loadStringFromURL:urlString block:^(int statusCode, NSDictionary* headerFields, id data) {
-            NSLog(@"StatusCode: %d", statusCode);
-            if (statusCode == 200) {
-                [repo setBranchesFromJSONObject:(NSArray*)data];
-                NSLog(@"Master Branch URL: %@", [repo urlOfMasterBranch]);
-                [self showMasterBranch:repo];
-            }
-        } 
-         ];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    Repository* repo = nil;
-    if (indexPath.section == 0) {
-        repo = [self.myRepos objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        repo = [self.watchedRepos objectAtIndex:indexPath.row];
     } else {
         return;
     }
     
-    RepositoryViewController* repoViewController = [[RepositoryViewController alloc] initWithRepository:repo];
+    UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
     [self.navigationController pushViewController:repoViewController animated:YES];
 }
+
 
 #pragma mark - fetch data
 
@@ -263,54 +218,178 @@
 - (IBAction)onFetchRepos {
     NSLog(@"Get repositories");
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
-            NSLog(@"StatusCode: %d", statusCode);
-            NSMutableArray* newRepos = [[NSMutableArray alloc] init];
-            NSArray* array = (NSArray*) data;
-            NSLog(@"%d elements", [array count]);
+        NSLog(@"StatusCode: %d", statusCode);
+        NSMutableArray* newRepos = [[NSMutableArray alloc] init];
+        NSArray* array = (NSArray*) data;
+        NSLog(@"%d elements", [array count]);
+        
+        if (array.count != self.myRepos.count) {
+            [self.tableView beginUpdates];
+
+            NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
+            NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:0];
+            for (int i = 1; i < self.myRepos.count + 1; i++) {
+                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                [newIndexPaths addObject:rowPath];
+            }
+            [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+            
+
+            newIndexPaths = [[NSMutableArray alloc] init];
             for (NSDictionary* repoObject in array) {
                 [newRepos addObject:[[Repository alloc] initFromJSONObject:repoObject]];
             }
             self.myRepos = newRepos;
-            [(UITableView*)self.view reloadData];
-        } 
-    ];
+            
+            for (int i = 1; i < self.myRepos.count + 1; i++) {
+                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                [newIndexPaths addObject:rowPath];
+            }
+            
+            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+            [self.tableView endUpdates];
+        }
+    } 
+     ];
     
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         NSMutableArray* newRepos = [[NSMutableArray alloc] init];
         NSArray* array = (NSArray*) data;
         NSLog(@"%d elements", [array count]);
+        
         for (NSDictionary* repoObject in array) {
             Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
+            [[RepositoryStorage sharedStorage] addWatchedRepository:repo];
             if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
                 [newRepos addObject:repo];
             }
         }
-        self.watchedRepos = newRepos;
-        [(UITableView*)self.view reloadData];
+        
+        if (newRepos.count != self.watchedRepos.count) {
+            [self.tableView beginUpdates];
+
+            NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
+            NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:1];
+            for (int i = 1; i < self.watchedRepos.count + 1; i++) {
+                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                [newIndexPaths addObject:rowPath];
+            }
+            [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+
+            self.watchedRepos = newRepos;
+            newIndexPaths = [[NSMutableArray alloc] init];
+            sectionPath = [NSIndexPath indexPathWithIndex:1];
+            for (int i = 1; i < self.watchedRepos.count + 1; i++) {
+                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                [newIndexPaths addObject:rowPath];
+            }
+            
+            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+            [self.tableView endUpdates];
+
+        }
     } 
      ];
+    
+}
 
+@end
+
+
+
+@implementation RepoSearchTableViewController 
+
+@synthesize repos, searchBar;
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    //    self.tableView.tableHeaderView = self.searchBar;
+    //    self.searchBar.delegate = self;
+    
+    self.tableView.tableHeaderView = self.searchBar;
+    self.searchBar.delegate = self;
+}
+
+-(void)viewDidUnload {
+    self.searchBar = nil;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.repos.count;
 }
 
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+    }
+
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
+    
+    // Configure the cell...
+    Repository* repo = [repos objectAtIndex:indexPath.row];
+    cell.textLabel.text = repo.fullName;
+    cell.detailTextLabel.text = repo.description;
+    return cell;
+}
 
 
--(void)showMasterBranch:(Repository*)repository {
-//    NSString* commitUrl = [repository urlOfMasterBranch];
-//    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-//        NSLog(@"StatusCode: %d", statusCode);
-//        NSDictionary* dict = (NSDictionary*)data;
-//        for (NSString* key in dict.keyEnumerator) {
-//            NSLog(@"Key: %@", key);
-//        }
-//        NSLog(@"Branch: %@", [data objectForKey:@"tree"]);
-//        Commit* commit = [[[Commit alloc] initWithJSONObject:data repository:repository] autorelease];
-//        TreeViewController* treeViewController = [[[TreeViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commitSha:commit.sha repository:repository branchName:repository.masterBranch] autorelease];
-//        [self.navigationController pushViewController:treeViewController animated:YES];
-//    } 
-//     ];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Repository* repo = nil;
+    repo = [self.repos objectAtIndex:indexPath.row];
 
+    UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
+        [self.navigationController pushViewController:repoViewController animated:YES];
+}
+
+
+#pragma mark - UISearchBarDelegate methods
+
+
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {
+    NSLog(@"Jetzt suchen? %@", aSearchBar.text);
+    
+    NSString *searchUrl = [NSString stringWithFormat:@"http://github.com/api/v2/json/repos/search/%@", aSearchBar.text];
+    
+    [aSearchBar resignFirstResponder];
+    
+    [[NetworkProxy sharedInstance] loadStringFromURL:searchUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        NSMutableArray* newRepos = [[NSMutableArray alloc] init];
+        NSArray* foundRepos = [data valueForKey:@"repositories"];
+        for (NSDictionary* jsonRepo in foundRepos) {
+            Repository* repo = [[Repository alloc] initFromJSONObject:jsonRepo];
+            [newRepos addObject:repo]; 
+            NSLog(@"Found repo: %@", repo.fullName);
+        }
+        self.repos = newRepos;
+        [self.tableView reloadData];
+    }];
+    
+}
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)aSearchBar {
 }
 
 @end

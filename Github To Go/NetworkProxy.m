@@ -76,15 +76,21 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+    [self loadStringFromURL:urlString verb:@"GET" block:block];
+}
+
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
     NSURL* url = [NSURL URLWithString:urlString];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.timeoutInterval = 10;
+    request.HTTPMethod = aVerb;
     NSLog(@"Request %@", request);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
     ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
     connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];    
     connectionData.receivedData = [[NSMutableData alloc] init];
-    connectionData.block = block;//Block_copy(block);
+    connectionData.block = block;
     [connectionDataSet addObject:connectionData];
 }
 

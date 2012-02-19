@@ -72,6 +72,14 @@ static long sequenceCounter = 0;
     return self;
 }
 
+-(id)initWithLogin:(NSString *)aLogin {
+    self = [super init];
+    if (self) {
+        self.login = aLogin;
+    }
+    return self;
+}
+
 -(void)loadImageIntoImageView:(UIImageView*)imageView {
     if (avatarUrl != nil) {
         long mySequenceNumber = sequenceCounter++;

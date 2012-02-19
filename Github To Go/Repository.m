@@ -34,8 +34,12 @@
 
         self.branches = [[NSMutableDictionary alloc] init];
 
-        NSDictionary* ownerObject = (NSDictionary*)[jsonObject objectForKey:@"owner"];
-        self.owner = [[Person alloc] initWithJSONObject:ownerObject JSONObject:nil];
+        id ownerObject = [jsonObject objectForKey:@"owner"];
+        if ([ownerObject isKindOfClass:[NSString class]]) {
+            self.owner = [[Person alloc] initWithLogin:ownerObject];
+        } else {
+            self.owner = [[Person alloc] initWithJSONObject:ownerObject JSONObject:nil];
+        }
 
         self.repoId = [jsonObject valueForKey:@"id"];
 

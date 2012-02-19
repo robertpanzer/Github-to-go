@@ -26,6 +26,8 @@
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondObject;
 
+-(id)initWithLogin:(NSString*)aLogin;
+
 -(void)loadImageIntoImageView:(UIImageView*)imageView;
 
 +(void)clearCache;

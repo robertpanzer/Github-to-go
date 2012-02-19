@@ -106,6 +106,10 @@
             if (oldCount == commitHistoryList.count) {
                 isComplete = YES;
             }
+            
+            
+            
+            
             [(UITableView*)self.view reloadData];
         }
     }];

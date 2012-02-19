@@ -38,6 +38,7 @@
 		946CB2AB14B4796000BBFDAD /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AA14B4796000BBFDAD /* Commit.m */; };
 		946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AD14B48E6000BBFDAD /* TreeViewController.m */; };
 		946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */; };
+		949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 949DB8CF14F1522D000BE743 /* RepositoryStorage.m */; };
 		949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13314B3327800D3E713 /* UIKit.framework */; };
 		949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13514B3327800D3E713 /* Foundation.framework */; };
 		949FB13814B3327800D3E713 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13714B3327800D3E713 /* CoreGraphics.framework */; };
@@ -114,6 +115,8 @@
 		946CB2AC14B48E6000BBFDAD /* TreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewController.h; sourceTree = "<group>"; };
 		946CB2AD14B48E6000BBFDAD /* TreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewController.m; sourceTree = "<group>"; };
 		946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeViewController.xib; sourceTree = "<group>"; };
+		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
+		949DB8CF14F1522D000BE743 /* RepositoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryStorage.m; sourceTree = "<group>"; };
 		949FB12F14B3327800D3E713 /* Github To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		949FB13314B3327800D3E713 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		949FB13514B3327800D3E713 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -313,6 +316,8 @@
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
 				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
+				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
+				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
 				949FB14814B3327800D3E713 /* first.png */,
@@ -461,6 +466,7 @@
 				94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */,
 				94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */,
 				945C25F614E86D6F00479D21 /* HistoryList.m in Sources */,
+				949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

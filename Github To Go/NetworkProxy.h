@@ -18,4 +18,6 @@
 
 -(void)loadStringFromURL:(NSString*)url block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block;
 
+-(void)loadStringFromURL:(NSString*)url verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block;
+
 @end

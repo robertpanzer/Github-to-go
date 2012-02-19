@@ -13,7 +13,7 @@
 #import "BranchesBrowserViewController.h"
 #import "EventTableViewController.h"
 
-@interface UIRepositoryRootViewController : UIViewController {
+@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate> {
     Repository* repository;
     
     RepositoryViewController* repositoryViewController;
@@ -23,15 +23,20 @@
     EventTableViewController* eventTableViewController;
     
     UIView* headerView;
+    
 }
 
 @property(strong) Repository* repository;
 @property(strong) RepositoryViewController* repositoryViewController;
 @property(strong) BranchesBrowserViewController* branchesBrowserViewController;
 @property(strong) EventTableViewController* eventTableViewController;
+@property BOOL watched;
 @property(strong) IBOutlet UIView* headerView;
+
 
 - (id)initWithRepository:(Repository*)aRepository;
 
 - (IBAction)selectedSegmentChanged:(id)sender;
+
+- (void)showActionSheet;
 @end

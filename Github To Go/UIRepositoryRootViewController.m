@@ -8,10 +8,28 @@
 
 #import "UIRepositoryRootViewController.h"
 #import "RepositoryViewController.h"
+#import "RepositoryStorage.h"
+#import "NetworkProxy.h"
+
+static NSString* WatchRepo;
+static NSString* StopWatchingRepo;
+
+static NSArray* actionSheetTitles;
 
 @implementation UIRepositoryRootViewController
 
-@synthesize repository, repositoryViewController, branchesBrowserViewController, headerView, eventTableViewController;
+@synthesize repository;
+@synthesize repositoryViewController;
+@synthesize branchesBrowserViewController;
+@synthesize headerView;  
+@synthesize eventTableViewController;
+@synthesize watched;
+
++(void) initialize {
+    WatchRepo = @"Watch Repository";
+    StopWatchingRepo = @"Stop watching";
+    actionSheetTitles = [NSArray arrayWithObjects:WatchRepo, StopWatchingRepo, nil];
+}
 
 - (id)initWithRepository:(Repository*)aRepository
 {
@@ -19,6 +37,7 @@
     if (self) {
         // Custom initialization
         self.repository = aRepository;
+        self.watched = [[RepositoryStorage sharedStorage] repositoryIsWatched:aRepository];
     }
     return self;
 }
@@ -50,8 +69,8 @@
     [self.view addSubview:eventTableViewController.view];
     [self addChildViewController:eventTableViewController];
     eventTableViewController.tableView.tableHeaderView = self.headerView;
-
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
 }
 
 - (void)viewDidUnload
@@ -108,6 +127,42 @@
     }
 }
 
+-(void)showActionSheet {
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
+        [actionSheet addButtonWithTitle:WatchRepo];
+    } else {
+        [actionSheet addButtonWithTitle:StopWatchingRepo];
+    }
+    
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+}
 
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
 
+    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
+    NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repository.fullName];
+    if ([WatchRepo isEqualToString:titleClicked]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
+            if (status == 204) {
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is being watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alertView show];
+            } else {
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Starting to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alertView show];
+            }
+        } ];
+    } else if ([StopWatchingRepo isEqualToString:titleClicked]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
+            if (status == 204) {
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is no longer watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alertView show];
+            } else {
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alertView show];
+            }
+        } ];
+    }
+    
+}
 @end
