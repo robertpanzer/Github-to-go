@@ -40,6 +40,7 @@
 @property(strong, readonly) NSString* absolutePath;
 @property(strong, readonly) NSString* commitSha;
 @property(strong) UISearchBar* searchBar;
+@property(strong) IBOutlet UITableViewCell* loadNextTableViewCell;
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch;
 

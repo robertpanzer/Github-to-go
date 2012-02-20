@@ -27,6 +27,7 @@
 @synthesize absolutePath;
 @synthesize commitSha;
 @synthesize searchBar;
+@synthesize loadNextTableViewCell;
 
 -(id)initWithCommitHistoryList:(CommitHistoryList *)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
@@ -135,6 +136,9 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    UILabel* loadNextLabel = (UILabel*)[self.loadNextTableViewCell.contentView viewWithTag:2];
+    loadNextLabel.text = NSLocalizedString(@"Loading more commits...", @"Commit History Loading More Commits");
+    
     if (!isSearchResult) {
         UISearchBar* aSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 45.0f)];
         aSearchBar.delegate = self;
@@ -146,8 +150,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.loadNextTableViewCell = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -209,18 +212,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
     static NSString *CommitCellIdentifier = @"CommitCell";
     
-    static NSInteger MESSAGE_TAG = 1;
-    static NSInteger AUTHOR_TAG = 2;
-    static NSInteger SHA_TAG = 3;
-    static NSInteger IMAGE_TAG = 4;
-    UITableViewCell *cell = nil;
-    UILabel* messageLabel = nil;
-    UILabel* shaLabel = nil;
-    UILabel* authorLabel = nil;
-    UIImageView* imageView = nil;
     
     NSString* date = [commitHistoryList.dates objectAtIndex:indexPath.section];
     NSArray* commitsForDay = [commitHistoryList commitsForDay:date];
@@ -229,6 +222,16 @@
     (indexPath.section == commitHistoryList.dates.count - 1 && indexPath.row < commitsForDay.count);
     
     if (isCommit) {
+        static NSInteger MESSAGE_TAG = 1;
+        static NSInteger AUTHOR_TAG = 2;
+        static NSInteger SHA_TAG = 3;
+        static NSInteger IMAGE_TAG = 4;
+        UITableViewCell *cell = nil;
+        UILabel* messageLabel = nil;
+        UILabel* shaLabel = nil;
+        UILabel* authorLabel = nil;
+        UIImageView* imageView = nil;
+
         cell = [tableView dequeueReusableCellWithIdentifier:CommitCellIdentifier];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CommitCellIdentifier];
@@ -260,7 +263,6 @@
             authorLabel.textAlignment = UITextAlignmentLeft;
             authorLabel.textColor = [UIColor lightGrayColor];
             [cell.contentView addSubview:authorLabel];
-            
         } else {
             messageLabel = (UILabel*)[cell.contentView viewWithTag:MESSAGE_TAG];
             shaLabel = (UILabel*)[cell.contentView viewWithTag:SHA_TAG];
@@ -270,34 +272,24 @@
         imageView.image = nil;
         imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
 
-    } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        }
-    }
-    
-    if (isCommit) {
         messageLabel.frame = CGRectMake(57.0f, 2.0f, self.tableView.frame.size.width - 57.0f, 38.0f);
         shaLabel.frame = CGRectMake(self.tableView.frame.size.width - 80.0f, 39.0f, 77.0f, 15.0f);
         authorLabel.frame = CGRectMake(55.0f, 39.0f, 150.0f, 14.0f);
-
+        
         Commit* commit = [commitsForDay objectAtIndex:indexPath.row];
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
         authorLabel.text = [commit.author displayname];
         [commit.author loadImageIntoImageView:imageView];
+
+        return cell;
     } else {
-        cell.textLabel.text = @"Load More Commits...";
-        cell.detailTextLabel.text = nil;
-        
         if (!isLoading) {
             isLoading = YES;
             [self loadCommits];
         }
-
+        return loadNextTableViewCell;
     }
-    return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
