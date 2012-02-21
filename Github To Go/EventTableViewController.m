@@ -206,15 +206,15 @@
             if (statusCode == 200) {
                 NSArray* eventArray = (NSArray*)data;
                 if (eventArray.count == 0) {
-                    complete = YES;
-                    return;
+                    self.complete = YES;
+                } else {
+                    for (NSDictionary* event in eventArray) {
+                        GithubEvent* eventObject = [[GithubEvent alloc] initWithJSON:event];
+                        [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
+                        
+                    }
+                    pagesLoaded++;
                 }
-                for (NSDictionary* event in eventArray) {
-                    GithubEvent* eventObject = [[GithubEvent alloc] initWithJSON:event];
-                    [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
-                    
-                }
-                pagesLoaded++;
                 isLoading = NO;
                 [self.tableView reloadData];
             }

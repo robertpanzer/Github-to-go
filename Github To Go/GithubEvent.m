@@ -21,6 +21,17 @@
 -(void)parseForkEvent:(NSDictionary*)jsonObject;
 
 -(void)parseWatchEvent:(NSDictionary*)jsonObject;
+
+-(void)parseCreateEvent:(NSDictionary*)jsonObject;
+
+-(void)parseDeleteEvent:(NSDictionary*)jsonObject;
+
+-(void)parseDownloadEvent:(NSDictionary*)jsonObject;
+
+-(void)parseFollowEvent:(NSDictionary*)jsonObject;
+
+-(void)parseIssuesEvent:(NSDictionary*)jsonObject;
+
 @end
 
 
@@ -52,6 +63,16 @@
                 [self parseCommitComment:jsonObject];
             } else if ([type isEqualToString:@"WatchEvent"]) {
                 [self parseWatchEvent:jsonObject];
+            } else if ([type isEqualToString:@"CreateEvent"]) {
+                [self parseCreateEvent:jsonObject];
+            } else if ([type isEqualToString:@"DeleteEvent"]) {
+                [self parseDeleteEvent:jsonObject];
+            } else if ([type isEqualToString:@"DownloadEvent"]) {
+                [self parseDownloadEvent:jsonObject];
+            } else if ([type isEqualToString:@"FollowEvent"]) {
+                [self parseFollowEvent:jsonObject];
+            } else if ([type isEqualToString:@"IssuesEvent"]) {
+                [self parseIssuesEvent:jsonObject];
             } else {
                 self.text = type;
             }
@@ -128,4 +149,46 @@
                  [jsonObject valueForKeyPath:@"repo.name"] ];
     
 }
+
+-(void)parseCreateEvent:(NSDictionary*)jsonObject {
+    NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
+    if (![@"repository" isEqualToString:refType]) {
+        self.text = [NSString stringWithFormat:@"%@ has created %@ %@",
+                     self.person.displayname,
+                     refType,
+                     [jsonObject valueForKeyPath:@"payload.ref"] ];
+    } else {
+        self.text = [NSString stringWithFormat:@"%@ has created %@",
+                     self.person.displayname,
+                     refType];
+    }
+}
+
+-(void)parseDeleteEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ has deleted %@ %@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.ref_type"],
+                 [jsonObject valueForKeyPath:@"payload.ref"] ];
+}
+
+-(void)parseDownloadEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ has created download %@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.download.name"] ];
+}
+
+-(void)parseFollowEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ is following %@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.object.login"] ];
+}
+
+-(void)parseIssuesEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ %@ issue %@:\n%@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.action"],
+                 [jsonObject valueForKeyPath:@"payload.issue.number"],
+                 [jsonObject valueForKeyPath:@"payload.issue.title"] ];
+}
+
 @end
