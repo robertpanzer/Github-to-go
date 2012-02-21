@@ -20,15 +20,19 @@
 
 @synthesize repository;
 @synthesize eventHistory;
+@synthesize complete;
+@synthesize loadNextTableViewCell;
+@synthesize isLoading;
+@synthesize pagesLoaded;
 
 - (id)initWithRepository:(Repository *)aRepository {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
         self.eventHistory = [[HistoryList alloc] init];
-        isLoading = NO;
-        complete = NO;
-        pagesLoaded = 0;
+        self.isLoading = NO;
+        self.complete = NO;
+        self.pagesLoaded = 0;
     }
     return self;
 }
@@ -51,6 +55,9 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UILabel* loadNextLabel = (UILabel*)[self.loadNextTableViewCell.contentView viewWithTag:2];
+        loadNextLabel.text = NSLocalizedString(@"Loading more commits...", @"Event list loading More entries");
+
 }
 
 - (void)viewDidUnload
@@ -58,6 +65,7 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    self.loadNextTableViewCell = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -104,11 +112,24 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSString* date = [eventHistory.dates objectAtIndex:section];
-    return [eventHistory objectsForDate:date].count;
+    
+    int entriesCount = [eventHistory objectsForDate:date].count;
+    if (section == eventHistory.dates.count - 1 && !self.complete) {
+        return entriesCount + 1;
+    } else {
+        return entriesCount;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
+
+    if (indexPath.section == eventHistory.dates.count - 1 && indexPath.row == [eventHistory objectsForDate:date].count) {
+        [self loadEvents];
+        return self.loadNextTableViewCell;
+    }
+
     static NSString *CellIdentifier = @"Cell";
     
     UIImageView* imageView = nil;
@@ -133,7 +154,6 @@
     }
     imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
     // Configure the cell...
-    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
     GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
     label.text = event.text;
 
@@ -142,10 +162,6 @@
     CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     label.frame = CGRectMake(55.0f, 2.0f, width - 57.0f, size.height);
     [event.person loadImageIntoImageView:imageView];
-    
-    if (indexPath.section == eventHistory.dates.count - 1 && indexPath.row == [eventHistory objectsForDate:date].count - 1) {
-        [self loadEvents];
-    }
     
     return cell;
 }
@@ -159,7 +175,11 @@
 #pragma mark - Table view delegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
-    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row] ;
+    NSArray* objectsForDate = [eventHistory objectsForDate:date];
+    if (indexPath.row == objectsForDate.count) {
+        return 55.0f;
+    }
+    GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row] ;
     CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
     return labelHeight > 55.0f ? labelHeight : 55.0f;

@@ -10,22 +10,14 @@
 #import "Repository.h"
 #import "HistoryList.h"
 
-@interface EventTableViewController : UITableViewController {
-    
-    Repository* repository;
-    
-    HistoryList* eventHistory;
-    
-    int pagesLoaded;
-    
-    BOOL isLoading;
-    
-    BOOL complete;
-    
-}
+@interface EventTableViewController : UITableViewController 
 
 @property(strong) Repository* repository;
 @property(strong) HistoryList* eventHistory;
+@property int pagesLoaded;
+@property BOOL isLoading;
+@property BOOL complete;
+@property(strong) IBOutlet UITableViewCell* loadNextTableViewCell;
 
 -(id)initWithRepository:(Repository*)aRepository;
 
