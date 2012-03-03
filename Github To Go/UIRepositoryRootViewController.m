@@ -90,7 +90,6 @@ static NSArray* actionSheetTitles;
     return YES;
 }
 
-
 -(void)selectedSegmentChanged:(id)sender {
     UISegmentedControl* segmentedControl = sender;
     repositoryViewController.tableView.tableHeaderView = nil;
@@ -125,6 +124,10 @@ static NSArray* actionSheetTitles;
             repositoryViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
+    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+
 }
 
 -(void)showActionSheet {

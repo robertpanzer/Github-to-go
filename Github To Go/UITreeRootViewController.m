@@ -105,6 +105,9 @@
             branchViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
+    treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+
 }
 
 
