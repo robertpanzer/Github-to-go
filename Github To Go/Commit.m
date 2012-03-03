@@ -94,6 +94,25 @@
     return self;
 }
 
+-(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject {
+    self = [super init];
+    if (self) {
+        self.commitUrl = [jsonObject objectForKey:@"url"];
+        self.sha = [jsonObject objectForKey:@"sha"];
+        
+        
+        self.committedDate = [jsonObject valueForKeyPath:@"committer.date"];
+        self.authoredDate = [jsonObject valueForKeyPath:@"author.date"];
+        self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]];
+        self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]];
+        
+        self.message = [jsonObject valueForKeyPath:@"message"];
+        
+    }
+    return self;
+
+}
+
 
 - (BOOL)matchesString:(NSString *)searchString {
     if (author.name != nil && [author.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Person.h"
+#import "CommitHistoryList.h"
+
 
 @interface GithubEvent : NSObject 
 
@@ -17,5 +19,18 @@
 
 -(id) initWithJSON:(NSDictionary*)jsonObject;
 
+@end
+
+@interface PushEvent: GithubEvent
+
+@property(strong) CommitHistoryList* commits;
+
+-(id) initWithJSON:(NSDictionary *)jsonObject;
+
+@end
+
+@interface EventFactory : NSObject 
+
++(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject;
 
 @end

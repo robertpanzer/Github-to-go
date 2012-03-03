@@ -7,12 +7,12 @@
 //
 
 #import "GithubEvent.h"
+#import "CommitHistoryList.h"
+#import "Repository.h"
 
 @interface GithubEvent() 
 
 -(void)parseCommitComment:(NSDictionary*)jsonObject;
-
--(void)parsePushEvent:(NSDictionary*)jsonObject;
 
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject;
 
@@ -32,6 +32,7 @@
 
 -(void)parseIssuesEvent:(NSDictionary*)jsonObject;
 
+-(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject;
 @end
 
 
@@ -51,9 +52,7 @@
             self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
             self.date = [jsonObject objectForKey:@"created_at"];
             NSLog(@"%@", type);
-            if ([type isEqualToString:@"PushEvent"]) {
-                [self parsePushEvent:jsonObject];
-            } else if ([type isEqualToString:@"IssueCommentEvent"]) {
+            if ([type isEqualToString:@"IssueCommentEvent"]) {
                 [self parseIssueCommentEvent:jsonObject];
             } else if ([type isEqualToString:@"PullRequestEvent"]) {
                 [self parsePullRequestEvent:jsonObject];
@@ -73,6 +72,8 @@
                 [self parseFollowEvent:jsonObject];
             } else if ([type isEqualToString:@"IssuesEvent"]) {
                 [self parseIssuesEvent:jsonObject];
+            } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
+                [self parsePullRequestReviewCommentEvent:jsonObject];
             } else {
                 self.text = type;
             }
@@ -86,29 +87,6 @@
     return self;
 }
 
-
--(void)parsePushEvent:(NSDictionary*)jsonObject {
-
-    NSNumber* commitCount = [jsonObject valueForKeyPath:@"payload.size"];
-    if (commitCount.intValue == 1) {
-        NSArray* commits = [jsonObject valueForKeyPath:@"payload.commits"];
-        NSDictionary* commit = [commits objectAtIndex:0];
-        NSString* message = [commit valueForKeyPath:@"message"];
-        if (message == nil) {
-            self.text = [NSString stringWithFormat:@"%@ has pushed a commit", 
-                         self.person.displayname];
-        } else {
-            self.text = [NSString stringWithFormat:@"%@ has pushed a commit:\n%@", 
-                         self.person.displayname, 
-                         [commit valueForKeyPath:@"message"]];
-        }        
-    } else {
-        self.text = [NSString stringWithFormat:@"%@ has pushed %d commits", 
-                     self.person.displayname, 
-                     commitCount.intValue];
-    }
-
-}
 
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject {
     NSNumber* issueNumber = [jsonObject valueForKeyPath:@"payload.issue.number"];
@@ -189,6 +167,96 @@
                  [jsonObject valueForKeyPath:@"payload.action"],
                  [jsonObject valueForKeyPath:@"payload.issue.number"],
                  [jsonObject valueForKeyPath:@"payload.issue.title"] ];
+}
+
+-(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ commented on pull request:\n%@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.comment.body"]];
+}
+
+@end
+
+
+@implementation PushEvent
+
+@synthesize commits;
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super init];
+    if (self) {
+        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
+        self.date = [jsonObject objectForKey:@"created_at"];
+
+        NSNumber* commitCount = [jsonObject valueForKeyPath:@"payload.size"];
+        NSArray* commitArray = [jsonObject valueForKeyPath:@"payload.commits"];
+
+        self.commits = [[CommitHistoryList alloc] init];
+        for (NSDictionary* commitJsonObject in commitArray) {
+            Commit* commit = [[Commit alloc] initWithJSONObjectFromPushEvent:commitJsonObject];
+            commit.committedDate = self.date;
+            [self.commits addCommit:commit];
+        }
+        
+        if (commitCount.intValue == 1) {
+            NSDictionary* commit = [commitArray objectAtIndex:0];
+            NSString* message = [commit valueForKeyPath:@"message"];
+            if (message == nil) {
+                self.text = [NSString stringWithFormat:@"%@ has pushed a commit", 
+                             self.person.displayname];
+            } else {
+                self.text = [NSString stringWithFormat:@"%@ has pushed a commit:\n%@", 
+                             self.person.displayname, 
+                             [commit valueForKeyPath:@"message"]];
+            }        
+        } else {
+            self.text = [NSString stringWithFormat:@"%@ has pushed %d commits", 
+                         self.person.displayname, 
+                         commitCount.intValue];
+        }
+
+
+    }
+    return self;
+}
+
+
+@end
+
+@implementation EventFactory
+    
++(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
+    NSString* type = [jsonObject objectForKey:@"type"];
+    
+    NSLog(@"%@", type);
+    if ([type isEqualToString:@"PushEvent"]) {
+        return [[PushEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"IssueCommentEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"PullRequestEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"ForkEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"CommitCommentEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"WatchEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"CreateEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"DeleteEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"DownloadEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"FollowEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"IssuesEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    } else {
+        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    }
+    
 }
 
 @end

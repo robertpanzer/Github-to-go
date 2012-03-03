@@ -9,6 +9,9 @@
 #import "EventTableViewController.h"
 #import "NetworkProxy.h"
 #import "GithubEvent.h"
+#import "UITableViewCell+GithubEvent.h"
+#import "CommitViewController.h"
+#import "BranchViewController.h"
 
 @interface EventTableViewController()
 
@@ -152,16 +155,18 @@
         imageView = (UIImageView*)[cell.contentView viewWithTag:1];
         label = (UILabel*)[cell.contentView viewWithTag:2];
     }
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
-    // Configure the cell...
     GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
-    label.text = event.text;
 
+    if ([event isKindOfClass:[PushEvent class]]) {
+        [cell bindPushEvent:(PushEvent*)event];
+    } else {
+        [cell bindGithubEvent:event];
+    }
+    
     CGFloat width = self.tableView.frame.size.width;
 
-    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    label.frame = CGRectMake(55.0f, 2.0f, width - 57.0f, size.height);
-    [event.person loadImageIntoImageView:imageView];
+    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+    label.frame = CGRectMake(55.0f, 2.0f, width - 97.0f, size.height);
     
     return cell;
 }
@@ -180,21 +185,27 @@
         return 55.0f;
     }
     GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row] ;
-    CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 57.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
     return labelHeight > 55.0f ? labelHeight : 55.0f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
+    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
+    if ([event isKindOfClass:[PushEvent class]]) {
+        PushEvent* pushEvent = (PushEvent*)event;
+        if (pushEvent.commits.count == 1) {
+            CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:self.repository];
+            [self.navigationController pushViewController:commitViewController animated:YES];
+        } else {
+            BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:self.repository branch:nil];
+            [self.navigationController pushViewController:branchViewController animated:YES];
+        }
+    }
+    
+    
 }
 
 
@@ -209,9 +220,8 @@
                     self.complete = YES;
                 } else {
                     for (NSDictionary* event in eventArray) {
-                        GithubEvent* eventObject = [[GithubEvent alloc] initWithJSON:event];
+                        GithubEvent* eventObject = [EventFactory createEventFromJsonObject:event];
                         [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
-                        
                     }
                     pagesLoaded++;
                 }

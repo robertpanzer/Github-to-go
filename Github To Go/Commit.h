@@ -49,9 +49,13 @@
 
 @property(strong) Repository* repository;
 
+-(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject;
+
 -(id)initMinimalDataWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
+
+
 
 -(BOOL) matchesString:(NSString*)searchString;
 
