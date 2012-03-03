@@ -10,6 +10,7 @@
 #import "NetworkProxy.h"
 #import "CommitFile.h"
 #import "FileDiffViewController.h"
+#import "BlobViewController.h"
 
 @implementation CommitViewController
 
@@ -17,25 +18,15 @@
 @synthesize messageCell;
 @synthesize messageTextView;
 @synthesize repository;
+@synthesize commitSha;
+@synthesize message;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository {
     self = [super initWithNibName:@"CommitViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
-        self.navigationItem.title = aCommit.message;
-        [[NetworkProxy sharedInstance] loadStringFromURL:aCommit.commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-            if (statusCode == 200) {
-                self.commit = [[Commit alloc] initWithJSONObject:data repository:aRepository];
-                [(UITableView*)self.view reloadData];
-            }
-        }];
-        NSString* commentsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@/comments", repository.fullName, aCommit.sha];
-        NSLog(@"Comments URL: %@", commentsUrl);
-        [[NetworkProxy sharedInstance] loadStringFromURL:commentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-            if (statusCode == 200) {
-                NSLog(@"Comments %@", data);
-            }
-        }];
+        self.commitSha = aCommit.sha;
+        self.message = aCommit.message;
     }
     return self;
 }
@@ -55,11 +46,21 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.title = self.message;
+    NSString* commitUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@", self.repository.fullName, self.commitSha];
+    [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        if (statusCode == 200) {
+            self.commit = [[Commit alloc] initWithJSONObject:data repository:self.repository];
+            [(UITableView*)self.view reloadData];
+        }
+    }];
+    NSString* commentsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@/comments", repository.fullName, self.commitSha];
+    NSLog(@"Comments URL: %@", commentsUrl);
+    [[NetworkProxy sharedInstance] loadStringFromURL:commentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        if (statusCode == 200) {
+            NSLog(@"Comments %@", data);
+        }
+    }];
 }
 
 - (void)viewDidUnload
@@ -290,44 +291,6 @@
     }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -335,19 +298,14 @@
 {
     if (indexPath.section == 5) {
         CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-//        FileDiffViewController* fileDiffViewController = [[[FileDiffViewController alloc] initWithCommitFile:commitFile] autorelease];
+//        FileDiffViewController* fileDiffViewController = [[FileDiffViewController alloc] initWithCommitFile:commitFile];
 //        [self.navigationController pushViewController:fileDiffViewController animated:YES];
           
-        [commitFile loadFile];
+        BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
+        [self.navigationController pushViewController:blobViewController animated:YES];
+        
+//        [commitFile loadFile];
     }
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

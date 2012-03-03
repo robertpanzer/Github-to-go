@@ -10,15 +10,9 @@
 
 #import "Blob.h"
 #import "Repository.h"
+#import "CommitFile.h"
 
-@interface BlobViewController : UIViewController <UIWebViewDelegate> {
-    UIWebView* webView;
-    Blob* blob;
-    NSString* url;
-    NSString* name;
-    NSString* commitSha;
-    Repository* repository;
-}
+@interface BlobViewController : UIViewController <UIWebViewDelegate> 
 
 @property(strong) IBOutlet UIWebView* webView;
 @property(strong) Blob* blob;
@@ -26,7 +20,11 @@
 @property(strong) NSString* url;
 @property(strong) NSString* commitSha;
 @property(strong, readonly) Repository* repository;
+@property(strong) CommitFile* commitFile;
+@property BOOL showDiffs;
 
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+
+- (id)initWithCommitFile:(CommitFile*)aCommitFile;
 
 @end

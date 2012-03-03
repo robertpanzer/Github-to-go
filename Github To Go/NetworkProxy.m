@@ -114,6 +114,8 @@ static NetworkProxy* networkProxyInstance;
         object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
     } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
         object = [UIImage imageWithData:receivedData];
+    } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
+        object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
     }
                  
     void(^block)(int statusCode, NSDictionary* headerFields, id data) = connectionData.block;

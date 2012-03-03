@@ -11,21 +11,14 @@
 #import "Commit.h"
 #import "Repository.h"
 
-@interface CommitViewController : UITableViewController {
-    Commit* commit;
-    
-    UITableViewCell* messageCell;
-
-    UITextView* messageTextview;
-    
-    Repository* repository;
-}
+@interface CommitViewController : UITableViewController 
 
 @property(strong) Commit* commit;
 @property(strong) Repository* repository;
 @property(strong) IBOutlet UITableViewCell* messageCell;
 @property(strong) IBOutlet UITextView* messageTextView;
-
+@property(strong) NSString* commitSha;
+@property(strong) NSString* message;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository;
 @end

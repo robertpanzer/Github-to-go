@@ -26,4 +26,5 @@
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha;
 
+-(id)initWithRawData:(NSString*)rawData absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha;
 @end

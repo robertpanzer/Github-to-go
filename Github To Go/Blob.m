@@ -31,10 +31,20 @@
             if ([@"utf-8" isEqualToString:encoding]) {
                 self.content = aContent;
             } else if ([@"base64" isEqualToString:encoding]) {
-//                self.content = aContent;
                 self.content = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:aContent] encoding:NSUTF8StringEncoding];
             }
         }
+    }
+    return self;
+}
+
+-(id)initWithRawData:(NSString*)rawData absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
+    self = [super init];
+    if (self) {
+        absolutePath = anAbsolutePath;
+        commitSha = aCommitSha;
+        size = rawData.length; 
+        self.content = rawData;
     }
     return self;
 }

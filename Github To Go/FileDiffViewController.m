@@ -68,10 +68,10 @@
 
 -(void)showFile:(id)sender {
     
-    NSString* blobUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/git/blobs/%@", commitFile.commit.repository.fullName, commitFile.blobSha];
+    NSString* rawUrl = commitFile.rawUrl;
     
-    BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:blobUrl absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository];
-    [self.navigationController pushViewController:blobViewController animated:YES];
+//    BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:rawUrl diffs:self.commitFile.patch absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository];
+//    [self.navigationController pushViewController:blobViewController animated:YES];
 }
 
 @end

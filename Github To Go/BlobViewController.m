@@ -10,6 +10,48 @@
 #import "NetworkProxy.h"
 #import "BranchViewController.h"
 
+
+
+@implementation NSString (RPFiltering)
+
+- (NSString*) escapeCharsToHtml {
+    NSString* filteredLine = self;
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@" " withString:@"&nbsp;"];
+    return filteredLine;
+}
+
+-(NSString*)wrapToHtmlWithOldLineNo:(NSNumber*)oldLineNo newLineNo:(NSNumber*)newLineNo {
+    NSString* class = nil;
+    NSString* oldLineNoString;
+    NSString* newLineNoString;
+    if (oldLineNo.intValue == 0 && newLineNo.intValue > 0) {
+        class = @"new";
+        oldLineNoString = @"";
+        newLineNoString = [NSString stringWithFormat:@"+%@", newLineNo];
+    } else if (oldLineNo.intValue > 0 && newLineNo.intValue == 0) {
+        class = @"old";
+        oldLineNoString = [NSString stringWithFormat:@"<nobr>-%@</nobr>", oldLineNo];
+        newLineNoString = @"";
+    } else {
+        class = @"oldAndNew";
+        oldLineNoString = [oldLineNo description];
+        newLineNoString = [newLineNo description];
+    }
+    NSString* ret = [NSString stringWithFormat:@"<tr class=\"%@\"><td>%@</td><td>%@</td><td>%@</td></tr>\n", class, oldLineNoString, newLineNoString, [self escapeCharsToHtml]];
+    return ret;
+}
+
+-(NSString*)wrapToHtmlWithLineNo:(NSNumber*)lineNo {
+    NSString* lineNoString = [lineNo description];
+    NSString* ret = [NSString stringWithFormat:@"<tr><td>%@</td><td>%@</td></tr>\n", lineNoString, [self escapeCharsToHtml]];
+    return ret;
+}
+
+@end
+
+
 @implementation BlobViewController
 
 @synthesize webView;
@@ -18,6 +60,8 @@
 @synthesize absolutePath;
 @synthesize commitSha;
 @synthesize repository;
+@synthesize commitFile;
+@synthesize showDiffs;
 
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString *)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository
 {
@@ -28,7 +72,25 @@
         
         absolutePath = anAbsolutePath;
         commitSha = aCommitSha;
+        showDiffs = NO;
         self.navigationItem.title = [absolutePath pathComponents].lastObject;
+    }
+    return self;
+}
+
+- (id)initWithCommitFile:(CommitFile*)aCommitFile
+{
+    self = [super initWithNibName:@"BlobViewController" bundle:nil];
+    if (self) {
+        url = aCommitFile.rawUrl;
+        self.commitFile = aCommitFile;
+        repository = aCommitFile.commit.repository;
+        
+        absolutePath = aCommitFile.fileName;
+        commitSha = aCommitFile.commit.sha;
+        showDiffs = YES;
+        self.navigationItem.title = [absolutePath pathComponents].lastObject;
+        
     }
     return self;
 }
@@ -54,35 +116,57 @@
     
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            self.blob = [[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha];
+            if ([data isKindOfClass:[NSString class]]) {
+                self.blob = [[Blob alloc] initWithRawData:data absolutePath:absolutePath commitSha:commitSha];
+            } else {
+                self.blob = [[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha];
+            }
 
             NSMutableString* html = [[NSMutableString alloc] initWithCapacity:self.blob.content.length + 1000];
             
             [html appendString:@"<!DOCTYPE html>\n"];
             [html appendString:@"<html><head><style>\n"];
-            [html appendString:@".l { min-width: 100px; display: inline-block; text-align: right}\n"];
-            [html appendString:@"body { font-family: Arial;}\n"];
+            [html appendString:@".old { background-color: red;height:12pt}\n"];
+            [html appendString:@".new { background-color: green;height:12pt;}\n"];
+            [html appendString:@".oldAndNew { background-color: clear; height:12pt;}\n"];
+            [html appendString:@"body { font-family: Courier; font-size: 11pt;}\n"];
             [html appendString:@"</style></head><body>\n"];
+            [html appendString:@"<table>\n"];
             
             NSArray* lines = [self.blob.content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-            int lineNo = 1;
-            for (__strong NSString* line in lines) {
-                line = [line stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
-                line = [line stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
-                
-                [html appendFormat:@"<span class=\"l\"><a href=\"open?line=%d\">%d</a></span>%@<br>", lineNo, lineNo++, line];
-            }
-            
-            [html appendString:@"<script>\n"];
-            [html appendString:@"document.querySelector(\"body\").innerHtml = \"Hallo Welt\";\n"];
-            [html appendString:@"  function f(evt) {\n"];
-            [html appendString:@"    location.href = \"http://www.heise.de\";"];
-            [html appendString:@"      evt.target.innerHtml=\"42\";\n"];
-            [html appendString:@"  }\n"];
-            [html appendString:@"  document.querySelector(\"body\").addEventListener(\"mouseup\", f);\n"];
-            [html appendString:@"</script>\n"];
+            if (self.commitFile == nil) {
+                for (int i = 1; i <= lines.count; i++) {
+                    NSString* line = [lines objectAtIndex:i - 1];
+                    [html appendString:[line wrapToHtmlWithLineNo:[NSNumber numberWithInt:i]]];
+                }
+            } else {
+                int maxLineNo = MAX( lines.count, MAX(commitFile.largestOldLineNo, commitFile.largestNewLineNo) );
+                int oldLineCounter = 1;
+                for (int i = 1; i <= maxLineNo; i++) {
+                    NSString* oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
+                    NSString* newLine = [self.commitFile.linesOfNewFile objectForKey:[NSNumber numberWithInt:i]];
+                    
+                    if (oldLine != nil) {
+                        do {
+                            oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
+                            if (oldLine != nil) {
+                                [html appendString:[oldLine wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter] newLineNo:nil]];
+                                oldLineCounter++;
+                            }
+                        } while (oldLine != nil);
+                    }
+                    if (newLine != nil) {
+                        [html appendString:[newLine wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
+                    } else {
+                        NSString* line = [lines objectAtIndex:i - 1];
+                        [html appendString:[line wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter++] newLineNo:[NSNumber numberWithInt:i]]];
+                    }
+                }
+            }            
+            [html appendString:@"</table>\n"];
             [html appendString:@"</body>\n"];
             [html appendString:@"</html>\n"];
+            NSLog(@"HTML:\n%@", html);
             [self.webView setScalesPageToFit:YES];
             [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
             self.webView.delegate = self;
