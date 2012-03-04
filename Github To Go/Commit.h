@@ -49,7 +49,7 @@
 
 @property(strong) Repository* repository;
 
--(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject;
+-(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject committer:(Person*)aCommitter;
 
 -(id)initMinimalDataWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
 

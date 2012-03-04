@@ -48,14 +48,8 @@
 
         self.committedDate = [jsonObject valueForKeyPath:@"commit.committer.date"];
         self.authoredDate = [jsonObject valueForKeyPath:@"commit.author.date"];
-        self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]];
-        if (author.displayname == nil) {
-            self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.author"]];
-        }
-        self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]];
-        if (committer.displayname == nil) {
-            self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"commit.committer"]];            
-        }
+        self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"] JSONObject:[jsonObject valueForKeyPath:@"commit.author"]];
+        self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"] JSONObject:[jsonObject valueForKeyPath:@"commit.committer"]];
         
         self.message = [jsonObject valueForKeyPath:@"commit.message"];
 
@@ -94,17 +88,14 @@
     return self;
 }
 
--(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject {
+-(id)initWithJSONObjectFromPushEvent:(NSDictionary*)jsonObject committer:(Person*)aCommitter {
     self = [super init];
     if (self) {
         self.commitUrl = [jsonObject objectForKey:@"url"];
         self.sha = [jsonObject objectForKey:@"sha"];
         
-        
-        self.committedDate = [jsonObject valueForKeyPath:@"committer.date"];
-        self.authoredDate = [jsonObject valueForKeyPath:@"author.date"];
         self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]];
-        self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"]];
+        self.committer = aCommitter;
         
         self.message = [jsonObject valueForKeyPath:@"message"];
         

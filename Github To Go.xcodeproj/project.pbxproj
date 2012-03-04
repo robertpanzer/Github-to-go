@@ -57,6 +57,7 @@
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
+		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
@@ -145,6 +146,8 @@
 		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
 		94C6566B15025FAD00E85813 /* UITableViewCell+GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+GithubEvent.h"; sourceTree = "<group>"; };
 		94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+GithubEvent.m"; sourceTree = "<group>"; };
+		94C6566F1503727D00E85813 /* UITableViewCell+Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Person.h"; sourceTree = "<group>"; };
+		94C656701503727D00E85813 /* UITableViewCell+Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Person.m"; sourceTree = "<group>"; };
 		94D50E0714E472D6000C92E2 /* EventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewController.h; sourceTree = "<group>"; };
 		94D50E0814E472D6000C92E2 /* EventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewController.m; sourceTree = "<group>"; };
 		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
@@ -314,6 +317,8 @@
 				9466DBD514B7AD6300238151 /* Commit */,
 				946CB2A514B4651700BBFDAD /* Person.h */,
 				946CB2A614B4651700BBFDAD /* Person.m */,
+				94C6566F1503727D00E85813 /* UITableViewCell+Person.h */,
+				94C656701503727D00E85813 /* UITableViewCell+Person.m */,
 				942130BE14B455C000969D38 /* NetworkProxy.h */,
 				942130BF14B455C000969D38 /* NetworkProxy.m */,
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
@@ -473,6 +478,7 @@
 				945C25F614E86D6F00479D21 /* HistoryList.m in Sources */,
 				949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */,
 				94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */,
+				94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

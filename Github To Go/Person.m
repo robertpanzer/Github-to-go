@@ -54,13 +54,22 @@ static long sequenceCounter = 0;
             self.login = [dictionary objectForKey:@"login"];
             self.name = [dictionary objectForKey:@"name"];
             self.email = [dictionary objectForKey:@"email"];
-//            self.avatarUrl = [dictionary objectForKey:@"avatar_url"];
+            self.avatarUrl = [dictionary objectForKey:@"avatar_url"];
             avatarId = [dictionary objectForKey:@"gravatar_id"];
         }
         if (![secondDictionary isEqual:[NSNull null]]) {
-//            if (self.avatarUrl == nil) {
-//                self.avatarUrl = [secondDictionary objectForKey:@"avatar_url"];
-//            }
+            if (self.login == nil) {
+                self.login = [secondDictionary objectForKey:@"login"];
+            }
+            if (self.name == nil) {
+                self.name = [secondDictionary objectForKey:@"name"];
+            }
+            if (self.email == nil) {
+                self.email = [secondDictionary objectForKey:@"email"];
+            }
+            if (self.avatarUrl == nil) {
+                self.avatarUrl = [secondDictionary objectForKey:@"avatar_url"];
+            }
             if (avatarId == nil) {
                 avatarId = [secondDictionary objectForKey:@"garavatr_id"];
             }

@@ -193,7 +193,7 @@
 
         self.commits = [[CommitHistoryList alloc] init];
         for (NSDictionary* commitJsonObject in commitArray) {
-            Commit* commit = [[Commit alloc] initWithJSONObjectFromPushEvent:commitJsonObject];
+            Commit* commit = [[Commit alloc] initWithJSONObjectFromPushEvent:commitJsonObject committer:self.person];
             commit.committedDate = self.date;
             [self.commits addCommit:commit];
         }
