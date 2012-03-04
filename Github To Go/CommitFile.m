@@ -68,7 +68,7 @@
                                  forKey:lineNo];
                     largestOldLineNo = oldLineCounter;
                     oldLineCounter++;
-                } else {
+                } else if ([line hasPrefix:@" "]){
                     oldLineCounter++;
                     newLineCounter++;
                 }

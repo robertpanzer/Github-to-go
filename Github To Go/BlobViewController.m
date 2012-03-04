@@ -126,14 +126,26 @@
             
             [html appendString:@"<!DOCTYPE html>\n"];
             [html appendString:@"<html><head><style>\n"];
-            [html appendString:@".old { background-color: red;height:12pt}\n"];
-            [html appendString:@".new { background-color: green;height:12pt;}\n"];
+
+            
+            [html appendString:@"table { margin: 0px; border: 0px; border-spacing: 0px; padding:0px;  border-collapse: collapse;}\n"];
+            [html appendString:@"table td { border-left: 1px solid; border-right: 1px solid; border-collapse: collapse; vertical-align: top;}\n"];
+            [html appendString:@"table tr:first-child { border-top: 1px solid;}\n"];
+            [html appendString:@"table tr:last-child { border-bottom: 1px solid;}\n"];
+            [html appendString:@"tr td:nth-child(1) {text-align: right;}\n"];
+            [html appendString:@"tr td:nth-child(2) {text-align: right;}\n"];
+            [html appendString:@".old { background-color: #FF8080;height:12pt}\n"];
+            [html appendString:@".new { background-color: #80FF80;height:12pt;}\n"];
+            
             [html appendString:@".oldAndNew { background-color: clear; height:12pt;}\n"];
             [html appendString:@"body { font-family: Courier; font-size: 11pt;}\n"];
             [html appendString:@"</style></head><body>\n"];
             [html appendString:@"<table>\n"];
             
-            NSArray* lines = [self.blob.content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            NSString* originalString = self.blob.content;
+            NSString* dos2unixString = [originalString stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+            NSArray* lines = [dos2unixString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+
             if (self.commitFile == nil) {
                 for (int i = 1; i <= lines.count; i++) {
                     NSString* line = [lines objectAtIndex:i - 1];
@@ -145,7 +157,6 @@
                 for (int i = 1; i <= maxLineNo; i++) {
                     NSString* oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
                     NSString* newLine = [self.commitFile.linesOfNewFile objectForKey:[NSNumber numberWithInt:i]];
-                    
                     if (oldLine != nil) {
                         do {
                             oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
@@ -157,7 +168,7 @@
                     }
                     if (newLine != nil) {
                         [html appendString:[newLine wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
-                    } else {
+                    } else if (lines.count > i) {
                         NSString* line = [lines objectAtIndex:i - 1];
                         [html appendString:[line wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter++] newLineNo:[NSNumber numberWithInt:i]]];
                     }
