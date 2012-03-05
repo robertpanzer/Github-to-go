@@ -8,11 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NetworkProxy : NSObject  {
-    NSMutableSet* connectionDataSet;
-}
+@interface NetworkProxy : NSObject  
 
 @property(strong) NSMutableSet* connectionDataSet;
+@property(strong) NSOperationQueue* operationQueue;
 
 +(NetworkProxy*) sharedInstance;
 

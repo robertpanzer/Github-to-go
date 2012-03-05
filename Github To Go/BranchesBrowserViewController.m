@@ -55,7 +55,9 @@
                 [newBranches addObject:[[Branch alloc] initWithJSONObject:jsonBranch]];
             }
             self.branches = newBranches;
-            [(UITableView*)self.view reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [(UITableView*)self.view reloadData];
+            });
         }
     }];
     
@@ -139,21 +141,14 @@
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
         Commit* commit = [[Commit alloc] initWithJSONObject:data repository:repository];
-        
-        UITreeRootViewController* treeViewController = [[UITreeRootViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commit:commit repository:repository branchName:branch.name];
 
-        [self.navigationController pushViewController:treeViewController animated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            UITreeRootViewController* treeViewController = [[UITreeRootViewController alloc] initWithUrl:commit.treeUrl absolutePath:@"" commit:commit repository:repository branchName:branch.name];
+            [self.navigationController pushViewController:treeViewController animated:YES];
+        });
     } 
      ];
     
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    Branch* branch = [branches objectAtIndex:indexPath.row];
-//    NSString* commitUrl = branch.commitUrl;
-
-    BranchViewController* branchViewController = [[BranchViewController alloc] initWithRepository:repository andBranch:branch];
-    [self.navigationController pushViewController:branchViewController animated:YES];
 }
 
 

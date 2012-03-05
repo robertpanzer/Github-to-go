@@ -107,11 +107,10 @@
             if (oldCount == commitHistoryList.count) {
                 isComplete = YES;
             }
-            
-            
-            
-            
-            [(UITableView*)self.view reloadData];
+
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [(UITableView*)self.view reloadData];
+            });
         }
     }];
 }
@@ -189,8 +188,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-//    return 1;
     return commitHistoryList.dates.count;
 }
 

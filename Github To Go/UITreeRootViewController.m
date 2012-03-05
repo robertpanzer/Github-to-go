@@ -43,30 +43,29 @@
     // Do any additional setup after loading the view from its nib.
     [[NetworkProxy sharedInstance] loadStringFromURL:self.treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            NSLog(@"Loaded tree %@", data);
-            Tree* tree = [[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commit.sha];
-            
-            treeViewController = [[TreeViewController alloc] initWithTree:tree
-                                                             absolutePath:self.absolutePath
-                                                                   commit:commit 
-                                                               repository:self.repository
-                                                               branchName:self.branchName];
-            
-            [self addChildViewController:treeViewController];
-
-            [self.view addSubview:treeViewController.view];
-            treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-
-            branchViewController = [[BranchViewController alloc] initWithGitObject:tree
-                                                                         commitSha:self.commit.sha
-                                                                        repository:repository];
-            
-            branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-            
-            
-            
-            treeViewController.tableView.tableHeaderView = self.headerView;
-
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                Tree* tree = [[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commit.sha];
+                
+                treeViewController = [[TreeViewController alloc] initWithTree:tree
+                                                                 absolutePath:self.absolutePath
+                                                                       commit:commit 
+                                                                   repository:self.repository
+                                                                   branchName:self.branchName];
+                
+                [self addChildViewController:treeViewController];
+                
+                [self.view addSubview:treeViewController.view];
+                treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+                
+                branchViewController = [[BranchViewController alloc] initWithGitObject:tree
+                                                                             commitSha:self.commit.sha
+                                                                            repository:repository];
+                
+                branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+                
+                
+                treeViewController.tableView.tableHeaderView = self.headerView;
+            });
         }
     }];
 

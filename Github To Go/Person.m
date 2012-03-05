@@ -104,7 +104,9 @@ static long sequenceCounter = 0;
                 [url2Image setValue:data forKey:self.avatarUrl];
                 NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                 if ([sequenceNumber longValue] == mySequenceNumber) {
-                    imageView.image = data;
+                    dispatch_sync(dispatch_get_main_queue(), ^() {
+                        imageView.image = data;
+                    });
                     [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                 }
             }

@@ -52,7 +52,9 @@
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             self.commit = [[Commit alloc] initWithJSONObject:data repository:self.repository];
-            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [self.tableView reloadData];
+            });
         }
     }];
     NSString* commentsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@/comments", repository.fullName, self.commitSha];

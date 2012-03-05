@@ -178,9 +178,11 @@
             [html appendString:@"</body>\n"];
             [html appendString:@"</html>\n"];
             NSLog(@"HTML:\n%@", html);
-            [self.webView setScalesPageToFit:YES];
-            [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
-            self.webView.delegate = self;
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                self.webView.delegate = self;
+                [self.webView setScalesPageToFit:YES];
+                [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
+            });
         }
     }];
     

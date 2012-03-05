@@ -143,6 +143,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        cell.detailTextLabel.text = nil;
         if (indexPath.section == 0) {
             cell.textLabel.text = @"My Repositories";
         } else {
@@ -223,34 +224,36 @@
         NSArray* array = (NSArray*) data;
         NSLog(@"%d elements", [array count]);
         
-        if (array.count != self.myRepos.count) {
-            [self.tableView beginUpdates];
-
-            NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
-            NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:0];
-            for (int i = 1; i < self.myRepos.count + 1; i++) {
-                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
-                [newIndexPaths addObject:rowPath];
-            }
-            [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+        dispatch_async(dispatch_get_main_queue(), ^(){
             
-
-            newIndexPaths = [[NSMutableArray alloc] init];
-            for (NSDictionary* repoObject in array) {
-                [newRepos addObject:[[Repository alloc] initFromJSONObject:repoObject]];
+            if (array.count != self.myRepos.count) {
+                [self.tableView beginUpdates];
+                
+                NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
+                NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:0];
+                for (int i = 1; i < self.myRepos.count + 1; i++) {
+                    NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                    [newIndexPaths addObject:rowPath];
+                }
+                [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+                
+                
+                newIndexPaths = [[NSMutableArray alloc] init];
+                for (NSDictionary* repoObject in array) {
+                    [newRepos addObject:[[Repository alloc] initFromJSONObject:repoObject]];
+                }
+                self.myRepos = newRepos;
+                
+                for (int i = 1; i < self.myRepos.count + 1; i++) {
+                    NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                    [newIndexPaths addObject:rowPath];
+                }
+                
+                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+                [self.tableView endUpdates];
             }
-            self.myRepos = newRepos;
-            
-            for (int i = 1; i < self.myRepos.count + 1; i++) {
-                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
-                [newIndexPaths addObject:rowPath];
-            }
-            
-            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
-            [self.tableView endUpdates];
-        }
-    } 
-     ];
+        });
+    }];
     
     [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSLog(@"StatusCode: %d", statusCode);
@@ -258,39 +261,40 @@
         NSArray* array = (NSArray*) data;
         NSLog(@"%d elements", [array count]);
         
-        for (NSDictionary* repoObject in array) {
-            Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
-            [[RepositoryStorage sharedStorage] addWatchedRepository:repo];
-            if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
-                [newRepos addObject:repo];
-            }
-        }
-        
-        if (newRepos.count != self.watchedRepos.count) {
-            [self.tableView beginUpdates];
-
-            NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
-            NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:1];
-            for (int i = 1; i < self.watchedRepos.count + 1; i++) {
-                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
-                [newIndexPaths addObject:rowPath];
-            }
-            [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
-
-            self.watchedRepos = newRepos;
-            newIndexPaths = [[NSMutableArray alloc] init];
-            sectionPath = [NSIndexPath indexPathWithIndex:1];
-            for (int i = 1; i < self.watchedRepos.count + 1; i++) {
-                NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
-                [newIndexPaths addObject:rowPath];
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            for (NSDictionary* repoObject in array) {
+                Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
+                [[RepositoryStorage sharedStorage] addWatchedRepository:repo];
+                if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
+                    [newRepos addObject:repo];
+                }
             }
             
-            [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
-            [self.tableView endUpdates];
-
-        }
-    } 
-     ];
+            if (newRepos.count != self.watchedRepos.count) {
+                [self.tableView beginUpdates];
+                
+                NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
+                NSIndexPath* sectionPath = [NSIndexPath indexPathWithIndex:1];
+                for (int i = 1; i < self.watchedRepos.count + 1; i++) {
+                    NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                    [newIndexPaths addObject:rowPath];
+                }
+                [self.tableView deleteRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+                
+                self.watchedRepos = newRepos;
+                newIndexPaths = [[NSMutableArray alloc] init];
+                sectionPath = [NSIndexPath indexPathWithIndex:1];
+                for (int i = 1; i < self.watchedRepos.count + 1; i++) {
+                    NSIndexPath* rowPath = [sectionPath indexPathByAddingIndex:i];
+                    [newIndexPaths addObject:rowPath];
+                }
+                
+                [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
+                [self.tableView endUpdates];
+                
+            }
+        });
+    }];
     
 }
 

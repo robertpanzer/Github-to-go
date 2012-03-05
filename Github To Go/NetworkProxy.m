@@ -56,6 +56,7 @@ static NetworkProxy* networkProxyInstance;
 @implementation NetworkProxy
 
 @synthesize connectionDataSet;
+@synthesize operationQueue;
 
 +(void)initialize {
     networkProxyInstance = [[NetworkProxy alloc] init];
@@ -71,6 +72,7 @@ static NetworkProxy* networkProxyInstance;
         NSLog(@"Init %@", self);
         networkProxyInstance = self;
         self.connectionDataSet = [[NSMutableSet alloc] init];
+        self.operationQueue = [[NSOperationQueue alloc] init];
     }
     return self;
 }
@@ -80,6 +82,7 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+        
     NSURL* url = [NSURL URLWithString:urlString];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.timeoutInterval = 10;
@@ -88,10 +91,11 @@ static NetworkProxy* networkProxyInstance;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
     ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
-    connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];    
     connectionData.receivedData = [[NSMutableData alloc] init];
     connectionData.block = block;
     [connectionDataSet addObject:connectionData];
+
+    connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];  
 }
 
 
@@ -107,20 +111,26 @@ static NetworkProxy* networkProxyInstance;
     NSLog(@"Received %d bytes", receivedData.length);
 //    SBJsonParser* parser = [[SBJsonParser alloc] init];
 //    id object = [parser objectWithData:receivedData];
-    NSError* error = [[NSError alloc] init];
-    NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
-    id object = nil;
-    if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
-        object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
-    } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
-        object = [UIImage imageWithData:receivedData];
-    } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
-        object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-    }
-                 
-    void(^block)(int statusCode, NSDictionary* headerFields, id data) = connectionData.block;
-    block([connectionData.statusCode intValue], connectionData.headerFields, object);
+
+    void(^block)(int, NSDictionary*, id) = connectionData.block;
     
+    [operationQueue addOperationWithBlock:^() {
+        NSError* error = [[NSError alloc] init];
+        NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
+        id object = nil;
+        if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
+            object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
+        } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
+            object = [UIImage imageWithData:receivedData];
+        } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
+            object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+        }
+        NSLog(@"ConnectionData: %@", connectionData.statusCode);
+        NSLog(@"headerfields %@", connectionData.headerFields);
+        NSLog(@"data: %@", object);
+        NSLog(@"Block %@", block);
+        block([connectionData.statusCode intValue], connectionData.headerFields, object);
+    }];    
     // release the connection, and the data object
     //Block_release(connectionData.block);
     connectionData.block = nil;

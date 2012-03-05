@@ -25,7 +25,7 @@
 
 -(id)initWithTree:(Tree*)aTree absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName {
     
-    self = [super init];
+    self = [super initWithNibName:@"TreeViewController" bundle:nil];
     if (self) {
         commit = aCommit;
         repository = aRepository;
@@ -51,41 +51,6 @@
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-//    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(offerTreeActions:)] autorelease];
-//    self.navigationItem.title = self.branchName;
-//    
-//    [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
-//        if (statusCode == 200) {
-//            NSLog(@"Loaded tree %@", data);
-//            self.tree = [[[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commitSha] autorelease];
-//            
-//            NSString* headerText = [NSString stringWithFormat:@"Path: %@", absolutePath];
-//            
-//            CGSize headerSize = [headerText sizeWithFont:[UIFont systemFontOfSize:16.0f] 
-//                                              constrainedToSize:CGSizeMake(320.0f, 1000.0f) 
-//                                                  lineBreakMode:UILineBreakModeWordWrap];
-//            
-//            UILabel* header = [[[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, headerSize.width, headerSize.height + 10.0f)] autorelease];
-//            header.numberOfLines = 0;
-//            header.lineBreakMode = UILineBreakModeWordWrap;
-//            header.text = headerText;
-//            header.opaque = YES;
-//            header.backgroundColor = [UIColor clearColor];
-//            header.font = [UIFont systemFontOfSize:16.0f];
-//            
-//            self.tableView.tableHeaderView = header;
-//            
-//            [self.tableView reloadData];
-//        }
-//    }];
- 
-
-
 }
 
 - (void)viewDidUnload
@@ -103,6 +68,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -187,44 +153,6 @@
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -233,18 +161,22 @@
     if (indexPath.section == 0) {
         Tree* subtree = [self.tree treeAtIndex:indexPath.row];
         NSString* treeUrl = subtree.url;
-        UITreeRootViewController* treeRootViewController = 
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            UITreeRootViewController* treeRootViewController = 
             [[UITreeRootViewController alloc] initWithUrl:treeUrl
-                                              absolutePath:subtree.absolutePath
-                                                    commit:self.commit
-                                                repository:repository
-                                                branchName:branchName];
-        [self.navigationController pushViewController:treeRootViewController animated:YES];
+                                             absolutePath:subtree.absolutePath
+                                                   commit:self.commit
+                                               repository:repository
+                                               branchName:branchName];
+            [self.navigationController pushViewController:treeRootViewController animated:YES];
+        });
     } else {
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
         NSString* blobUrl = blob.url;
-        BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commit.sha repository:self.repository];
-        [self.navigationController pushViewController:blobViewController animated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:blobUrl absolutePath:blob.absolutePath commitSha:self.commit.sha repository:self.repository];
+            [self.navigationController pushViewController:blobViewController animated:YES];
+        });
     }
 }
 
