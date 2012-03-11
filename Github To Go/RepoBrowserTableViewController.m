@@ -306,18 +306,13 @@
 
 @synthesize repos, searchBar;
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return YES;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    //    self.tableView.tableHeaderView = self.searchBar;
-    //    self.searchBar.delegate = self;
     
     self.tableView.tableHeaderView = self.searchBar;
     self.searchBar.delegate = self;
@@ -388,7 +383,9 @@
             NSLog(@"Found repo: %@", repo.fullName);
         }
         self.repos = newRepos;
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^() {
+            [self.tableView reloadData];
+        });
     }];
     
 }
