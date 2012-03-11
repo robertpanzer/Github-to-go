@@ -168,7 +168,7 @@
                     }
                     if (newLine != nil) {
                         [html appendString:[newLine wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
-                    } else if (lines.count > i) {
+                    } else if (lines.count >= i) {
                         NSString* line = [lines objectAtIndex:i - 1];
                         [html appendString:[line wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter++] newLineNo:[NSNumber numberWithInt:i]]];
                     }
