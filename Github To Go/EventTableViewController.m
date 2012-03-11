@@ -196,12 +196,14 @@
     GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
     if ([event isKindOfClass:[PushEvent class]]) {
         PushEvent* pushEvent = (PushEvent*)event;
-        if (pushEvent.commits.count == 1) {
-            CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:self.repository];
-            [self.navigationController pushViewController:commitViewController animated:YES];
-        } else {
-            BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:self.repository branch:nil];
-            [self.navigationController pushViewController:branchViewController animated:YES];
+        if (pushEvent.commits.count > 0) {
+            if (pushEvent.commits.count == 1) {
+                CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:self.repository];
+                [self.navigationController pushViewController:commitViewController animated:YES];
+            } else {
+                BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:self.repository branch:nil];
+                [self.navigationController pushViewController:branchViewController animated:YES];
+            }
         }
     }
     
