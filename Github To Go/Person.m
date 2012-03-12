@@ -8,6 +8,7 @@
 
 #import "Person.h"
 #import "NetworkProxy.h"
+#import "QuartzCore/QuartzCore.h"
 
 static NSMutableDictionary* url2Image;
 
@@ -105,6 +106,8 @@ static long sequenceCounter = 0;
                 NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                 if ([sequenceNumber longValue] == mySequenceNumber) {
                     dispatch_sync(dispatch_get_main_queue(), ^() {
+                        imageView.layer.cornerRadius = 10.0f;
+                        imageView.layer.masksToBounds = YES;
                         imageView.image = data;
                     });
                     [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
