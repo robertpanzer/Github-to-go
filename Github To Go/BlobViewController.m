@@ -133,7 +133,9 @@
             [html appendString:@"table tr:first-child { border-top: 1px solid;}\n"];
             [html appendString:@"table tr:last-child { border-bottom: 1px solid;}\n"];
             [html appendString:@"tr td:nth-child(1) {text-align: right;}\n"];
-            [html appendString:@"tr td:nth-child(2) {text-align: right;}\n"];
+            if (self.commitFile != nil) {
+                [html appendString:@"tr td:nth-child(2) {text-align: right;}\n"];
+            }
             [html appendString:@".old { background-color: #FF8080;height:12pt}\n"];
             [html appendString:@".new { background-color: #80FF80;height:12pt;}\n"];
             
