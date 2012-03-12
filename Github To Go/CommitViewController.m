@@ -12,6 +12,7 @@
 #import "FileDiffViewController.h"
 #import "BlobViewController.h"
 #import "UITableViewCell+Person.h"
+#import "UITableViewCell+CommitFile.h"
 
 @implementation CommitViewController
 
@@ -133,7 +134,6 @@
 
     static NSString *CellIdentifier = @"Cell";
     static NSString *MessageCellIdentifier = @"MessageCell";
-    static NSString *FilenameCellIdentifier = @"FilenameCell";
     
     UITableViewCell *cell = nil;
     if (indexPath.section == 0) {
@@ -146,11 +146,17 @@
                 cell.textLabel.numberOfLines = 0;
                 cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
             }
-        } else if (indexPath.row == 2 || indexPath.row == 3) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"Person"];
-            if (cell == nil) {
-                cell = [UITableViewCell createPersonCell:@"Person" tableView:self.tableView];
-            }
+            cell.textLabel.text = commit.message; 
+            cell.detailTextLabel.text = nil; 
+            return cell;
+        } else if (indexPath.row == 2) {
+            cell = [UITableViewCell createPersonCellForTableView:self.tableView];
+            [cell bindPerson:commit.committer role:@"Committer" tableView:self.tableView];
+            return cell;
+        } else if (indexPath.row == 3) {
+            cell = [UITableViewCell createPersonCellForTableView:self.tableView];
+            [cell bindPerson:commit.author role:@"Author" tableView:self.tableView];
+            return cell;
         } else {
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (cell == nil) {
@@ -159,37 +165,11 @@
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
                 cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
             }
-
-        }
-    } else if (indexPath.section == 1) {
-        cell = [tableView dequeueReusableCellWithIdentifier:FilenameCellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
-                                           reuseIdentifier:FilenameCellIdentifier];
-            cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
-            cell.textLabel.numberOfLines = 0;
-            cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
-        }
-    }
-    
-    // Configure the cell...
-    switch (indexPath.section) {
-        case 0:
             switch (indexPath.row) {
-                case 0:
-                    cell.textLabel.text = commit.message; 
-                    cell.detailTextLabel.text = nil; 
-                    break;
                 case 1:
                     cell.textLabel.text = @"SHA"; 
                     cell.detailTextLabel.text = self.commit.sha;
                     NSLog(@"SHA: %@", self.commit.sha);
-                    break;
-                case 2:
-                    [cell bindPerson:commit.committer role:@"Committer" tableView:self.tableView];
-                    break;
-                case 3:
-                    [cell bindPerson:commit.author role:@"Author" tableView:self.tableView];
                     break;
                 case 4:
                     cell.textLabel.text = @"Deletions"; 
@@ -203,21 +183,16 @@
                     cell.textLabel.text = @"Total"; 
                     cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", commit.total];
                     break;
-                default:
-                    break;
             }
-            break;
-        case 1: {
-            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-            cell.textLabel.text = commitFile.fileName;
-            cell.detailTextLabel.text = nil;
-            }
-            break;
-        default:
-            break;
+            return cell;
+        }
+    } else if (indexPath.section == 1) {
+        cell = [UITableViewCell createCommitFileCellForTableView:tableView];
+        CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
+        [cell bindCommitFile:commitFile];
+        return cell;
     }
-    
-    return cell;
+    return nil;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -258,14 +233,8 @@
 
         return height > tableView.rowHeight ? height : tableView.rowHeight;
     } else if (indexPath.section == 1) {
-        UIFont* font = [UIFont systemFontOfSize:13.0f];
-
         CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row];
-        CGSize size = [commitFile.fileName sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
-        
-        CGFloat height = size.height + 10;
-        
-        return height > tableView.rowHeight ? height : tableView.rowHeight;
+        return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile];
     } else {
         return tableView.rowHeight;
     }
