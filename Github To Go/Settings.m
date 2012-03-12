@@ -55,9 +55,11 @@ static NSURLProtectionSpace* protectionSpace = nil;
 }
 
 - (void)setUsername:(NSString*)aUserName {
-    [settings setValue:aUserName forKey:@"username"];
-    [self setCredentialsUser:aUserName password:nil];
-    [self storeSettingsToFile];
+    if (![self.username isEqualToString:aUserName]) {
+        [settings setValue:aUserName forKey:@"username"];
+        [self setCredentialsUser:aUserName password:nil];
+        [self storeSettingsToFile];
+    }
 }
 
 - (NSString*) password {
