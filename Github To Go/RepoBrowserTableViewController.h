@@ -13,6 +13,7 @@
 
 @property(strong) NSArray* repos;
 @property(strong) IBOutlet UISearchBar* searchBar;
+@property BOOL letUserSelectCells;
 @end
 
 
@@ -23,6 +24,6 @@
 
 @property(strong) NSArray* myRepos;
 @property(strong) NSArray* watchedRepos;
-@property(strong) IBOutlet RepoSearchTableViewController* repoSearchTableViewController;
+//@property(strong) RepoSearchTableViewController* repoSearchTableViewController;
 @property BOOL initialized;
 @end
