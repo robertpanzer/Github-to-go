@@ -100,20 +100,26 @@ static long sequenceCounter = 0;
             imageView.image = image;
             return;
         }
-        [[NetworkProxy sharedInstance] loadStringFromURL:avatarUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
-            if ([data isKindOfClass:[UIImage class]]) {
-                [url2Image setValue:data forKey:self.avatarUrl];
-                NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
-                if ([sequenceNumber longValue] == mySequenceNumber) {
-                    dispatch_sync(dispatch_get_main_queue(), ^() {
-                        imageView.layer.cornerRadius = 10.0f;
-                        imageView.layer.masksToBounds = YES;
-                        imageView.image = data;
-                    });
-                    [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
-                }
-            }
-        }];
+        [[NetworkProxy sharedInstance] 
+         loadStringFromURL:avatarUrl 
+         verb:@"GET"
+         block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+             if ([data isKindOfClass:[UIImage class]]) {
+                 [url2Image setValue:data forKey:self.avatarUrl];
+                 NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
+                 if ([sequenceNumber longValue] == mySequenceNumber) {
+                     dispatch_sync(dispatch_get_main_queue(), ^() {
+                         imageView.layer.cornerRadius = 10.0f;
+                         imageView.layer.masksToBounds = YES;
+                         imageView.image = data;
+                     });
+                     [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
+                 }
+             }
+         }
+         errorBlock:^(NSError* error) {
+             // Ignore, it's only images.
+         }];
     }
 
 }
