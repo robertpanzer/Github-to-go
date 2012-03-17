@@ -8,6 +8,8 @@
 
 #import "NetworkProxy.h"
 #import <UIKit/UIKit.h>
+#import "NSData+Base64.h"
+#import "Settings.h"
 
 static NetworkProxy* networkProxyInstance;
 
@@ -19,6 +21,7 @@ static NetworkProxy* networkProxyInstance;
     NSString* url;
     NSDictionary* headerFields;
     void (^block)(int, NSDictionary*, id);
+    void (^errorBlock)(NSError*);
 }
 @property(strong) NSNumber* statusCode;
 @property(strong) NSURLConnection* connection;
@@ -26,6 +29,7 @@ static NetworkProxy* networkProxyInstance;
 @property(strong) NSString* url;
 @property(strong) NSDictionary* headerFields;
 @property(nonatomic, copy) void (^block)(int, NSDictionary*, id);
+@property(nonatomic, copy) void (^errorBlock)(NSError*);
 @end
 
 @implementation ConnectionData 
@@ -36,6 +40,7 @@ static NetworkProxy* networkProxyInstance;
 @synthesize url;
 @synthesize headerFields;
 @synthesize block;
+@synthesize errorBlock;
 
 
 - (id)initWithUrl:(NSString*)anUrl {
@@ -51,6 +56,8 @@ static NetworkProxy* networkProxyInstance;
 
 @interface NetworkProxy()  
 -(ConnectionData*)connectionDataForConnection:(NSURLConnection*)connection;
+
+-(void)addBasicAuthenticationHeaderToRequest:(NSMutableURLRequest*)request;
 @end
 
 @implementation NetworkProxy
@@ -69,7 +76,6 @@ static NetworkProxy* networkProxyInstance;
 - (id)init {
     self = [super init];
     if (self) {
-        NSLog(@"Init %@", self);
         networkProxyInstance = self;
         self.connectionDataSet = [[NSMutableSet alloc] init];
         self.operationQueue = [[NSOperationQueue alloc] init];
@@ -82,19 +88,64 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+    [self loadStringFromURL:urlString verb:aVerb block:block errorBlock:nil];
+}
+
+-(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
+    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:nil];
+}
+
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
         
-    NSURL* url = [NSURL URLWithString:urlString];
+    NSString* escapedUrlString = [[urlString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    
+    NSURL* url = [[NSURL alloc] initWithString:escapedUrlString];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
-    request.timeoutInterval = 10;
+    request.timeoutInterval = 30;
     request.HTTPMethod = aVerb;
-    NSLog(@"Request %@", request);
+    [self addBasicAuthenticationHeaderToRequest:request];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
     ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
     connectionData.receivedData = [[NSMutableData alloc] init];
     connectionData.block = block;
+    connectionData.errorBlock = errorBlock;
     [connectionDataSet addObject:connectionData];
 
+    connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];  
+}
+
+-(void)sendData:(id)data ToUrl:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
+    
+    NSString* escapedUrlString = [[urlString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+
+    NSURL* url = [NSURL URLWithString:escapedUrlString];
+    NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.timeoutInterval = 10;
+    request.HTTPMethod = aVerb;
+    
+    NSData* nsData = nil;
+    if ([data isKindOfClass:[NSDictionary class]]) {
+        NSError* error = nil;
+        nsData = [NSJSONSerialization dataWithJSONObject:data options:0 error:&error];
+        if (error != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                errorBlock(error); 
+            });
+            return;
+        }
+        [self addBasicAuthenticationHeaderToRequest:request];
+    }
+    request.HTTPBody = nsData;
+
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
+    connectionData.receivedData = [[NSMutableData alloc] init];
+    connectionData.block = block;
+    connectionData.errorBlock = errorBlock;
+    [connectionDataSet addObject:connectionData];
+    
     connectionData.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];  
 }
 
@@ -108,7 +159,6 @@ static NetworkProxy* networkProxyInstance;
     
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
     NSMutableData* receivedData = connectionData.receivedData;
-    NSLog(@"Received %d bytes", receivedData.length);
 //    SBJsonParser* parser = [[SBJsonParser alloc] init];
 //    id object = [parser objectWithData:receivedData];
 
@@ -125,10 +175,6 @@ static NetworkProxy* networkProxyInstance;
         } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
             object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
         }
-        NSLog(@"ConnectionData: %@", connectionData.statusCode);
-        NSLog(@"headerfields %@", connectionData.headerFields);
-        NSLog(@"data: %@", object);
-        NSLog(@"Block %@", block);
         block([connectionData.statusCode intValue], connectionData.headerFields, object);
     }];    
     // release the connection, and the data object
@@ -151,7 +197,6 @@ static NetworkProxy* networkProxyInstance;
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
-    NSLog(@"Response : %d", httpResponse.statusCode);
     // This method is called when the server has determined that it
     // has enough information to create the NSURLResponse.
     
@@ -167,9 +212,14 @@ static NetworkProxy* networkProxyInstance;
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     NSLog(@"Failed: %@", error);
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [alertView show];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    ConnectionData* connectionData = [self connectionDataForConnection:connection];
+    if (connectionData.errorBlock != nil) {
+        connectionData.errorBlock(error);
+    } else {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+        [alertView show];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    }
 }
 
 -(void)connection:(NSURLConnection *)connection
@@ -198,5 +248,13 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
     }
     return nil;
 }
-                           
+        
+-(void)addBasicAuthenticationHeaderToRequest:(NSMutableURLRequest*)request {
+    if ([@"api.github.com" isEqualToString:request.URL.host]) {
+        NSData *passwordData = [[NSString stringWithFormat:@"%@:%@", [Settings sharedInstance].username, [Settings sharedInstance].password] dataUsingEncoding:NSASCIIStringEncoding];
+        NSString *pwd = [NSString stringWithFormat:@"Basic %@", [passwordData base64EncodingWithLineLength:1024]];
+        [request setValue:pwd forHTTPHeaderField:@"Authorization"];
+    }
+}
+
 @end
