@@ -15,4 +15,6 @@
 
 -(void)bindPushEvent:(PushEvent*)anEvent;
 
+-(void)bindPullRequestEvent:(PullRequestEvent*)anEvent;
+
 @end

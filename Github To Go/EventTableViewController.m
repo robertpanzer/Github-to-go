@@ -12,6 +12,7 @@
 #import "UITableViewCell+GithubEvent.h"
 #import "CommitViewController.h"
 #import "BranchViewController.h"
+#import "PullRequestRootViewController.h"
 
 @interface EventTableViewController()
 
@@ -141,6 +142,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)];
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
@@ -159,6 +161,8 @@
 
     if ([event isKindOfClass:[PushEvent class]]) {
         [cell bindPushEvent:(PushEvent*)event];
+    } else if ([event isKindOfClass:[PullRequestEvent class]]) {
+        [cell bindPullRequestEvent:(PullRequestEvent*)event];
     } else {
         [cell bindGithubEvent:event];
     }
@@ -205,6 +209,10 @@
                 [self.navigationController pushViewController:branchViewController animated:YES];
             }
         }
+    } else if ([event isKindOfClass:[PullRequestEvent class]]) {
+        PullRequest *pullRequest = [(PullRequestEvent*)event pullRequest];
+        PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:pullRequest];
+        [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
     }
     
     

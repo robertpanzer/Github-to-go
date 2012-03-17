@@ -12,24 +12,15 @@
 #import "RepositoryViewController.h"
 #import "BranchesBrowserViewController.h"
 #import "EventTableViewController.h"
+#import "PullRequestListTableViewController.h"
 
-@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate> {
-    Repository* repository;
-    
-    RepositoryViewController* repositoryViewController;
-    
-    BranchesBrowserViewController* branchesBrowserViewController;
-    
-    EventTableViewController* eventTableViewController;
-    
-    UIView* headerView;
-    
-}
+@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate> 
 
 @property(strong) Repository* repository;
 @property(strong) RepositoryViewController* repositoryViewController;
 @property(strong) BranchesBrowserViewController* branchesBrowserViewController;
 @property(strong) EventTableViewController* eventTableViewController;
+@property(strong) PullRequestListTableViewController* pullRequestTableViewController;
 @property BOOL watched;
 @property(strong) IBOutlet UIView* headerView;
 

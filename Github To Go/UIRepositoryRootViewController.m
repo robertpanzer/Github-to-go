@@ -24,6 +24,7 @@ static NSArray* actionSheetTitles;
 @synthesize headerView;  
 @synthesize eventTableViewController;
 @synthesize watched;
+@synthesize pullRequestTableViewController;
 
 +(void) initialize {
     WatchRepo = @"Watch Repository";
@@ -61,10 +62,12 @@ static NSArray* actionSheetTitles;
     repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
     branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
     eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
-
+    pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
+    
     repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
     [self.view addSubview:eventTableViewController.view];
     [self addChildViewController:eventTableViewController];
@@ -81,6 +84,7 @@ static NSArray* actionSheetTitles;
     self.eventTableViewController = nil;
     self.branchesBrowserViewController = nil;
     self.repositoryViewController = nil;
+    self.pullRequestTableViewController = nil;
     self.headerView = nil;
 }
 
@@ -95,12 +99,15 @@ static NSArray* actionSheetTitles;
     repositoryViewController.tableView.tableHeaderView = nil;
     branchesBrowserViewController.tableView.tableHeaderView = nil;
     eventTableViewController.tableView.tableHeaderView = nil;
+    pullRequestTableViewController.tableView.tableHeaderView = nil;
     switch (segmentedControl.selectedSegmentIndex) {
         case 0:
             [repositoryViewController removeFromParentViewController];
             [repositoryViewController.view removeFromSuperview];
             [branchesBrowserViewController removeFromParentViewController];
             [branchesBrowserViewController.view removeFromSuperview];
+            [pullRequestTableViewController removeFromParentViewController];
+            [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:eventTableViewController];
             [self.view addSubview:eventTableViewController.view];
             eventTableViewController.tableView.tableHeaderView = self.headerView;
@@ -110,6 +117,8 @@ static NSArray* actionSheetTitles;
             [repositoryViewController.view removeFromSuperview];
             [eventTableViewController removeFromParentViewController];
             [eventTableViewController.view removeFromSuperview];
+            [pullRequestTableViewController removeFromParentViewController];
+            [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:branchesBrowserViewController];
             [self.view addSubview:branchesBrowserViewController.view];
             branchesBrowserViewController.tableView.tableHeaderView = self.headerView;
@@ -119,14 +128,28 @@ static NSArray* actionSheetTitles;
             [branchesBrowserViewController.view removeFromSuperview];
             [eventTableViewController removeFromParentViewController];
             [eventTableViewController.view removeFromSuperview];
+            [pullRequestTableViewController removeFromParentViewController];
+            [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:repositoryViewController];
             [self.view addSubview:repositoryViewController.view];
             repositoryViewController.tableView.tableHeaderView = self.headerView;
+            break;
+        case 3:
+            [branchesBrowserViewController removeFromParentViewController];
+            [branchesBrowserViewController.view removeFromSuperview];
+            [eventTableViewController removeFromParentViewController];
+            [eventTableViewController.view removeFromSuperview];
+            [repositoryViewController removeFromParentViewController];
+            [repositoryViewController.view removeFromSuperview];
+            [self addChildViewController:pullRequestTableViewController];
+            [self.view addSubview:pullRequestTableViewController.view];
+            pullRequestTableViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
     repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
 }
 

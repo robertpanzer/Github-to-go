@@ -11,7 +11,7 @@
 
 @interface UITableViewCell (Person)
 
-+(UITableViewCell *)createPersonCell:(NSString*)identifier tableView:(UITableView*)tableView;
++(UITableViewCell *)createPersonCellForTableView:(UITableView*)tableView;
 
 -(void)bindPerson:(Person *)person role:(NSString*)role tableView:(UITableView*)tableView;
 

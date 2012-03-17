@@ -22,6 +22,13 @@
 
 -(void)bindPushEvent:(PushEvent*)anEvent {
     [self bindGithubEvent:anEvent];
+    if (anEvent.commits.count > 0) {
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+}
+
+-(void)bindPullRequestEvent:(PullRequestEvent*)anEvent {
+    [self bindGithubEvent:anEvent];
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 }
 

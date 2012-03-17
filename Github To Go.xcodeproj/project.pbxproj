@@ -10,6 +10,13 @@
 		9402273C14C167260036A676 /* CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402273B14C167260036A676 /* CommitFile.m */; };
 		9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402274014C1A1140036A676 /* FileDiffViewController.m */; };
 		9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9402274114C1A1140036A676 /* FileDiffViewController.xib */; };
+		9404B4FC150CB38E0077BA8E /* UITableViewCell+CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */; };
+		9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */; };
+		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
+		941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF8B150E1A5C0046F72F /* Icon@2x.png */; };
+		941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */; };
+		941FCF95150EAD1A0046F72F /* PullRequestRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */; };
+		941FCF991510980E0046F72F /* PullRequestReviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */; };
 		942130C414B455C000969D38 /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130BF14B455C000969D38 /* NetworkProxy.m */; };
 		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
 		942130C614B455C000969D38 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C314B455C000969D38 /* Repository.m */; };
@@ -31,6 +38,7 @@
 		945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271C514D74A3100F5610D /* UITreeRootViewController.xib */; };
 		945C25F614E86D6F00479D21 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 945C25F514E86D6F00479D21 /* HistoryList.m */; };
 		945FE31E14B866F60099FD84 /* StringQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 945FE31D14B866F60099FD84 /* StringQueue.m */; };
+		946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946045E61512465000C2E44D /* PullRequestCommentViewController.xib */; };
 		9466DBD414B7ACCD00238151 /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD314B7ACCD00238151 /* Branch.m */; };
 		9466DBD914B7B77800238151 /* BranchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9466DBD714B7B77800238151 /* BranchViewController.m */; };
 		9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9466DBD814B7B77800238151 /* BranchViewController.xib */; };
@@ -56,11 +64,17 @@
 		94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
+		94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2CF150A7050005EA1BD /* PullRequest.m */; };
+		94BCF2D4150A7375005EA1BD /* PullRequestListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */; };
+		94BCF2E1150B5430005EA1BD /* PullRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
+		94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */; };
+		94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */; };
+		94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +83,17 @@
 		9402273F14C1A1140036A676 /* FileDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDiffViewController.h; sourceTree = "<group>"; };
 		9402274014C1A1140036A676 /* FileDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileDiffViewController.m; sourceTree = "<group>"; };
 		9402274114C1A1140036A676 /* FileDiffViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileDiffViewController.xib; sourceTree = "<group>"; };
+		9404B4FA150CB38E0077BA8E /* UITableViewCell+CommitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+CommitFile.h"; sourceTree = "<group>"; };
+		9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+CommitFile.m"; sourceTree = "<group>"; };
+		9404B4FE150CE6F70077BA8E /* UITableViewCell+PullRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+PullRequest.h"; sourceTree = "<group>"; };
+		9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+PullRequest.m"; sourceTree = "<group>"; };
+		941FCF89150E18A10046F72F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		941FCF8B150E1A5C0046F72F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestRootViewController.h; sourceTree = "<group>"; };
+		941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestRootViewController.m; sourceTree = "<group>"; };
+		941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestRootViewController.xib; sourceTree = "<group>"; };
+		941FCF971510980E0046F72F /* PullRequestReviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestReviewTableViewController.h; sourceTree = "<group>"; };
+		941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestReviewTableViewController.m; sourceTree = "<group>"; };
 		942130BE14B455C000969D38 /* NetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkProxy.h; sourceTree = "<group>"; };
 		942130BF14B455C000969D38 /* NetworkProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkProxy.m; sourceTree = "<group>"; };
 		942130C014B455C000969D38 /* RepoBrowserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepoBrowserTableViewController.h; sourceTree = "<group>"; };
@@ -105,6 +130,7 @@
 		945C25F514E86D6F00479D21 /* HistoryList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryList.m; sourceTree = "<group>"; };
 		945FE31C14B866F60099FD84 /* StringQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringQueue.h; sourceTree = "<group>"; };
 		945FE31D14B866F60099FD84 /* StringQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringQueue.m; sourceTree = "<group>"; };
+		946045E61512465000C2E44D /* PullRequestCommentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestCommentViewController.xib; sourceTree = "<group>"; };
 		9466DBD214B7ACCD00238151 /* Branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Branch.h; sourceTree = "<group>"; };
 		9466DBD314B7ACCD00238151 /* Branch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Branch.m; sourceTree = "<group>"; };
 		9466DBD614B7B77800238151 /* BranchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchViewController.h; sourceTree = "<group>"; };
@@ -143,6 +169,12 @@
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
+		94BCF2CE150A7050005EA1BD /* PullRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequest.h; sourceTree = "<group>"; };
+		94BCF2CF150A7050005EA1BD /* PullRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequest.m; sourceTree = "<group>"; };
+		94BCF2D1150A7375005EA1BD /* PullRequestListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestListTableViewController.h; sourceTree = "<group>"; };
+		94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestListTableViewController.m; sourceTree = "<group>"; };
+		94BCF2DE150B5430005EA1BD /* PullRequestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestTableViewController.h; sourceTree = "<group>"; };
+		94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestTableViewController.m; sourceTree = "<group>"; };
 		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
 		94C6566B15025FAD00E85813 /* UITableViewCell+GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+GithubEvent.h"; sourceTree = "<group>"; };
 		94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+GithubEvent.m"; sourceTree = "<group>"; };
@@ -153,6 +185,10 @@
 		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
 		94D50E0C14E478D7000C92E2 /* GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubEvent.h; sourceTree = "<group>"; };
 		94D50E0D14E478D7000C92E2 /* GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubEvent.m; sourceTree = "<group>"; };
+		94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoSearchTableViewController.xib; sourceTree = "<group>"; };
+		94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestCommentViewController.h; sourceTree = "<group>"; };
+		94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestCommentViewController.m; sourceTree = "<group>"; };
+		94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestAddCommentViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +213,8 @@
 				9402273F14C1A1140036A676 /* FileDiffViewController.h */,
 				9402274014C1A1140036A676 /* FileDiffViewController.m */,
 				9402274114C1A1140036A676 /* FileDiffViewController.xib */,
+				9404B4FA150CB38E0077BA8E /* UITableViewCell+CommitFile.h */,
+				9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */,
 			);
 			name = CommitFile;
 			sourceTree = "<group>";
@@ -305,6 +343,9 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
+				941FCF89150E18A10046F72F /* Icon.png */,
+				94BCF2CC150A7037005EA1BD /* PullRequest */,
 				94D50E0514E472B9000C92E2 /* Events */,
 				94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */,
 				9402273E14C1A0D10036A676 /* CommitFile */,
@@ -324,6 +365,7 @@
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
 				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
+				94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */,
 				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
@@ -352,6 +394,30 @@
 				949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		94BCF2CC150A7037005EA1BD /* PullRequest */ = {
+			isa = PBXGroup;
+			children = (
+				94BCF2CE150A7050005EA1BD /* PullRequest.h */,
+				94BCF2CF150A7050005EA1BD /* PullRequest.m */,
+				94BCF2D1150A7375005EA1BD /* PullRequestListTableViewController.h */,
+				94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */,
+				94BCF2DE150B5430005EA1BD /* PullRequestTableViewController.h */,
+				94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */,
+				9404B4FE150CE6F70077BA8E /* UITableViewCell+PullRequest.h */,
+				9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */,
+				941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */,
+				941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */,
+				941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */,
+				941FCF971510980E0046F72F /* PullRequestReviewTableViewController.h */,
+				941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */,
+				94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */,
+				94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */,
+				946045E61512465000C2E44D /* PullRequestCommentViewController.xib */,
+				94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */,
+			);
+			name = PullRequest;
 			sourceTree = "<group>";
 		};
 		94D50E0514E472B9000C92E2 /* Events */ = {
@@ -437,6 +503,12 @@
 				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 				94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
+				941FCF8A150E18A10046F72F /* Icon.png in Resources */,
+				941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */,
+				941FCF95150EAD1A0046F72F /* PullRequestRootViewController.xib in Resources */,
+				94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */,
+				94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */,
+				946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +551,14 @@
 				949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */,
 				94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */,
 				94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */,
+				94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */,
+				94BCF2D4150A7375005EA1BD /* PullRequestListTableViewController.m in Sources */,
+				94BCF2E1150B5430005EA1BD /* PullRequestTableViewController.m in Sources */,
+				9404B4FC150CB38E0077BA8E /* UITableViewCell+CommitFile.m in Sources */,
+				9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */,
+				941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */,
+				941FCF991510980E0046F72F /* PullRequestReviewTableViewController.m in Sources */,
+				94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

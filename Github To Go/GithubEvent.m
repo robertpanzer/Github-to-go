@@ -16,8 +16,6 @@
 
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject;
 
--(void)parsePullRequestEvent:(NSDictionary*)jsonObject;
-
 -(void)parseForkEvent:(NSDictionary*)jsonObject;
 
 -(void)parseWatchEvent:(NSDictionary*)jsonObject;
@@ -51,11 +49,8 @@
         @try {
             self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
             self.date = [jsonObject objectForKey:@"created_at"];
-            NSLog(@"%@", type);
             if ([type isEqualToString:@"IssueCommentEvent"]) {
                 [self parseIssueCommentEvent:jsonObject];
-            } else if ([type isEqualToString:@"PullRequestEvent"]) {
-                [self parsePullRequestEvent:jsonObject];
             } else if ([type isEqualToString:@"ForkEvent"]) {
                 [self parseForkEvent:jsonObject];
             } else if ([type isEqualToString:@"CommitCommentEvent"]) {
@@ -97,15 +92,6 @@
                  [jsonObject valueForKeyPath:@"payload.comment.body"]];
 }
 
--(void)parsePullRequestEvent:(NSDictionary*)jsonObject {
-    NSNumber* pullRequestNumber = [jsonObject valueForKeyPath:@"payload.pull_request.number"];
-    NSString* action = [jsonObject valueForKeyPath:@"payload.action"];
-    self.text = [NSString stringWithFormat:@"%@ %@ pull request %d\n%@", 
-                 self.person.displayname, 
-                 action,
-                 pullRequestNumber.intValue,
-                 [jsonObject valueForKeyPath:@"payload.pull_request.title"]];
-}
 
 -(void)parseForkEvent:(NSDictionary*)jsonObject {
     self.text = [NSString stringWithFormat:@"%@ has forked repository %@",
@@ -177,6 +163,29 @@
 
 @end
 
+@implementation PullRequestEvent 
+
+@synthesize pullRequest;
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super init];
+    if (self) {
+        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
+        self.date = [jsonObject objectForKey:@"created_at"];
+        self.pullRequest = [[PullRequest alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"payload.pull_request"]  repository:nil];
+        NSNumber* pullRequestNumber = [jsonObject valueForKeyPath:@"payload.pull_request.number"];
+        NSString* action = [jsonObject valueForKeyPath:@"payload.action"];
+        self.text = [NSString stringWithFormat:@"%@ %@ pull request %d\n%@", 
+                     self.person.displayname, 
+                     action,
+                     pullRequestNumber.intValue,
+                     [jsonObject valueForKeyPath:@"payload.pull_request.title"]];
+
+    }
+    return self;
+}
+
+@end
 
 @implementation PushEvent
 
@@ -228,13 +237,12 @@
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
     NSString* type = [jsonObject objectForKey:@"type"];
     
-    NSLog(@"%@", type);
     if ([type isEqualToString:@"PushEvent"]) {
         return [[PushEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"IssueCommentEvent"]) {
         return [[GithubEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"PullRequestEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
+        return [[PullRequestEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"ForkEvent"]) {
         return [[GithubEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"CommitCommentEvent"]) {

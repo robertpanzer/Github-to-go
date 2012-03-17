@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 #import "CommitHistoryList.h"
-
+#import "PullRequest.h"
 
 @interface GithubEvent : NSObject 
 
@@ -26,6 +26,12 @@
 @property(strong) CommitHistoryList* commits;
 
 -(id) initWithJSON:(NSDictionary *)jsonObject;
+
+@end
+
+@interface PullRequestEvent: GithubEvent 
+
+@property (strong, nonatomic) PullRequest *pullRequest;
 
 @end
 
