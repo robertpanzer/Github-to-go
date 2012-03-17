@@ -22,6 +22,9 @@
 @synthesize private;
 @synthesize fork;
 @synthesize forks;
+@synthesize createdAt;
+@synthesize language;
+@synthesize openIssues;
 
 -(id) initFromJSONObject:(NSDictionary*)jsonObject {
     self = [super init];
@@ -52,6 +55,10 @@
         self.forks = [jsonObject valueForKey:@"forks"];
 
         self.url = [jsonObject valueForKey:@"url"];
+        self.createdAt = [jsonObject valueForKey:@"created_at"];
+        self.language = [jsonObject valueForKey:@"language"];
+        self.openIssues = [jsonObject valueForKey:@"open_issues"];
+        
     }
     return self;    
 }

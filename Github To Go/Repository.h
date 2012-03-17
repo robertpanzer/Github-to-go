@@ -9,31 +9,23 @@
 #import <Foundation/Foundation.h>
 #import "Person.h"
 
-@interface Repository : NSObject {
-    NSString* name;
-    NSString* description;
-    NSNumber* repoId;
-    NSNumber* watchers;
-    NSString* url;
-    BOOL private;
-    BOOL fork;
-    NSNumber* forks;
-    NSString* masterBranch;
-    Person* owner;
-    NSDictionary* branches;
-}
+@interface Repository : NSObject 
 
-@property(strong) NSString* name;
-@property(strong) NSString* description;
-@property(strong) NSString* url;
-@property(strong) NSNumber* repoId;
-@property(strong) NSNumber* watchers;
+@property(strong, nonatomic) NSString *name;
+@property(strong, nonatomic) NSString *description;
+@property(strong, nonatomic) NSString *url;
+@property(strong, nonatomic) NSNumber *repoId;
+@property(strong, nonatomic) NSNumber *watchers;
 @property BOOL private;
 @property BOOL fork;
-@property(strong) NSNumber* forks;
-@property(strong) NSString* masterBranch;
-@property(strong) Person* owner;
-@property(strong) NSDictionary* branches;
+@property(strong, nonatomic) NSNumber *forks;
+@property(strong, nonatomic) NSString *masterBranch;
+@property(strong, nonatomic) Person *owner;
+@property(strong, nonatomic) NSDictionary *branches;
+@property(strong, nonatomic) NSString *createdAt;
+@property(strong, nonatomic) NSString *language;
+@property(strong, nonatomic) NSNumber *openIssues;
+
 
 @property(unsafe_unretained, readonly) NSString* fullName;
 

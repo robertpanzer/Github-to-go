@@ -9,10 +9,31 @@
 #import "RepositoryViewController.h"
 #import "NetworkProxy.h"
 #import "BranchesBrowserViewController.h"
+#import "UITableViewCell+Person.h"
+
+static NSArray *keys, *descriptions;
+static BOOL *isBool;
 
 @implementation RepositoryViewController
 
 @synthesize repository;
+
++(void)initialize {
+    keys = [NSArray arrayWithObjects:@"name", @"description", @"owner", @"repoId", @"private", @"watchers", @"fork", @"forks", @"createdAt", @"language", @"openIssues", nil];
+    descriptions = [NSArray arrayWithObjects:@"Name", @"Description", @"Owner", @"Id", @"Private", @"Watchers", @"Fork", @"Forks", @"Created at", @"Language", @"Open issues", nil];
+    isBool = calloc(keys.count, sizeof(BOOL));
+    isBool[0] = NO;
+    isBool[1] = NO;
+    isBool[2] = NO;
+    isBool[3] = NO;
+    isBool[4] = YES;
+    isBool[5] = NO;
+    isBool[6] = YES;
+    isBool[7] = NO;
+    isBool[8] = NO;
+    isBool[9] = NO;
+    isBool[10] = NO;
+}
 
 -(id)initWithRepository:(Repository*)repo {
     self = [super initWithNibName:@"RepositoryViewController" bundle:nil];
@@ -37,11 +58,6 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
@@ -90,100 +106,43 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return 8;
+    return keys.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* InfoCellIdentifier = @"InfoCell";
+    
+    id value = [repository valueForKeyPath:[keys objectAtIndex:indexPath.row]];
+    if ([value isKindOfClass:[Person class]]) {
+        UITableViewCell *cell = [UITableViewCell createPersonCellForTableView:self.tableView];
+        [cell bindPerson:value role:[descriptions objectAtIndex:indexPath.row] tableView:self.tableView];
+        return cell;
+    } else {
+        static NSString* InfoCellIdentifier = @"InfoCell";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier];
+            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
+        
+        if ([value isKindOfClass:[NSString class]]) {
+            cell.detailTextLabel.text = value;
+        } else if ([value isKindOfClass:[NSNumber class]]) {
+            if (isBool[indexPath.row]) {
+                cell.detailTextLabel.text = [value boolValue] ? NSLocalizedString(@"Yes",nil) : NSLocalizedString(@"No", nil);
+            } else {
+                cell.detailTextLabel.text = [value stringValue];
+            }
+        }
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier];
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        return cell;    
     }
-    switch (indexPath.row) {
-        case 0:
-            cell.textLabel.text = @"Name";
-            cell.detailTextLabel.text = repository.name;
-            break;
-        case 1:
-            cell.textLabel.text = @"Description";
-            cell.detailTextLabel.text = repository.description;
-            break;
-        case 2:
-            cell.textLabel.text = @"Owner";
-            cell.detailTextLabel.text = repository.owner.login;
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-            break;
-        case 3:
-            cell.textLabel.text = @"ID";
-            cell.detailTextLabel.text = repository.repoId.description;
-            break;
-        case 4:
-            cell.textLabel.text = @"Private";
-            cell.detailTextLabel.text = repository.private ? @"Yes" : @"No";
-            break;
-        case 5:
-            cell.textLabel.text = @"Watchers";
-            cell.detailTextLabel.text = repository.watchers.description;
-            break;
-        case 6:
-            cell.textLabel.text = @"Fork";
-            cell.detailTextLabel.text = repository.fork ? @"Yes" : @"No";
-            break;
-        case 7:
-            cell.textLabel.text = @"Forks";
-            cell.detailTextLabel.text = repository.forks.description;
-            break;
-            
-        default:
-            break;
-    }
-    return cell;    
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
