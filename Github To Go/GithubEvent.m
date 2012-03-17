@@ -40,6 +40,7 @@
 @synthesize text = text_;
 @synthesize person = person_;
 @synthesize date = date_;
+@synthesize repository;
 
 - (id)initWithJSON:(NSDictionary *)jsonObject {
     self = [super init];
@@ -49,6 +50,8 @@
         @try {
             self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
             self.date = [jsonObject objectForKey:@"created_at"];
+            self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKey:@"repo"]];
+            
             if ([type isEqualToString:@"IssueCommentEvent"]) {
                 [self parseIssueCommentEvent:jsonObject];
             } else if ([type isEqualToString:@"ForkEvent"]) {
@@ -168,10 +171,8 @@
 @synthesize pullRequest;
 
 -(id)initWithJSON:(NSDictionary *)jsonObject {
-    self = [super init];
+    self = [super initWithJSON:jsonObject];
     if (self) {
-        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
-        self.date = [jsonObject objectForKey:@"created_at"];
         self.pullRequest = [[PullRequest alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"payload.pull_request"]  repository:nil];
         NSNumber* pullRequestNumber = [jsonObject valueForKeyPath:@"payload.pull_request.number"];
         NSString* action = [jsonObject valueForKeyPath:@"payload.action"];
@@ -192,11 +193,9 @@
 @synthesize commits;
 
 -(id)initWithJSON:(NSDictionary *)jsonObject {
-    self = [super init];
+    self = [super initWithJSON:jsonObject];
     if (self) {
-        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
-        self.date = [jsonObject objectForKey:@"created_at"];
-
+        
         NSNumber* commitCount = [jsonObject valueForKeyPath:@"payload.size"];
         NSArray* commitArray = [jsonObject valueForKeyPath:@"payload.commits"];
 

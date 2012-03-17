@@ -16,6 +16,7 @@
 @property(strong) NSString* text;
 @property(strong) Person* person;
 @property(strong) NSString* date;
+@property(strong) Repository* repository;
 
 -(id) initWithJSON:(NSDictionary*)jsonObject;
 

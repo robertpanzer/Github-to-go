@@ -13,10 +13,13 @@
 #import "CommitViewController.h"
 #import "BranchViewController.h"
 #import "PullRequestRootViewController.h"
+#import "Settings.h"
 
 @interface EventTableViewController()
 
 -(void) loadEvents;
+
+@property(strong, nonatomic) NSString *baseUrl;
 
 @end
 
@@ -28,6 +31,21 @@
 @synthesize loadNextTableViewCell;
 @synthesize isLoading;
 @synthesize pagesLoaded;
+@synthesize baseUrl;
+
+-(id) initWithAllEvents {
+    self = [super initWithNibName:@"EventTableViewController" bundle:nil];
+    if (self) {
+        self.title = NSLocalizedString(@"Events", @"Events");
+        self.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:0];
+
+        self.eventHistory = [[HistoryList alloc] init];
+        self.isLoading = NO;
+        self.complete = NO;
+        self.pagesLoaded = 0;
+    }
+    return self;
+}
 
 - (id)initWithRepository:(Repository *)aRepository {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
@@ -75,6 +93,20 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.repository != nil) {
+        self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", repository.fullName];
+    } else if ([Settings sharedInstance].username != nil) {
+        NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
+        if (![newBaseUrl isEqualToString:self.baseUrl]) {
+            self.baseUrl = newBaseUrl;
+            self.eventHistory = [[HistoryList alloc] init];
+            self.pagesLoaded = 0;
+            self.complete = NO;
+        }
+    } else {
+        self.baseUrl = @"https://api.github.com/events";
+    }
     
     if (pagesLoaded == 0) {
         [self loadEvents];
@@ -202,10 +234,10 @@
         PushEvent* pushEvent = (PushEvent*)event;
         if (pushEvent.commits.count > 0) {
             if (pushEvent.commits.count == 1) {
-                CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:self.repository];
+                CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:pushEvent.repository];
                 [self.navigationController pushViewController:commitViewController animated:YES];
             } else {
-                BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:self.repository branch:nil];
+                BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:pushEvent.repository branch:nil];
                 [self.navigationController pushViewController:branchViewController animated:YES];
             }
         }
@@ -221,7 +253,7 @@
 
 -(void)loadEvents {
     if (!isLoading && !complete) {
-        NSString* url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events?page=%d", repository.fullName, pagesLoaded + 1];
+        NSString* url = [NSString stringWithFormat:@"%@?page=%d", self.baseUrl, pagesLoaded + 1];
         isLoading = YES;
         [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {

@@ -21,4 +21,5 @@
 
 -(id)initWithRepository:(Repository*)aRepository;
 
+-(id)initWithAllEvents;
 @end

@@ -250,7 +250,8 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 }
         
 -(void)addBasicAuthenticationHeaderToRequest:(NSMutableURLRequest*)request {
-    if ([@"api.github.com" isEqualToString:request.URL.host]) {
+    if ([@"api.github.com" isEqualToString:request.URL.host] 
+        && [Settings sharedInstance].username != nil && [[Settings sharedInstance].username length] > 0) {
         NSData *passwordData = [[NSString stringWithFormat:@"%@:%@", [Settings sharedInstance].username, [Settings sharedInstance].password] dataUsingEncoding:NSASCIIStringEncoding];
         NSString *pwd = [NSString stringWithFormat:@"Basic %@", [passwordData base64EncodingWithLineLength:1024]];
         [request setValue:pwd forHTTPHeaderField:@"Authorization"];

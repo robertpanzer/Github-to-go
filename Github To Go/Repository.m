@@ -40,7 +40,7 @@
         id ownerObject = [jsonObject objectForKey:@"owner"];
         if ([ownerObject isKindOfClass:[NSString class]]) {
             self.owner = [[Person alloc] initWithLogin:ownerObject];
-        } else {
+        } else if (ownerObject != nil) {
             self.owner = [[Person alloc] initWithJSONObject:ownerObject JSONObject:nil];
         }
 
@@ -83,6 +83,10 @@
 }
 
 - (NSString*)fullName {
-    return [NSString stringWithFormat:@"%@/%@", self.owner.login, self.name];
+    if (self.owner == nil) {
+        return self.name;
+    } else {
+        return [NSString stringWithFormat:@"%@/%@", self.owner.login, self.name];
+    }
 }
 @end
