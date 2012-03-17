@@ -65,7 +65,6 @@ static NSURLProtectionSpace* protectionSpace = nil;
 - (NSString*) password {
     NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
     NSURLCredential* credential = [credentialStorage defaultCredentialForProtectionSpace:protectionSpace];
-    NSLog(@"Password: %@", credential.password);
     return credential.password;
 }
 
@@ -94,9 +93,6 @@ static NSURLProtectionSpace* protectionSpace = nil;
     }
     
     credentials = [credentialStorage credentialsForProtectionSpace:protectionSpace];
-    for (NSURLCredential* credential in credentials.objectEnumerator) {
-        NSLog(@"Credential for %@:%@", credential.user, credential.password);
-    }
 
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
@@ -120,9 +116,5 @@ static NSURLProtectionSpace* protectionSpace = nil;
 	path = [path stringByAppendingPathComponent:@"Settings.plist"];
     [settings writeToFile:path atomically:YES];
 }
-
-//-(NSUInteger)retainCount {
-//    return NSIntegerMax;
-//}
 
 @end
