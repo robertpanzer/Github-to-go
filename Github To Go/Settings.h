@@ -15,8 +15,10 @@
     NSString* password;
 }
 
-@property(strong) NSString* username;
-@property(strong) NSString* password;
+@property(strong, nonatomic) NSString* username;
+@property(strong, nonatomic) NSString* password;
+
+@property(readonly) BOOL isUsernameSet;
 
 + (Settings*) sharedInstance;
 

@@ -14,6 +14,7 @@
 #import "BranchViewController.h"
 #import "PullRequestRootViewController.h"
 #import "Settings.h"
+#import "UIRepositoryRootViewController.h"
 
 @interface EventTableViewController()
 
@@ -79,7 +80,6 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     UILabel* loadNextLabel = (UILabel*)[self.loadNextTableViewCell.contentView viewWithTag:2];
         loadNextLabel.text = NSLocalizedString(@"Loading more commits...", @"Event list loading More entries");
-
 }
 
 - (void)viewDidUnload
@@ -93,10 +93,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     if (self.repository != nil) {
         self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", repository.fullName];
-    } else if ([Settings sharedInstance].username != nil) {
+    } else if ([Settings sharedInstance].isUsernameSet) {
         NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
         if (![newBaseUrl isEqualToString:self.baseUrl]) {
             self.baseUrl = newBaseUrl;
@@ -114,27 +113,13 @@
         
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self.tableView reloadData];
 }
 
@@ -195,6 +180,14 @@
         [cell bindPushEvent:(PushEvent*)event];
     } else if ([event isKindOfClass:[PullRequestEvent class]]) {
         [cell bindPullRequestEvent:(PullRequestEvent*)event];
+    } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
+        [cell bindGithubEvent:event];
+        if (self.repository == nil) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+    } else if ([event isKindOfClass:[ForkEvent class]]) {
+        [cell bindGithubEvent:event];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else {
         [cell bindGithubEvent:event];
     }
@@ -245,6 +238,10 @@
         PullRequest *pullRequest = [(PullRequestEvent*)event pullRequest];
         PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:pullRequest];
         [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+    } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
+                || [event isKindOfClass:[ForkEvent class]]) {
+        UIRepositoryRootViewController *repositoryRootViewController = [[UIRepositoryRootViewController alloc] initWithRepository:event.repository];
+        [self.navigationController pushViewController:repositoryRootViewController animated:YES];
     }
     
     
@@ -261,18 +258,41 @@
                 if (eventArray.count == 0) {
                     self.complete = YES;
                 } else {
+                    GithubEvent *event = nil;
+                    if ([self.tableView visibleCells] && [self.tableView visibleCells].count > 0) {
+                        UITableViewCell *firstCell = [[self.tableView visibleCells] objectAtIndex:0];
+                        NSIndexPath *firstIndex = [self.tableView indexPathForCell:firstCell];
+                        event = [eventHistory objectAtIndexPath:firstIndex];
+                    }                    
+                    NSMutableArray *indexPaths = [NSMutableArray array];
                     for (NSDictionary* event in eventArray) {
                         GithubEvent* eventObject = [EventFactory createEventFromJsonObject:event];
-                        [eventHistory addObject:eventObject date:eventObject.date primaryKey:nil];
+                        NSIndexPath* indexPath = [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
+                        if (indexPath != nil) {
+                            [indexPaths addObject:indexPath];
+                        }
                     }
                     pagesLoaded++;
+                    NSIndexPath *newIndexPath = nil;
+                    if (event) {
+                        newIndexPath = [eventHistory indexPathOfObject:event];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^() {
+                        [self.tableView reloadData];
+                        if (newIndexPath) {
+                            [self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                        }
+                    });
                 }
                 isLoading = NO;
-                dispatch_async(dispatch_get_main_queue(), ^() {
-                    [self.tableView reloadData];
-                });
             }
         }];
     }    
 }
+
+-(void)reload {
+    self.pagesLoaded = 0;
+    [self loadEvents];
+}
+
 @end

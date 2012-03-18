@@ -9,29 +9,27 @@
 #import <Foundation/Foundation.h>
 
 @interface HistoryList : NSObject {
-    
     NSMutableArray* dates;
-    
     NSMutableDictionary* objectsForDate;
-    
     NSMutableDictionary* objectsByPrimaryKey;
-    
-    int count;
-    
+    NSInteger count;
 }
 
 @property(strong) NSMutableArray* dates;
 @property(strong) NSMutableDictionary* objectsForDate;
 @property(strong) NSMutableDictionary* objectsByPrimaryKey;
-
-@property(readonly) NSInteger count;
+@property(readonly, nonatomic) NSInteger count;
 
 -(id) init;
 
--(void) addObject:(NSObject*)anObject date:(NSString*)aDate primaryKey:(NSString*)aPrimaryKey;
+-(NSIndexPath*) addObject:(NSObject*)anObject date:(NSString*)aDate primaryKey:(NSString*)aPrimaryKey;
 
 -(NSArray*) objectsForDate:(NSString*)aDate;
 
 -(NSObject*) objectForPrimaryKey:(NSString*)primaryKey;
+
+-(id) objectAtIndexPath:(NSIndexPath*)indexPath;
+
+-(NSIndexPath*)indexPathOfObject:(id)object;
 
 @end

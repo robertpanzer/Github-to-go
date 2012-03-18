@@ -13,10 +13,12 @@
 
 @interface GithubEvent : NSObject 
 
-@property(strong) NSString* text;
-@property(strong) Person* person;
-@property(strong) NSString* date;
-@property(strong) Repository* repository;
+@property(strong, nonatomic) NSString* text;
+@property(strong, nonatomic) Person* person;
+@property(strong, nonatomic) NSString* date;
+@property(strong, nonatomic) Repository* repository;
+@property(strong, nonatomic) NSString *primaryKey;
+
 
 -(id) initWithJSON:(NSDictionary*)jsonObject;
 
@@ -33,6 +35,15 @@
 @interface PullRequestEvent: GithubEvent 
 
 @property (strong, nonatomic) PullRequest *pullRequest;
+
+@end
+
+@interface ForkEvent: GithubEvent 
+
+@end
+
+
+@interface CreateRepositoryEvent: GithubEvent 
 
 @end
 

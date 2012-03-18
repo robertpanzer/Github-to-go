@@ -97,6 +97,10 @@ static NSURLProtectionSpace* protectionSpace = nil;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
+-(BOOL) isUsernameSet {
+    return self.username != nil && self.username.length > 0;
+}
+
 - (void) loadSettingsFromFile {
     NSString *path;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

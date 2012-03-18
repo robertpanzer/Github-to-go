@@ -16,8 +16,6 @@
 
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject;
 
--(void)parseForkEvent:(NSDictionary*)jsonObject;
-
 -(void)parseWatchEvent:(NSDictionary*)jsonObject;
 
 -(void)parseCreateEvent:(NSDictionary*)jsonObject;
@@ -31,6 +29,10 @@
 -(void)parseIssuesEvent:(NSDictionary*)jsonObject;
 
 -(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject;
+
+-(void)parseGistEvent:(NSDictionary*)jsonObject;
+
+-(void)parseGollumEvent:(NSDictionary*)jsonObject;
 @end
 
 
@@ -41,6 +43,7 @@
 @synthesize person = person_;
 @synthesize date = date_;
 @synthesize repository;
+@synthesize primaryKey;
 
 - (id)initWithJSON:(NSDictionary *)jsonObject {
     self = [super init];
@@ -51,11 +54,10 @@
             self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
             self.date = [jsonObject objectForKey:@"created_at"];
             self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKey:@"repo"]];
+            self.primaryKey = [jsonObject valueForKey:@"id"];
             
             if ([type isEqualToString:@"IssueCommentEvent"]) {
                 [self parseIssueCommentEvent:jsonObject];
-            } else if ([type isEqualToString:@"ForkEvent"]) {
-                [self parseForkEvent:jsonObject];
             } else if ([type isEqualToString:@"CommitCommentEvent"]) {
                 [self parseCommitComment:jsonObject];
             } else if ([type isEqualToString:@"WatchEvent"]) {
@@ -72,6 +74,10 @@
                 [self parseIssuesEvent:jsonObject];
             } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
                 [self parsePullRequestReviewCommentEvent:jsonObject];
+            } else if ([type isEqualToString:@"GistEvent"]) {
+                [self parseGistEvent:jsonObject];
+            } else if ([type isEqualToString:@"GollumEvent"]) {
+                [self parseGollumEvent:jsonObject];
             } else {
                 self.text = type;
             }
@@ -96,11 +102,6 @@
 }
 
 
--(void)parseForkEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ has forked repository %@",
-                 self.person.displayname,
-                 [jsonObject valueForKeyPath:@"payload.forkee.name"]];
-}
 
 -(void)parseCommitComment:(NSDictionary *)jsonObject {
     self.text = [NSString stringWithFormat:@"%@ commented on commit %@:\n%@",
@@ -125,9 +126,10 @@
                      refType,
                      [jsonObject valueForKeyPath:@"payload.ref"] ];
     } else {
-        self.text = [NSString stringWithFormat:@"%@ has created %@",
+        self.text = [NSString stringWithFormat:@"%@ has created %@ %@",
                      self.person.displayname,
-                     refType];
+                     refType,
+                     [jsonObject valueForKeyPath:@"repo.name"]];
     }
 }
 
@@ -145,9 +147,10 @@
 }
 
 -(void)parseFollowEvent:(NSDictionary*)jsonObject {
+    Person *followedPerson = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"payload.target"]];
     self.text = [NSString stringWithFormat:@"%@ is following %@",
                  self.person.displayname,
-                 [jsonObject valueForKeyPath:@"payload.object.login"] ];
+                 followedPerson.displayname ];
 }
 
 -(void)parseIssuesEvent:(NSDictionary*)jsonObject {
@@ -162,6 +165,35 @@
     self.text = [NSString stringWithFormat:@"%@ commented on pull request:\n%@",
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.comment.body"]];
+}
+
+-(void)parseGistEvent:(NSDictionary*)jsonObject {
+    self.text = [NSString stringWithFormat:@"%@ %@d gist %@:\n%@",
+                 self.person.displayname,
+                 [jsonObject valueForKeyPath:@"payload.action"],
+                 [jsonObject valueForKeyPath:@"payload.gist.id"],
+                 [jsonObject valueForKeyPath:@"payload.gist.description"]
+                 ];
+}
+
+-(void)parseGollumEvent:(NSDictionary*)jsonObject {
+    NSMutableString * newText = [NSMutableString stringWithString:self.person.displayname];
+    BOOL first = YES;
+    for (NSDictionary *gollumAction in [jsonObject valueForKeyPath:@"payload.pages"]) {
+        if (first) {
+            first = NO;
+            [newText appendString:@" "];
+        } else {
+            [newText appendString:@", "];
+        }
+        NSString *action = [NSString stringWithFormat:@"%@ page %@", 
+                            [gollumAction valueForKey:@"action"],
+                            [gollumAction valueForKey:@"page_name"]
+                            ];
+        [newText appendString:action];
+        
+    }
+    self.text = newText;
 }
 
 @end
@@ -231,6 +263,29 @@
 
 @end
 
+
+
+@implementation CreateRepositoryEvent 
+
+@end
+
+@implementation ForkEvent
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super initWithJSON:jsonObject];
+    if (self != nil) {
+        self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"payload.forkee"]];
+        self.text = [NSString stringWithFormat:@"%@ has forked repository %@ to %@",
+                     self.person.displayname,
+                     [jsonObject valueForKeyPath:@"repo.name"],
+                     self.repository.fullName];
+    }
+    
+    return self;
+}
+
+@end
+
 @implementation EventFactory
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
@@ -243,13 +298,18 @@
     } else if ([type isEqualToString:@"PullRequestEvent"]) {
         return [[PullRequestEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"ForkEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
+        return [[ForkEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"CommitCommentEvent"]) {
         return [[GithubEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"WatchEvent"]) {
         return [[GithubEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"CreateEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
+        NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
+        if ([@"repository" isEqualToString:refType]) {
+            return [[CreateRepositoryEvent alloc] initWithJSON:jsonObject];
+        } else {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        }
     } else if ([type isEqualToString:@"DeleteEvent"]) {
         return [[GithubEvent alloc] initWithJSON:jsonObject];
     } else if ([type isEqualToString:@"DownloadEvent"]) {

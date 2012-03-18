@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Repository.h"
 #import "HistoryList.h"
+#import "PullToRefreshTableViewController.h"
 
-@interface EventTableViewController : UITableViewController 
+@interface EventTableViewController : PullToRefreshTableViewController
 
-@property(strong) Repository* repository;
-@property(strong) HistoryList* eventHistory;
+@property(strong, nonatomic) Repository* repository;
+@property(strong, nonatomic) HistoryList* eventHistory;
 @property int pagesLoaded;
 @property BOOL isLoading;
 @property BOOL complete;
-@property(strong) IBOutlet UITableViewCell* loadNextTableViewCell;
+@property(strong, nonatomic) IBOutlet UITableViewCell* loadNextTableViewCell;
 
 -(id)initWithRepository:(Repository*)aRepository;
 

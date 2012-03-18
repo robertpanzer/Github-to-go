@@ -8,11 +8,18 @@
 
 #import "HistoryList.h"
 
+@interface HistoryList()
+
+@property(nonatomic) NSInteger count;
+
+@end
+
 @implementation HistoryList 
 
 @synthesize dates;
 @synthesize objectsForDate;
 @synthesize objectsByPrimaryKey;
+@synthesize count;
 
 - (id)init {
     self = [super init];
@@ -24,18 +31,21 @@
     return self;
 }
 
--(void)addObject:(NSObject *)anObject date:(NSString *)aDate primaryKey:(NSString *)aPrimaryKey {
+-(NSIndexPath*)addObject:(NSObject *)anObject date:(NSString *)aDate primaryKey:(NSString *)aPrimaryKey {
     
     if (aPrimaryKey != nil && [self.objectsByPrimaryKey objectForKey:aPrimaryKey] != nil) {
-        return;
+        return nil;
     }
+    
+    NSUInteger section, row;
     
     NSString* date = [aDate substringToIndex:10];
     
     if (aPrimaryKey != nil) {
-        [objectsByPrimaryKey setObject:anObject forKey:aPrimaryKey];
+        [self.objectsByPrimaryKey setObject:anObject forKey:aPrimaryKey];
     }
-    NSMutableArray* objectsForDay = [self.objectsForDate objectForKey:date];
+    NSMutableArray *objectsForDay = [self.objectsForDate objectForKey:date];
+    NSMutableArray *timesForDay = [self.objectsForDate objectForKey:[date stringByAppendingString:@"_times"]];
     if (objectsForDay == nil) {
         BOOL inserted = NO;
         for (int i = 0; i < self.dates.count; i++) {
@@ -43,34 +53,72 @@
             if ([listDate compare:date] == NSOrderedAscending) {
                 [dates insertObject:date atIndex:i];
                 inserted = YES;
+                section = i;
                 break;
             }
         }
         if (!inserted) {
+            section = dates.count;
             [dates addObject:date];
         }
         objectsForDay = [NSMutableArray array];
         [self.objectsForDate setObject:objectsForDay forKey:date];
+        timesForDay = [NSMutableArray array];
+        [self.objectsForDate setObject:timesForDay forKey:[date stringByAppendingString:@"_times"]];
+    } else {
+        section = [dates indexOfObject:date];
     }
-    [objectsForDay addObject:anObject];
     
-    count++;
+    BOOL inserted = NO;
+    for (int i = 0; i < objectsForDay.count; i++) {
+        NSString *time = [timesForDay objectAtIndex:i];
+        if ([time compare:aDate] == NSOrderedAscending) {
+            [timesForDay insertObject:aDate atIndex:i];
+            [objectsForDay insertObject:anObject atIndex:i];
+            inserted = YES;
+            row = i;
+            break;
+        }
+    }
+    if (!inserted) {
+        [timesForDay addObject:aDate];
+        row = objectsForDay.count;
+        [objectsForDay addObject:anObject];
+    }
+    
+    self.count++;
+    return [NSIndexPath indexPathForRow:row inSection:section];
     
 }
 
 
 -(NSArray *)objectsForDate:(NSString *)aDate {
-    return [objectsForDate objectForKey:aDate];
+    return [self.objectsForDate objectForKey:aDate];
 }
 
 -(NSObject *)objectForPrimaryKey:(NSString *)primaryKey {
     return [self.objectsByPrimaryKey objectForKey:primaryKey];
 }
 
-- (NSInteger)count {
-    return count;
+
+-(id) objectAtIndexPath:(NSIndexPath*)indexPath {
+    NSString *date = [self.dates objectAtIndex:indexPath.section];
+    NSArray *objects = [self objectsForDate:date];
+    return [objects objectAtIndex:indexPath.row];
 }
 
-
+-(NSIndexPath*)indexPathOfObject:(id)object {
+    for (int section = 0; section < dates.count; section++) {
+        NSString *date = [dates objectAtIndex:section];
+        NSArray *objects = [self objectsForDate:date];
+        for (int row = 0; row < objects.count; row++) {
+            id currentObject = [objects objectAtIndex:row];
+            if ([object isEqual:currentObject]) {
+                return [NSIndexPath indexPathForRow:row inSection:section];
+            }
+        }
+    }
+    return nil;
+}
 
 @end

@@ -46,6 +46,7 @@
 		946CB2AB14B4796000BBFDAD /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AA14B4796000BBFDAD /* Commit.m */; };
 		946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AD14B48E6000BBFDAD /* TreeViewController.m */; };
 		946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */; };
+		9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */; };
 		949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 949DB8CF14F1522D000BE743 /* RepositoryStorage.m */; };
 		949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13314B3327800D3E713 /* UIKit.framework */; };
 		949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13514B3327800D3E713 /* Foundation.framework */; };
@@ -143,6 +144,8 @@
 		946CB2AC14B48E6000BBFDAD /* TreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewController.h; sourceTree = "<group>"; };
 		946CB2AD14B48E6000BBFDAD /* TreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewController.m; sourceTree = "<group>"; };
 		946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeViewController.xib; sourceTree = "<group>"; };
+		9491EE3C151658550050C424 /* PullToRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshTableViewController.h; sourceTree = "<group>"; };
+		9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
 		949DB8CF14F1522D000BE743 /* RepositoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryStorage.m; sourceTree = "<group>"; };
 		949FB12F14B3327800D3E713 /* Github To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -381,6 +384,8 @@
 				9445E35914B6198300BB929C /* NSData+Base64.h */,
 				9445E35A14B6198300BB929C /* NSData+Base64.m */,
 				94C0602614CE174600E28C5F /* GitObject.h */,
+				9491EE3C151658550050C424 /* PullToRefreshTableViewController.h */,
+				9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */,
 			);
 			path = "Github To Go";
 			sourceTree = "<group>";
@@ -559,6 +564,7 @@
 				941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */,
 				941FCF991510980E0046F72F /* PullRequestReviewTableViewController.m in Sources */,
 				94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */,
+				9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
