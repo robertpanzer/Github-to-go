@@ -102,8 +102,14 @@
 
 
 -(id) objectAtIndexPath:(NSIndexPath*)indexPath {
+    if (indexPath.section >= self.dates.count) {
+        return nil;
+    }
     NSString *date = [self.dates objectAtIndex:indexPath.section];
     NSArray *objects = [self objectsForDate:date];
+    if (indexPath.row >= objects.count) {
+        return nil;
+    }
     return [objects objectAtIndex:indexPath.row];
 }
 

@@ -79,7 +79,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     UILabel* loadNextLabel = (UILabel*)[self.loadNextTableViewCell.contentView viewWithTag:2];
-        loadNextLabel.text = NSLocalizedString(@"Loading more commits...", @"Event list loading More entries");
+        loadNextLabel.text = NSLocalizedString(@"Loading more events...", @"Event list loading More entries");
 }
 
 - (void)viewDidUnload
@@ -102,6 +102,7 @@
             self.eventHistory = [[HistoryList alloc] init];
             self.pagesLoaded = 0;
             self.complete = NO;
+            [self loadEvents];
         }
     } else {
         self.baseUrl = @"https://api.github.com/events";
