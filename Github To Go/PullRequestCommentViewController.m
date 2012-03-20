@@ -132,6 +132,7 @@
 @synthesize textView;
 @synthesize waitScreen;
 @synthesize pullRequest;
+@synthesize navigationItem;
 
 - (id)initWithPullRequest:(PullRequest*)aPullRequest
 {
@@ -171,6 +172,11 @@
     [self setWaitScreen:nil];
     [super viewDidUnload];
     self.textView = nil;
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    self.navigationItem.title = [self.pullRequest.number stringValue];
 }
 
 -(void)sendComment:(id)sender {

@@ -25,6 +25,7 @@
     
 @property (strong, nonatomic) IBOutlet UITextView *textView;
 @property (strong, nonatomic) IBOutlet UIView *waitScreen;
+@property (strong, nonatomic) IBOutlet UINavigationItem *navigationItem;
 
 @property (strong, nonatomic) PullRequest *pullRequest;
 -(IBAction)sendComment:(id)sender;
