@@ -37,7 +37,6 @@
 -(id) initWithAllEvents {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
-        self.title = NSLocalizedString(@"Events", @"Events");
         self.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:0];
 
         self.eventHistory = [[HistoryList alloc] init];
@@ -93,6 +92,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.hidden = (self.repository == nil);
+
     if (self.repository != nil) {
         self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", repository.fullName];
     } else if ([Settings sharedInstance].isUsernameSet) {
@@ -230,19 +232,23 @@
             if (pushEvent.commits.count == 1) {
                 CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:pushEvent.repository];
                 [self.navigationController pushViewController:commitViewController animated:YES];
+                self.navigationController.navigationBar.hidden = NO;
             } else {
                 BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:pushEvent.repository branch:nil];
                 [self.navigationController pushViewController:branchViewController animated:YES];
+                self.navigationController.navigationBar.hidden = NO;
             }
         }
     } else if ([event isKindOfClass:[PullRequestEvent class]]) {
         PullRequest *pullRequest = [(PullRequestEvent*)event pullRequest];
         PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:pullRequest];
         [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+        self.navigationController.navigationBar.hidden = NO;
     } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
                 || [event isKindOfClass:[ForkEvent class]]) {
         UIRepositoryRootViewController *repositoryRootViewController = [[UIRepositoryRootViewController alloc] initWithRepository:event.repository];
         [self.navigationController pushViewController:repositoryRootViewController animated:YES];
+        self.navigationController.navigationBar.hidden = NO;
     }
     
     
