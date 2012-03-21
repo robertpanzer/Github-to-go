@@ -69,6 +69,8 @@
 {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBar.hidden = YES;
+
     [self onFetchRepos];
 }
 
@@ -80,6 +82,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
