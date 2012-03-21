@@ -14,7 +14,7 @@
 @synthesize absolutePath;
 @synthesize url;
 @synthesize size;
-@synthesize content;
+@synthesize rawContent, content;
 @synthesize commitSha;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
@@ -31,6 +31,7 @@
             if ([@"utf-8" isEqualToString:encoding]) {
                 self.content = aContent;
             } else if ([@"base64" isEqualToString:encoding]) {
+                self.rawContent = [NSData dataWithBase64EncodedString:aContent];    
                 self.content = [[NSString alloc] initWithData:[NSData dataWithBase64EncodedString:aContent] encoding:NSUTF8StringEncoding];
             }
         }
@@ -48,6 +49,17 @@
     }
     return self;
 }
+
+-(id)initWithData:(id)rawData absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
+    self = [super init];
+    if (self) {
+        absolutePath = anAbsolutePath;
+        commitSha = aCommitSha;
+        self.content = rawData;
+    }
+    return self;
+}
+
 
 - (NSString *)name {
     return [absolutePath pathComponents].lastObject;

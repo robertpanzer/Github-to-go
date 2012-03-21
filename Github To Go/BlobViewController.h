@@ -16,10 +16,10 @@
 
 @property(strong) IBOutlet UIWebView* webView;
 @property(strong) Blob* blob;
-@property(readonly, strong) NSString* absolutePath;
+@property(strong) NSString* absolutePath;
 @property(strong) NSString* url;
 @property(strong) NSString* commitSha;
-@property(strong, readonly) Repository* repository;
+@property(strong) Repository* repository;
 @property(strong) CommitFile* commitFile;
 @property BOOL showDiffs;
 

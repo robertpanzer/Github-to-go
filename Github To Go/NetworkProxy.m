@@ -88,11 +88,17 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
-    [self loadStringFromURL:urlString verb:aVerb block:block errorBlock:nil];
+    [self loadStringFromURL:urlString verb:aVerb block:block errorBlock:^(NSError* error) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+        [alertView show];
+    }];
 }
 
 -(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
-    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:nil];
+    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:^(NSError* error) {
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+        [alertView show];
+    }];
 }
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
@@ -165,15 +171,23 @@ static NetworkProxy* networkProxyInstance;
     void(^block)(int, NSDictionary*, id) = connectionData.block;
     
     [operationQueue addOperationWithBlock:^() {
-        NSError* error = [[NSError alloc] init];
+        NSError* error;
         NSString* contentType = [connectionData.headerFields objectForKey:@"Content-Type"];
         id object = nil;
         if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
             object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
-        } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
-            object = [UIImage imageWithData:receivedData];
+//        } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
+//            object = [UIImage imageWithData:receivedData];
         } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
             object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+            if (object == nil) {
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    connectionData.errorBlock(nil); 
+                });
+                return;
+            }
+        } else {
+            object = receivedData;
         }
         block([connectionData.statusCode intValue], connectionData.headerFields, object);
     }];    
@@ -213,13 +227,10 @@ static NetworkProxy* networkProxyInstance;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     NSLog(@"Failed: %@", error);
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
-    if (connectionData.errorBlock != nil) {
-        connectionData.errorBlock(error);
-    } else {
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alertView show];
+    dispatch_async(dispatch_get_main_queue(), ^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    }
+        connectionData.errorBlock(error);
+    });
 }
 
 -(void)connection:(NSURLConnection *)connection

@@ -13,18 +13,22 @@
     NSString* absolutePath;
     NSString* url;
     long size;
-    NSString* content;
+    id content;
     NSString* commitSha;
 }
 
 @property(unsafe_unretained, readonly) NSString* name;
 @property(readonly, strong) NSString* absolutePath;
 @property(strong) NSString* url;
-@property(strong) NSString* content;
+@property(strong) id content;
+@property(strong) NSData *rawContent;
 @property(readonly) long size;
 @property(readonly, strong) NSString* commitSha;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha;
 
 -(id)initWithRawData:(NSString*)rawData absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha;
+
+-(id)initWithData:(NSData*)rawData absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha;
+
 @end

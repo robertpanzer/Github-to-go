@@ -104,14 +104,20 @@ static long sequenceCounter = 0;
          loadStringFromURL:avatarUrl 
          verb:@"GET"
          block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
-             if ([data isKindOfClass:[UIImage class]]) {
-                 [url2Image setValue:data forKey:self.avatarUrl];
+             if (statusCode == 200) {
+                 UIImage *image = nil;
+                 if ([data isKindOfClass:[UIImage class]]) {
+                     image = data;
+                 } else if ([data isKindOfClass:[NSData class]]) {
+                     image = [UIImage imageWithData:data];
+                 }
+                 [url2Image setValue:image forKey:self.avatarUrl];
                  NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                  if ([sequenceNumber longValue] == mySequenceNumber) {
                      dispatch_sync(dispatch_get_main_queue(), ^() {
                          imageView.layer.cornerRadius = 10.0f;
                          imageView.layer.masksToBounds = YES;
-                         imageView.image = data;
+                         imageView.image = image;
                      });
                      [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                  }
