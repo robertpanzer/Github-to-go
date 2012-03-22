@@ -108,4 +108,10 @@
     [self.navigationController pushViewController:blobViewController animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    CommitFile* commitFile = [self.files objectAtIndex:indexPath.row];
+    return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile];
+}
+
 @end
