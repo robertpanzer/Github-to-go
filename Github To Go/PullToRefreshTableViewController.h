@@ -19,7 +19,6 @@
 
 @property(strong, nonatomic) ReloadLabel *reloadLabel;
 
-@property CGFloat lastSwipeOffset;
 @property BOOL reloadPossible;
 
 -(void)reload;

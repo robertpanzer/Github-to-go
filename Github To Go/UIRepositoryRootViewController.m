@@ -21,7 +21,6 @@ static NSArray* actionSheetTitles;
 @synthesize repository;
 @synthesize repositoryViewController;
 @synthesize branchesBrowserViewController;
-@synthesize headerView;  
 @synthesize eventTableViewController;
 @synthesize watched;
 @synthesize pullRequestTableViewController;
@@ -64,14 +63,13 @@ static NSArray* actionSheetTitles;
     eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
     pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
     
-    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    repositoryViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
 
     [self.view addSubview:eventTableViewController.view];
     [self addChildViewController:eventTableViewController];
-    eventTableViewController.tableView.tableHeaderView = self.headerView;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
 }
@@ -85,7 +83,6 @@ static NSArray* actionSheetTitles;
     self.branchesBrowserViewController = nil;
     self.repositoryViewController = nil;
     self.pullRequestTableViewController = nil;
-    self.headerView = nil;
 }
 
 
@@ -94,12 +91,10 @@ static NSArray* actionSheetTitles;
     return YES;
 }
 
+
+
 -(void)selectedSegmentChanged:(id)sender {
     UISegmentedControl* segmentedControl = sender;
-    repositoryViewController.tableView.tableHeaderView = nil;
-    branchesBrowserViewController.tableView.tableHeaderView = nil;
-    eventTableViewController.tableView.tableHeaderView = nil;
-    pullRequestTableViewController.tableView.tableHeaderView = nil;
     switch (segmentedControl.selectedSegmentIndex) {
         case 0:
             [repositoryViewController removeFromParentViewController];
@@ -110,7 +105,6 @@ static NSArray* actionSheetTitles;
             [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:eventTableViewController];
             [self.view addSubview:eventTableViewController.view];
-            eventTableViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 1:
             [repositoryViewController removeFromParentViewController];
@@ -121,7 +115,6 @@ static NSArray* actionSheetTitles;
             [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:branchesBrowserViewController];
             [self.view addSubview:branchesBrowserViewController.view];
-            branchesBrowserViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 2:
             [branchesBrowserViewController removeFromParentViewController];
@@ -132,7 +125,6 @@ static NSArray* actionSheetTitles;
             [pullRequestTableViewController.view removeFromSuperview];
             [self addChildViewController:repositoryViewController];
             [self.view addSubview:repositoryViewController.view];
-            repositoryViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 3:
             [branchesBrowserViewController removeFromParentViewController];
@@ -143,13 +135,12 @@ static NSArray* actionSheetTitles;
             [repositoryViewController.view removeFromSuperview];
             [self addChildViewController:pullRequestTableViewController];
             [self.view addSubview:pullRequestTableViewController.view];
-            pullRequestTableViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
-    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    repositoryViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
 
 }
 

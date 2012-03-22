@@ -22,7 +22,6 @@
 @property(strong) EventTableViewController* eventTableViewController;
 @property(strong) PullRequestListTableViewController* pullRequestTableViewController;
 @property BOOL watched;
-@property(strong) IBOutlet UIView* headerView;
 
 
 - (id)initWithRepository:(Repository*)aRepository;

@@ -13,7 +13,7 @@
 
 @implementation UITreeRootViewController
 
-@synthesize headerView, treeUrl, absolutePath, commit, repository, branchName;
+@synthesize treeUrl, absolutePath, commit, repository, branchName;
 
 -(id)initWithUrl:(NSString*)aTreeUrl absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName
 {
@@ -41,6 +41,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 400.0f, 40.0f)];
+    titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
+    titleLabel.text = self.absolutePath;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    self.navigationItem.titleView = titleLabel;
     [[NetworkProxy sharedInstance] loadStringFromURL:self.treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             dispatch_async(dispatch_get_main_queue(), ^() {
@@ -55,16 +62,14 @@
                 [self addChildViewController:treeViewController];
                 
                 [self.view addSubview:treeViewController.view];
-                treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+                treeViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height -44.0f);
                 
                 branchViewController = [[BranchViewController alloc] initWithGitObject:tree
                                                                              commitSha:self.commit.sha
                                                                             repository:repository];
                 
-                branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+                branchViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
                 
-                
-                treeViewController.tableView.tableHeaderView = self.headerView;
             });
         }
     }];
@@ -76,7 +81,6 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
-    self.headerView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -94,18 +98,16 @@
             [self.view addSubview:treeViewController.view];
             [branchViewController removeFromParentViewController];
             [branchViewController.view removeFromSuperview];
-            treeViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 1:
             [treeViewController removeFromParentViewController];
             [treeViewController.view removeFromSuperview];
             [self addChildViewController:branchViewController];
             [self.view addSubview:branchViewController.view];
-            branchViewController.tableView.tableHeaderView = self.headerView;
             break;
     }
-    treeViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    branchViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    treeViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    branchViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
 
 }
 

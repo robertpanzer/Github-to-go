@@ -32,7 +32,6 @@
     
 }
 
-@property(strong) IBOutlet UIView* headerView;
 @property(strong) NSString* treeUrl;
 @property(strong) NSString* absolutePath;
 @property(strong) NSString* branchName;
