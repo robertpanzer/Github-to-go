@@ -11,7 +11,7 @@
 #import "NetworkProxy.h"
 #import "CommitFile.h"
 #import "UITableViewCell+CommitFile.h"
-
+#import "BlobViewController.h"
 
 @interface PullRequestReviewTableViewController ()
 
@@ -102,13 +102,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+
+    CommitFile *commitFile = [self.files objectAtIndex:indexPath.row];
+    BlobViewController *blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
+    [self.navigationController pushViewController:blobViewController animated:YES];
 }
 
 @end

@@ -149,10 +149,12 @@
                 [html appendString:@"</style></head><body>\n"];
                 [html appendString:@"<table>\n"];
                 
-                NSString* originalString = self.blob.content;
-                NSString* dos2unixString = [originalString stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
-                NSArray* lines = [dos2unixString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                
+                NSArray *lines = nil;
+                if (![self.commitFile.status isEqualToString:@"removed"]) {
+                    NSString* originalString = self.blob.content;
+                    NSString* dos2unixString = [originalString stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"];
+                    lines = [dos2unixString componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                }                
                 if (self.commitFile == nil) {
                     for (int i = 1; i <= lines.count; i++) {
                         NSString* line = [lines objectAtIndex:i - 1];
