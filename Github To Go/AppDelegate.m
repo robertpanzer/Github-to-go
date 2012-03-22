@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SecondViewController.h"
 #import "Repository.h"
 #import "NetworkProxy.h"
 #import "RepoBrowserTableViewController.h"
