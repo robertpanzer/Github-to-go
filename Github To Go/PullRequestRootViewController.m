@@ -13,7 +13,6 @@
 @end
 
 @implementation PullRequestRootViewController
-@synthesize headerView;
 @synthesize segmentedControl;
 @synthesize infoViewController;
 @synthesize pullRequest;
@@ -33,7 +32,6 @@
             [commentViewController.view removeFromSuperview];
             [self addChildViewController:infoViewController];
             [self.view addSubview:infoViewController.tableView];
-            infoViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 1:
             [infoViewController removeFromParentViewController];
@@ -42,7 +40,6 @@
             [commentViewController.view removeFromSuperview];
             [self addChildViewController:reviewTableViewController];
             [self.view addSubview:reviewTableViewController.tableView];
-            reviewTableViewController.tableView.tableHeaderView = self.headerView;
             break;
         case 2:
             [infoViewController removeFromParentViewController];
@@ -51,13 +48,12 @@
             [reviewTableViewController.view removeFromSuperview];
             [self addChildViewController:commentViewController];
             [self.view addSubview:commentViewController.tableView];
-            commentViewController.tableView.tableHeaderView = self.headerView;
             break;
         
     }
-    infoViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    reviewTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    commentViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    infoViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    reviewTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    commentViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
 
 }
 
@@ -77,15 +73,14 @@
 {
     [super viewDidLoad];
     
-    self.infoViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    self.infoViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
     
     [self.view addSubview:infoViewController.tableView];
     [self addChildViewController:infoViewController];
-    infoViewController.tableView.tableHeaderView = self.headerView;
     
-    self.reviewTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    self.reviewTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
 
-    self.commentViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    self.commentViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
     
 
 
@@ -93,7 +88,6 @@
 
 - (void)viewDidUnload
 {
-    [self setHeaderView:nil];
     [self setSegmentedControl:nil];
     [super viewDidUnload];
 }

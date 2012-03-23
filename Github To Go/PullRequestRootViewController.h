@@ -15,7 +15,6 @@
 
 @interface PullRequestRootViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
 @property (strong, nonatomic) PullRequestTableViewController* infoViewController;
