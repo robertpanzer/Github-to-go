@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Repository.h"
+#import "PullToRefreshTableViewController.h"
 
 @interface RepoSearchTableViewController : UITableViewController <UISearchBarDelegate> 
 
@@ -17,10 +18,9 @@
 @end
 
 
-@interface RepoBrowserTableViewController : UITableViewController 
+@interface RepoBrowserTableViewController : PullToRefreshTableViewController 
 
 - (IBAction)onFetchRepos;
-- (IBAction)swiped:(id)sender;
 
 @property(strong) NSArray* myRepos;
 @property(strong) NSArray* watchedRepos;

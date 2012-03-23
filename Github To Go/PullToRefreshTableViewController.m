@@ -22,6 +22,10 @@
         self.label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
         self.label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.label.textAlignment = UITextAlignmentCenter;
+        self.label.backgroundColor = [UIColor clearColor];
+        self.label.opaque = NO;
+        self.backgroundColor = [UIColor clearColor];
+        self.opaque = NO;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:self.label];
     }
@@ -55,9 +59,13 @@
         self.reloadLabel = [[ReloadLabel alloc] initWithFrame:CGRectMake(0.0f, -40.0f, self.tableView.frame.size.width, 40.0f)];
         [self.tableView addSubview:self.reloadLabel];
     
-        [self.tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)];
     }
+    [self.tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)];
 
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [self.tableView.panGestureRecognizer removeTarget:self action:@selector(swiped:)];
 }
 
 -(void) swiped:(UIPanGestureRecognizer*)recognizer {
