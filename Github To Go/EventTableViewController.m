@@ -204,7 +204,7 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString* date = [eventHistory.dates objectAtIndex:section];
+    NSString* date = [eventHistory stringFromInternalDate:[eventHistory.dates objectAtIndex:section]];
     return date;
 }
 

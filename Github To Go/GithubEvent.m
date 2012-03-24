@@ -9,6 +9,7 @@
 #import "GithubEvent.h"
 #import "CommitHistoryList.h"
 #import "Repository.h"
+#import "NSString+ISO8601Parsing.h"
 
 @interface GithubEvent() 
 
@@ -52,7 +53,7 @@
         
         @try {
             self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
-            self.date = [jsonObject objectForKey:@"created_at"];
+            self.date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
             self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKey:@"repo"]];
             self.primaryKey = [jsonObject valueForKey:@"id"];
             

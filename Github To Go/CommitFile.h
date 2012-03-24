@@ -30,5 +30,4 @@
 
 - (id)initWithJSONObject:(NSDictionary*)jsonObject commit:(Commit*)aCommit;
 
-- (void)loadFile;
 @end

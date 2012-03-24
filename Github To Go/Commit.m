@@ -12,10 +12,9 @@
 #import "NetworkProxy.h"
 #import "Tree.h"
 #import <Foundation/Foundation.h>
+#import "NSString+ISO8601Parsing.h"
 
 @interface Commit() 
-
--(void)loadObjectWithAbsolutePath:(NSArray*)pathElements fromTree:(Tree*)tree;
 
 @end
 
@@ -46,8 +45,12 @@
 
         self.treeUrl = [jsonObject valueForKeyPath:@"commit.tree.url"];
 
-        self.committedDate = [jsonObject valueForKeyPath:@"commit.committer.date"];
-        self.authoredDate = [jsonObject valueForKeyPath:@"commit.author.date"];
+        NSString *committedDateString = [jsonObject valueForKeyPath:@"commit.committer.date"];
+        self.committedDate = [committedDateString dateForRFC3339DateTimeString];
+        ;
+        NSString *authoredDateString = [jsonObject valueForKeyPath:@"commit.author.date"];
+        self.authoredDate = [authoredDateString dateForRFC3339DateTimeString];
+        
         self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"] JSONObject:[jsonObject valueForKeyPath:@"commit.author"]];
         self.committer = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"committer"] JSONObject:[jsonObject valueForKeyPath:@"commit.committer"]];
         
@@ -97,6 +100,8 @@
         self.author = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"author"]];
         self.committer = aCommitter;
         
+        NSString *committedDateString = [jsonObject valueForKeyPath:@"committer.date"];
+        self.committedDate = [committedDateString dateForRFC3339DateTimeString];
         self.message = [jsonObject valueForKeyPath:@"message"];
         
     }
@@ -129,41 +134,6 @@
     }
     
     return NO;
-}
-
-- (void)loadObjectWithAbsolutePath:(NSString*)absolutePath {
-    NSArray* pathElements = [absolutePath pathComponents];
-    [[NetworkProxy sharedInstance] loadStringFromURL:treeUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-        if (statusCode == 200) {
-            Tree* rootTree = [[Tree alloc] initWithJSONObject:data absolutePath:@"" commitSha:self.sha];
-            [self loadObjectWithAbsolutePath:pathElements fromTree:rootTree];
-        }
-    }];
-}
-
--(void)loadObjectWithAbsolutePath:(NSArray *)pathElements fromTree:(Tree *)tree {
-    for (Tree* subtree in tree.subtrees) {
-        if ([[pathElements objectAtIndex:0] isEqual:subtree.name]) {
-            [[NetworkProxy sharedInstance] loadStringFromURL:subtree.url block:^(int statusCode, NSDictionary* headerFields, id data) {
-                if (statusCode == 200) {
-//                    NSString* absolutePath = [tree.absolutePath stringByAppendingPathComponent:subtree.name];
-                    Tree* fullSubTree = [[Tree alloc] initWithJSONObject:data absolutePath:subtree.absolutePath commitSha:self.sha];
-                    [self loadObjectWithAbsolutePath:[pathElements subarrayWithRange:NSMakeRange(1, pathElements.count - 1)]  fromTree:fullSubTree];
-                }
-            }];
-        }
-    }
-    for (Blob* blob in tree.blobs) {
-        if ([[pathElements objectAtIndex:0] isEqual:blob.name]) {
-            [[NetworkProxy sharedInstance] loadStringFromURL:blob.url block:^(int statusCode, NSDictionary* headerFields, id data) {
-                if (statusCode == 200) {
-                    Blob* fullBlob = [[Blob alloc] initWithJSONObject:data absolutePath:blob.absolutePath commitSha:blob.commitSha];
-                    NSLog(@"Blob: %@", fullBlob);
-                }
-            }];
-            
-        }
-    }
 }
 
 @end

@@ -24,8 +24,8 @@
     int deletions;
     int additions;
     int total;
-    NSString* committedDate;
-    NSString* authoredDate;
+    NSDate* committedDate;
+    NSDate* authoredDate;
     
     Repository* repository;
 }
@@ -44,8 +44,8 @@
 @property int additions;
 @property int total;
 
-@property(strong) NSString* committedDate;
-@property(strong) NSString* authoredDate;
+@property(strong) NSDate* committedDate;
+@property(strong) NSDate* authoredDate;
 
 @property(strong) Repository* repository;
 
@@ -59,6 +59,6 @@
 
 -(BOOL) matchesString:(NSString*)searchString;
 
-- (void)loadObjectWithAbsolutePath:(NSString*)absolutePath;
+//- (void)loadObjectWithAbsolutePath:(NSString*)absolutePath;
 
 @end

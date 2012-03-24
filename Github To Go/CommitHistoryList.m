@@ -28,7 +28,7 @@
 }
 
 -(Commit *)lastCommit {
-    NSString* lastDate = dates.lastObject;
+    NSString* lastDate = self.dates.lastObject;
     NSArray* commitsForLastDate = [self objectsForDate:lastDate];//[commitsForDate objectForKey:lastDate];
     return commitsForLastDate.lastObject;
 }

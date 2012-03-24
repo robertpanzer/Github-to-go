@@ -223,11 +223,13 @@
         static NSInteger AUTHOR_TAG = 2;
         static NSInteger SHA_TAG = 3;
         static NSInteger IMAGE_TAG = 4;
+        static NSInteger TIME_TAG = 5;
         UITableViewCell *cell = nil;
         UILabel* messageLabel = nil;
         UILabel* shaLabel = nil;
         UILabel* authorLabel = nil;
         UIImageView* imageView = nil;
+        UILabel *timeLabel = nil;
 
         cell = [tableView dequeueReusableCellWithIdentifier:CommitCellIdentifier];
         if (cell == nil) {
@@ -252,31 +254,40 @@
             shaLabel.textAlignment = UITextAlignmentRight;
             shaLabel.textColor = [UIColor lightGrayColor];
             [cell.contentView addSubview:shaLabel];
-            
-            
+
             authorLabel = [[UILabel alloc] initWithFrame:CGRectMake(55.0f, 39.0f, 150.0f, 14.0f)];
             authorLabel.font = [UIFont systemFontOfSize:11.0f];
             authorLabel.tag = AUTHOR_TAG;
             authorLabel.textAlignment = UITextAlignmentLeft;
             authorLabel.textColor = [UIColor lightGrayColor];
             [cell.contentView addSubview:authorLabel];
+
+            timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 180.0f, 39.0f, 77.0f, 15.0f)];
+            timeLabel.font = [UIFont systemFontOfSize:11.0f];
+            timeLabel.tag = TIME_TAG;
+            timeLabel.textAlignment = UITextAlignmentRight;
+            timeLabel.textColor = [UIColor lightGrayColor];
+            [cell.contentView addSubview:timeLabel];
         } else {
             messageLabel = (UILabel*)[cell.contentView viewWithTag:MESSAGE_TAG];
             shaLabel = (UILabel*)[cell.contentView viewWithTag:SHA_TAG];
             authorLabel =  (UILabel*)[cell.contentView viewWithTag:AUTHOR_TAG];
             imageView = (UIImageView*)[cell.contentView viewWithTag:IMAGE_TAG];
+            timeLabel = (UILabel*)[cell.contentView viewWithTag:TIME_TAG];
         }
         imageView.image = nil;
         imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
 
         messageLabel.frame = CGRectMake(57.0f, 2.0f, self.tableView.frame.size.width - 57.0f, 38.0f);
         shaLabel.frame = CGRectMake(self.tableView.frame.size.width - 80.0f, 39.0f, 77.0f, 15.0f);
+        timeLabel.frame = CGRectMake(self.tableView.frame.size.width - 180.0f, 39.0f, 77.0f, 15.0f);
         authorLabel.frame = CGRectMake(55.0f, 39.0f, 150.0f, 14.0f);
         
         Commit* commit = [commitsForDay objectAtIndex:indexPath.row];
         messageLabel.text = commit.message;
         shaLabel.text = [commit.sha substringToIndex:7];
         authorLabel.text = [commit.author displayname];
+        timeLabel.text = [NSDateFormatter localizedStringFromDate:commit.committedDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle];
         [commit.author loadImageIntoImageView:imageView];
 
         return cell;
@@ -302,7 +313,7 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [commitHistoryList.dates objectAtIndex:section];
+    return [commitHistoryList stringFromInternalDate:[commitHistoryList.dates objectAtIndex:section]];
 }
 
 

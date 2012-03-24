@@ -15,7 +15,7 @@
 
 @property(strong, nonatomic) NSString* text;
 @property(strong, nonatomic) Person* person;
-@property(strong, nonatomic) NSString* date;
+@property(strong, nonatomic) NSDate* date;
 @property(strong, nonatomic) Repository* repository;
 @property(strong, nonatomic) NSString *primaryKey;
 

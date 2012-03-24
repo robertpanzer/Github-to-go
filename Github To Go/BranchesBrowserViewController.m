@@ -40,16 +40,10 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.navigationItem.title = repository.fullName;
     NSString* url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/branches", repository.fullName];
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            NSLog(@"Loaded branches %@", data);
             NSMutableArray* newBranches = [[NSMutableArray alloc] init];
             for (NSDictionary* jsonBranch in data) {
                 [newBranches addObject:[[Branch alloc] initWithJSONObject:jsonBranch]];
@@ -60,9 +54,6 @@
             });
         }
     }];
-    
-//    self.tableView.tableHeaderView = self.tableHeader;
-
 }
 
 - (void)viewDidUnload
@@ -120,8 +111,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
     }
     
     Branch* branch = [branches objectAtIndex:indexPath.row];
@@ -139,7 +130,6 @@
     NSString* commitUrl = branch.commitUrl;
 
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-        NSLog(@"StatusCode: %d", statusCode);
         Commit* commit = [[Commit alloc] initWithJSONObject:data repository:repository];
 
         dispatch_async(dispatch_get_main_queue(), ^() {

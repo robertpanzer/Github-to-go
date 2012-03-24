@@ -48,6 +48,7 @@
 		946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */; };
 		9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */; };
 		949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 949DB8CF14F1522D000BE743 /* RepositoryStorage.m */; };
+		949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */; };
 		949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13314B3327800D3E713 /* UIKit.framework */; };
 		949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13514B3327800D3E713 /* Foundation.framework */; };
 		949FB13814B3327800D3E713 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FB13714B3327800D3E713 /* CoreGraphics.framework */; };
@@ -147,6 +148,8 @@
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
 		949DB8CF14F1522D000BE743 /* RepositoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryStorage.m; sourceTree = "<group>"; };
 		949F506D151D2704009D5DC3 /* Github To Go.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Github To Go.entitlements"; sourceTree = "<group>"; };
+		949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ISO8601Parsing.h"; sourceTree = "<group>"; };
+		949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ISO8601Parsing.m"; sourceTree = "<group>"; };
 		949FB12F14B3327800D3E713 /* Github To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		949FB13314B3327800D3E713 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		949FB13514B3327800D3E713 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -368,6 +371,8 @@
 				94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */,
 				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
+				949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */,
+				949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
 				949FB14814B3327800D3E713 /* first.png */,
@@ -557,6 +562,7 @@
 				941FCF991510980E0046F72F /* PullRequestReviewTableViewController.m in Sources */,
 				94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */,
 				9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */,
+				949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -87,10 +87,5 @@
     return self;
 }
 
--(void)loadFile {
-    [commit loadObjectWithAbsolutePath:self.fileName];
-}
-
-
 
 @end

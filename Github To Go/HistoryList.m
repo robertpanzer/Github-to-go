@@ -31,7 +31,7 @@
     return self;
 }
 
--(NSIndexPath*)addObject:(NSObject *)anObject date:(NSString *)aDate primaryKey:(NSString *)aPrimaryKey {
+-(NSIndexPath*)addObject:(NSObject *)anObject date:(NSDate*)aDate primaryKey:(NSString *)aPrimaryKey {
     
     if (aPrimaryKey != nil && [self.objectsByPrimaryKey objectForKey:aPrimaryKey] != nil) {
         return nil;
@@ -39,8 +39,13 @@
     
     NSUInteger section, row;
     
-    NSString* date = [aDate substringToIndex:10];
-    
+//    NSString* date = [aDate substringToIndex:10];
+//    
+    NSDateFormatter *df = nil;
+    df = [[NSDateFormatter alloc] init];
+    df.dateFormat = @"yyyyMMdd";
+
+    NSString *date = [df stringFromDate:aDate];
     if (aPrimaryKey != nil) {
         [self.objectsByPrimaryKey setObject:anObject forKey:aPrimaryKey];
     }
@@ -71,8 +76,8 @@
     
     BOOL inserted = NO;
     for (int i = 0; i < objectsForDay.count; i++) {
-        NSString *time = [timesForDay objectAtIndex:i];
-        if ([time compare:aDate] == NSOrderedAscending) {
+        NSDate *time = [timesForDay objectAtIndex:i];
+        if ([time earlierDate:aDate] == time) {
             [timesForDay insertObject:aDate atIndex:i];
             [objectsForDay insertObject:anObject atIndex:i];
             inserted = YES;
@@ -100,6 +105,14 @@
     return [self.objectsByPrimaryKey objectForKey:primaryKey];
 }
 
+
+-(NSString*)stringFromInternalDate:(NSString*)internalDate {
+    NSDateFormatter *df = nil;
+    df = [[NSDateFormatter alloc] init];
+    df.dateFormat = @"yyyyMMdd";
+    NSDate *date = [df dateFromString:internalDate];
+    return [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterNoStyle];
+}
 
 -(id) objectAtIndexPath:(NSIndexPath*)indexPath {
     if (indexPath.section >= self.dates.count) {

@@ -22,7 +22,7 @@
 
 -(id) init;
 
--(NSIndexPath*) addObject:(NSObject*)anObject date:(NSString*)aDate primaryKey:(NSString*)aPrimaryKey;
+-(NSIndexPath*) addObject:(NSObject*)anObject date:(NSDate*)aDate primaryKey:(NSString*)aPrimaryKey;
 
 -(NSArray*) objectsForDate:(NSString*)aDate;
 
@@ -31,5 +31,7 @@
 -(id) objectAtIndexPath:(NSIndexPath*)indexPath;
 
 -(NSIndexPath*)indexPathOfObject:(id)object;
+
+-(NSString*)stringFromInternalDate:(NSString*)internalDate;
 
 @end

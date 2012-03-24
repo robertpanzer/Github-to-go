@@ -198,7 +198,7 @@
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return @"Base data";
+            return nil;
         case 1:
             return @"Files";
         default:
