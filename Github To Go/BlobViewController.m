@@ -49,6 +49,12 @@
     return ret;
 }
 
+-(NSString*)wrapToHtmlWithLineNo:(NSNumber*)lineNo class:(NSString*)class {
+    NSString* lineNoString = [lineNo description];
+    NSString* ret = [NSString stringWithFormat:@"<tr class=\"%@\"><td>%@</td><td>%@</td></tr>\n", class, lineNoString, [self escapeCharsToHtml]];
+    return ret;
+}
+
 @end
 
 @interface BlobViewController()
@@ -137,9 +143,9 @@
                 [html appendString:@"table td { border-left: 1px solid; border-right: 1px solid; border-collapse: collapse; vertical-align: top;}\n"];
                 [html appendString:@"table tr:first-child { border-top: 1px solid;}\n"];
                 [html appendString:@"table tr:last-child { border-bottom: 1px solid;}\n"];
-                [html appendString:@"tr td:nth-child(1) {text-align: right;}\n"];
+                [html appendString:@"tr td:nth-child(1) {text-align: right; min-width: 20px;}\n"];
                 if (self.commitFile != nil) {
-                    [html appendString:@"tr td:nth-child(2) {text-align: right;}\n"];
+                    [html appendString:@"tr td:nth-child(2) {text-align: right; min-width: 20px;}\n"];
                 }
                 [html appendString:@".old { background-color: #FF8080;height:12pt}\n"];
                 [html appendString:@".new { background-color: #80FF80;height:12pt;}\n"];
@@ -159,6 +165,11 @@
                     for (int i = 1; i <= lines.count; i++) {
                         NSString* line = [lines objectAtIndex:i - 1];
                         [html appendString:[line wrapToHtmlWithLineNo:[NSNumber numberWithInt:i]]];
+                    }
+                } else if ([self.commitFile.status isEqualToString:@"added"]) {
+                    for (int i = 1; i <= lines.count; i++) {
+                        NSString* line = [lines objectAtIndex:i - 1];
+                        [html appendString:[line wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
                     }
                 } else {
                     int maxLineNo = MAX( lines.count, MAX(commitFile.largestOldLineNo, commitFile.largestNewLineNo) );
