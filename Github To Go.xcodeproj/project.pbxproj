@@ -72,6 +72,7 @@
 		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
+		94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */; };
 		94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */; };
 		94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */; };
 		94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */; };
@@ -187,6 +188,8 @@
 		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
 		94D50E0C14E478D7000C92E2 /* GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubEvent.h; sourceTree = "<group>"; };
 		94D50E0D14E478D7000C92E2 /* GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubEvent.m; sourceTree = "<group>"; };
+		94E9F5EE151E747100AF5DD2 /* UITableViewCell+Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Commit.h"; sourceTree = "<group>"; };
+		94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Commit.m"; sourceTree = "<group>"; };
 		94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoSearchTableViewController.xib; sourceTree = "<group>"; };
 		94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestCommentViewController.h; sourceTree = "<group>"; };
 		94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestCommentViewController.m; sourceTree = "<group>"; };
@@ -276,6 +279,7 @@
 			children = (
 				942130C214B455C000969D38 /* Repository.h */,
 				942130C314B455C000969D38 /* Repository.m */,
+				9435DC2314C935D800E0B15B /* CommitHistoryList.m */,
 				94B9880514B72986007AA6A6 /* RepositoryViewController.h */,
 				94B9880614B72986007AA6A6 /* RepositoryViewController.m */,
 				94B9880714B72986007AA6A6 /* RepositoryViewController.xib */,
@@ -298,7 +302,6 @@
 				9466DBD714B7B77800238151 /* BranchViewController.m */,
 				9466DBD814B7B77800238151 /* BranchViewController.xib */,
 				9435DC2214C935D800E0B15B /* CommitHistoryList.h */,
-				9435DC2314C935D800E0B15B /* CommitHistoryList.m */,
 			);
 			name = Branch;
 			sourceTree = "<group>";
@@ -311,6 +314,8 @@
 				94A12FD614BB972A00453774 /* CommitViewController.h */,
 				94A12FD714BB972A00453774 /* CommitViewController.m */,
 				94A12FD814BB972A00453774 /* CommitViewController.xib */,
+				94E9F5EE151E747100AF5DD2 /* UITableViewCell+Commit.h */,
+				94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */,
 			);
 			name = Commit;
 			sourceTree = "<group>";
@@ -563,6 +568,7 @@
 				94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */,
 				9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */,
 				949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */,
+				94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
