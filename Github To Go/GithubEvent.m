@@ -207,6 +207,7 @@
     self = [super initWithJSON:jsonObject];
     if (self) {
         self.pullRequest = [[PullRequest alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"payload.pull_request"]  repository:nil];
+        self.pullRequest.repository = self.repository;
         NSNumber* pullRequestNumber = [jsonObject valueForKeyPath:@"payload.pull_request.number"];
         NSString* action = [jsonObject valueForKeyPath:@"payload.action"];
         self.text = [NSString stringWithFormat:@"%@ %@ pull request %d\n%@", 

@@ -11,10 +11,10 @@
 #import "GithubEvent.h"
 #import "UITableViewCell+GithubEvent.h"
 #import "CommitViewController.h"
-#import "BranchViewController.h"
 #import "PullRequestRootViewController.h"
 #import "Settings.h"
 #import "UIRepositoryRootViewController.h"
+#import "BranchViewController.h"
 
 @interface EventTableViewController()
 

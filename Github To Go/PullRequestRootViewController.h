@@ -11,7 +11,7 @@
 #import "PullRequestReviewTableViewController.h"
 #import "PullRequestCommentViewController.h"
 #import "PullRequest.h"
-
+#import "BranchViewController.h"
 
 @interface PullRequestRootViewController : UIViewController
 
@@ -20,6 +20,7 @@
 @property (strong, nonatomic) PullRequestTableViewController* infoViewController;
 @property (strong, nonatomic) PullRequestReviewTableViewController* reviewTableViewController;
 @property (strong, nonatomic) PullRequestCommentViewController *commentViewController;
+@property (strong, nonatomic) BranchViewController *commitsViewController;
 
 @property (strong, nonatomic) PullRequest* pullRequest;
 

@@ -29,6 +29,7 @@
 @synthesize commitSha;
 @synthesize searchBar;
 @synthesize loadNextTableViewCell;
+@synthesize fullUrl;
 
 -(id)initWithCommitHistoryList:(CommitHistoryList *)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
@@ -76,6 +77,17 @@
     return self;
 }
 
+-(id)initWithPullRequest:(PullRequest *)aPullRequest {
+    self = [super initWithNibName:@"BranchViewController" bundle:nil];
+    if (self) {
+        self.fullUrl = [NSString stringWithFormat:@"%@/commits", aPullRequest.selfUrl];
+        self.repository = aPullRequest.repository;
+        commitHistoryList = [[CommitHistoryList alloc] init];
+        isComplete = YES;
+        letUserSelectCells = YES;
+    }
+    return self;
+}
 
 
 -(Commit *)commitForIndexPath:(NSIndexPath *)indexPath {
@@ -85,15 +97,20 @@
 
 -(void)loadCommits {
     NSString* sha = nil;
-    if (commitHistoryList.dates.count == 0) {
-        sha = commitSha;
+    NSString* url = nil;
+    if (self.fullUrl != nil) {
+        url = self.fullUrl;
     } else {
-        Commit* lastCommit = [commitHistoryList lastCommit];
-        sha = lastCommit.sha;
-    }
-    NSString* url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha];
-    if (absolutePath != nil) {
-        url = [url stringByAppendingFormat:@"&path=%@", absolutePath];
+        if (commitHistoryList.dates.count == 0) {
+            sha = commitSha;
+        } else {
+            Commit* lastCommit = [commitHistoryList lastCommit];
+            sha = lastCommit.sha;
+        }
+        url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/commits?sha=%@", repository.fullName, sha];
+        if (absolutePath != nil) {
+            url = [url stringByAppendingFormat:@"&path=%@", absolutePath];
+        }
     }
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
