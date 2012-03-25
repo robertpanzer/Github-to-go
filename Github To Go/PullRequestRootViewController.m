@@ -92,6 +92,11 @@
     [super viewDidUnload];
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationItem.title = [NSString stringWithFormat:@"Pull %@", self.pullRequest.number];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;

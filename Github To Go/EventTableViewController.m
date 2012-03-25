@@ -116,6 +116,12 @@
         
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
@@ -162,7 +168,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)];
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
@@ -241,9 +246,15 @@
         }
     } else if ([event isKindOfClass:[PullRequestEvent class]]) {
         PullRequest *pullRequest = [(PullRequestEvent*)event pullRequest];
-        PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:pullRequest];
-        [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
-        self.navigationController.navigationBar.hidden = NO;
+        // This pull request is only the payload of the event. It may currently be in another state, so it has to be reloaded
+        [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                PullRequest *currentPullRequest = [[PullRequest alloc] initWithJSONObject:data repository:pullRequest.repository];
+                PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:currentPullRequest];
+                [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+//                self.navigationController.navigationBar.hidden = NO;
+            }
+        }];
     } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
                 || [event isKindOfClass:[ForkEvent class]]) {
         UIRepositoryRootViewController *repositoryRootViewController = [[UIRepositoryRootViewController alloc] initWithRepository:event.repository];
