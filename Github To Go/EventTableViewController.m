@@ -276,30 +276,13 @@
                 if (eventArray.count == 0) {
                     self.complete = YES;
                 } else {
-                    GithubEvent *event = nil;
-                    if ([self.tableView visibleCells] && [self.tableView visibleCells].count > 0) {
-                        UITableViewCell *firstCell = [[self.tableView visibleCells] objectAtIndex:0];
-                        NSIndexPath *firstIndex = [self.tableView indexPathForCell:firstCell];
-                        event = [eventHistory objectAtIndexPath:firstIndex];
-                    }                    
-                    NSMutableArray *indexPaths = [NSMutableArray array];
                     for (NSDictionary* event in eventArray) {
                         GithubEvent* eventObject = [EventFactory createEventFromJsonObject:event];
-                        NSIndexPath* indexPath = [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
-                        if (indexPath != nil) {
-                            [indexPaths addObject:indexPath];
-                        }
+                        [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
                     }
                     pagesLoaded++;
-                    NSIndexPath *newIndexPath = nil;
-                    if (event) {
-                        newIndexPath = [eventHistory indexPathOfObject:event];
-                    }
                     dispatch_async(dispatch_get_main_queue(), ^() {
                         [self.tableView reloadData];
-                        if (newIndexPath) {
-                            [self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                        }
                     });
                 }
                 isLoading = NO;
