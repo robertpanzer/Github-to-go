@@ -249,10 +249,11 @@
         // This pull request is only the payload of the event. It may currently be in another state, so it has to be reloaded
         [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
-                PullRequest *currentPullRequest = [[PullRequest alloc] initWithJSONObject:data repository:pullRequest.repository];
-                PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:currentPullRequest];
-                [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
-//                self.navigationController.navigationBar.hidden = NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    PullRequest *currentPullRequest = [[PullRequest alloc] initWithJSONObject:data repository:pullRequest.repository];
+                    PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:currentPullRequest];
+                    [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+                });
             }
         }];
     } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
