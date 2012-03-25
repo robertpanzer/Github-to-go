@@ -95,11 +95,14 @@ static long sequenceCounter = 0;
         long mySequenceNumber = sequenceCounter++;
         
         [image2SequenceNumber setObject:[NSNumber numberWithLong:mySequenceNumber] forKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
-        UIImage* image = [url2Image objectForKey:self.avatarUrl];
-        if (image != nil) {
+        id image = [url2Image objectForKey:self.avatarUrl];
+        if (image == [NSNull null]) {
+            return;
+        } else if (image != nil) {
             imageView.image = image;
             return;
         }
+
         [[NetworkProxy sharedInstance] 
          loadStringFromURL:avatarUrl 
          verb:@"GET"
@@ -121,6 +124,9 @@ static long sequenceCounter = 0;
                      });
                      [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                  }
+             } else {
+                 [url2Image setValue:[NSNull null] forKey:self.avatarUrl];
+     
              }
          }
          errorBlock:^(NSError* error) {
