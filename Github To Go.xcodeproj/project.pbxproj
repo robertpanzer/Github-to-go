@@ -32,6 +32,8 @@
 		94435C1114B772BB0037CF87 /* BranchesBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */; };
 		94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */; };
 		9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9445E35A14B6198300BB929C /* NSData+Base64.m */; };
+		944D6662151FBEDB002208FB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D6661151FBEDB002208FB /* PersonViewController.m */; };
+		944D6664151FC034002208FB /* PersonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D6663151FC034002208FB /* PersonViewController.xib */; };
 		945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */; };
 		945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */; };
 		945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271C414D74A3100F5610D /* UITreeRootViewController.m */; };
@@ -121,6 +123,9 @@
 		94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BranchesBrowserViewController.xib; sourceTree = "<group>"; };
 		9445E35914B6198300BB929C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		9445E35A14B6198300BB929C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		944D6660151FBEDB002208FB /* PersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonViewController.h; sourceTree = "<group>"; };
+		944D6661151FBEDB002208FB /* PersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonViewController.m; sourceTree = "<group>"; };
+		944D6663151FC034002208FB /* PersonViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonViewController.xib; sourceTree = "<group>"; };
 		945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRepositoryRootViewController.h; sourceTree = "<group>"; };
 		945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRepositoryRootViewController.m; sourceTree = "<group>"; };
 		945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIRepositoryRootViewController.xib; sourceTree = "<group>"; };
@@ -234,6 +239,18 @@
 				9424DE5514B9FEDF00B6538E /* Settings.m */,
 			);
 			name = Settings;
+			sourceTree = "<group>";
+		};
+		944D665E151FBEAC002208FB /* Person */ = {
+			isa = PBXGroup;
+			children = (
+				946CB2A514B4651700BBFDAD /* Person.h */,
+				946CB2A614B4651700BBFDAD /* Person.m */,
+				944D6660151FBEDB002208FB /* PersonViewController.h */,
+				944D6661151FBEDB002208FB /* PersonViewController.m */,
+				944D6663151FC034002208FB /* PersonViewController.xib */,
+			);
+			name = Person;
 			sourceTree = "<group>";
 		};
 		945FE32014B8BA7E0099FD84 /* General Data Structures */ = {
@@ -364,8 +381,7 @@
 				945FE32014B8BA7E0099FD84 /* General Data Structures */,
 				9466DBD014B7AC9D00238151 /* Repository */,
 				9466DBD514B7AD6300238151 /* Commit */,
-				946CB2A514B4651700BBFDAD /* Person.h */,
-				946CB2A614B4651700BBFDAD /* Person.m */,
+				944D665E151FBEAC002208FB /* Person */,
 				94C6566F1503727D00E85813 /* UITableViewCell+Person.h */,
 				94C656701503727D00E85813 /* UITableViewCell+Person.m */,
 				942130BE14B455C000969D38 /* NetworkProxy.h */,
@@ -517,6 +533,7 @@
 				94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */,
 				94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */,
 				946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */,
+				944D6664151FC034002208FB /* PersonViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +586,7 @@
 				9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */,
 				949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */,
 				94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */,
+				944D6662151FBEDB002208FB /* PersonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

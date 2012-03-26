@@ -8,6 +8,7 @@
 
 #import "Person.h"
 #import "NetworkProxy.h"
+#import "NSString+ISO8601Parsing.h"
 #import "QuartzCore/QuartzCore.h"
 
 static NSMutableDictionary* url2Image;
@@ -23,10 +24,17 @@ static long sequenceCounter = 0;
 @synthesize email;
 @synthesize avatarUrl;
 
+@synthesize publicGists;
+@synthesize publicRepos;
+@synthesize bio;
+@synthesize repos;
+@synthesize createdAt, followers, following, hireable, location, blog;
+
 + (void)initialize {
     url2Image = [[NSMutableDictionary alloc] init];
     image2SequenceNumber = [[NSMutableDictionary alloc] init];
 }
+
 
 - (id)initWithJSONObject:(NSDictionary*)dictionary {
     self = [super init];
@@ -36,6 +44,15 @@ static long sequenceCounter = 0;
             self.login = [dictionary objectForKey:@"login"];
             self.name = [dictionary objectForKey:@"name"];
             self.email = [dictionary objectForKey:@"email"];
+            self.publicRepos = [dictionary objectForKey:@"public_repos"];
+            self.blog = [dictionary objectForKey:@"blog"];
+            self.location = [dictionary objectForKey:@"location"];
+            self.publicGists = [dictionary objectForKey:@"public_gists"];
+            self.createdAt = [[dictionary objectForKey:@"created_at"] dateForRFC3339DateTimeString];
+            self.hireable = [[dictionary objectForKey:@"hireable"] boolValue];
+            self.followers = [dictionary objectForKey:@"followers"];
+            self.following = [dictionary objectForKey:@"following"];
+            self.bio = [dictionary objectForKey:@"bio"];
             avatarId = [dictionary objectForKey:@"gravatar_id"];
         }
         if (self.avatarUrl == nil && avatarId != nil) {

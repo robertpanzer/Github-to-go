@@ -11,6 +11,7 @@
 #import "CommitFile.h"
 #import "FileDiffViewController.h"
 #import "BlobViewController.h"
+#import "PersonViewController.h"
 #import "UITableViewCell+Person.h"
 #import "UITableViewCell+CommitFile.h"
 
@@ -214,7 +215,25 @@
     
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     NSLog(@"%f", cell.textLabel.frame.origin.y);
-    if (indexPath.section == 1) {
+    if (indexPath.section == 0) {
+        if (indexPath.row == 2 || indexPath.row == 3) {
+            NSString *url = nil;
+            if (indexPath.row == 2) {
+                url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.committer.login];
+            } else if (indexPath.row == 3) {
+                url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.author.login];
+            }
+            [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+                if (statusCode == 200) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        Person *person = [[Person alloc] initWithJSONObject:data];
+                        PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:person];
+                        [self.navigationController pushViewController:pwc animated:YES];
+                    });
+                }
+            }];
+        }
+    } else if (indexPath.section == 1) {
         CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
           
         BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
