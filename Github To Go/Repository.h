@@ -22,7 +22,7 @@
 @property(strong, nonatomic) NSString *masterBranch;
 @property(strong, nonatomic) Person *owner;
 @property(strong, nonatomic) NSDictionary *branches;
-@property(strong, nonatomic) NSString *createdAt;
+@property(strong, nonatomic) NSDate *createdAt;
 @property(strong, nonatomic) NSString *language;
 @property(strong, nonatomic) NSNumber *openIssues;
 

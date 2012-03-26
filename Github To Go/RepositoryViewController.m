@@ -11,28 +11,38 @@
 #import "BranchesBrowserViewController.h"
 #import "UITableViewCell+Person.h"
 
+static NSString *kName = @"name";
+static NSString *kDexcription = @"description";
+static NSString *kOwner = @"owner";
+static NSString *kRepoId = @"repoId";
+static NSString *kPrivate = @"private";
+static NSString *kWatchers = @"watchers";
+static NSString *kFork = @"fork";
+static NSString *kForks = @"forks";
+static NSString *kCreatedAt = @"createdAt";
+static NSString *kLanguage = @"language";
+static NSString *kOpenIssues = @"openIssues";
+
+
 static NSArray *keys, *descriptions;
-static BOOL *isBool;
+static NSSet *isBool;
+
+
+@interface RepositoryViewController()
+
+-(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath;
+
+@end
 
 @implementation RepositoryViewController
 
 @synthesize repository;
 
 +(void)initialize {
-    keys = [NSArray arrayWithObjects:@"name", @"description", @"owner", @"repoId", @"private", @"watchers", @"fork", @"forks", @"createdAt", @"language", @"openIssues", nil];
+    keys = [NSArray arrayWithObjects:
+            kName, kDexcription, kOwner, kRepoId, kPrivate, kWatchers, kFork, kForks, kCreatedAt, kLanguage, kOpenIssues, nil];
     descriptions = [NSArray arrayWithObjects:@"Name", @"Description", @"Owner", @"Id", @"Private", @"Watchers", @"Fork", @"Forks", @"Created at", @"Language", @"Open issues", nil];
-    isBool = calloc(keys.count, sizeof(BOOL));
-    isBool[0] = NO;
-    isBool[1] = NO;
-    isBool[2] = NO;
-    isBool[3] = NO;
-    isBool[4] = YES;
-    isBool[5] = NO;
-    isBool[6] = YES;
-    isBool[7] = NO;
-    isBool[8] = NO;
-    isBool[9] = NO;
-    isBool[10] = NO;
+    isBool = [NSSet setWithObjects:kPrivate, kFork, nil];
 }
 
 -(id)initWithRepository:(Repository*)repo {
@@ -128,17 +138,8 @@ static BOOL *isBool;
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
+        cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
         
-        if ([value isKindOfClass:[NSString class]]) {
-            cell.detailTextLabel.text = value;
-        } else if ([value isKindOfClass:[NSNumber class]]) {
-            if (isBool[indexPath.row]) {
-                cell.detailTextLabel.text = [value boolValue] ? NSLocalizedString(@"Yes",nil) : NSLocalizedString(@"No", nil);
-            } else {
-                cell.detailTextLabel.text = [value stringValue];
-            }
-        }
-
         return cell;    
     }
 }
@@ -156,5 +157,23 @@ static BOOL *isBool;
 }
 
 
+-(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath {
+    NSString *key = [keys objectAtIndex:indexPath.row];
+    id value = [repository valueForKey:key];
+    
+    if (value == [NSNull null]) {
+        return nil;
+    } else if ([value isKindOfClass:[NSDate class]]) {
+        return [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterNoStyle];
+    } else if ([isBool containsObject:key]) {
+        NSNumber *boolNumber = (NSNumber*)value;
+        return [boolNumber boolValue] ? NSLocalizedString(@"Yes", @"Yes") : NSLocalizedString(@"No", @"No");
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        return [value stringValue];
+    } else {
+        return [value description];
+    }
+    
+}
 
 @end

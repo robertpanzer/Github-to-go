@@ -8,6 +8,7 @@
 
 #import "Repository.h"
 #import "NetworkProxy.h"
+#import "NSString+ISO8601Parsing.h"
 
 @implementation Repository
 
@@ -55,7 +56,7 @@
         self.forks = [jsonObject valueForKey:@"forks"];
 
         self.url = [jsonObject valueForKey:@"url"];
-        self.createdAt = [jsonObject valueForKey:@"created_at"];
+        self.createdAt = [[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
         self.language = [jsonObject valueForKey:@"language"];
         self.openIssues = [jsonObject valueForKey:@"open_issues"];
         
