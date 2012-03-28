@@ -24,6 +24,8 @@
         UIImageView* imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(80.0f, 0.0f, tableView.rowHeight-2.0f, tableView.rowHeight-2.0f);
         imageView.tag = 4;
+        imageView.layer.cornerRadius = 10.0f;
+        imageView.layer.masksToBounds = YES;
         [ret.contentView addSubview:imageView];
         
         UILabel* roleLabel = [[UILabel alloc] init];
@@ -60,8 +62,6 @@
 -(void)bindPerson:(Person *)person role:(NSString*)role tableView:(UITableView*)tableView {
     
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:4];
-    imageView.layer.cornerRadius = 10.0f;
-    imageView.layer.masksToBounds = YES;
     imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
     [person loadImageIntoImageView:imageView];
 
@@ -91,7 +91,44 @@
     } else {
         self.accessoryType = UITableViewCellAccessoryNone;
     }
-
 }
+
++(UITableViewCell*)createSimplePersonCellForTableView:(UITableView*)tableView {
+    UITableViewCell* ret = [tableView dequeueReusableCellWithIdentifier:@"PersonCell"];
+    if (ret == nil) {
+        ret = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PersonCell"];
+        
+        UIImageView* imageView = [[UIImageView alloc] init];
+        imageView.frame = CGRectMake(0.0f, 0.0f, tableView.rowHeight-2.0f, tableView.rowHeight-2.0f);
+        imageView.tag = 4;
+        imageView.layer.cornerRadius = 10.0f;
+        imageView.layer.masksToBounds = YES;
+        [ret.contentView addSubview:imageView];
+
+        UILabel* nameLabel = [[UILabel alloc] init];
+        nameLabel.tag = 2;
+        nameLabel.opaque = NO;
+        nameLabel.backgroundColor = [UIColor clearColor];
+        nameLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        nameLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
+        nameLabel.textAlignment = UITextAlignmentLeft;
+        nameLabel.frame = CGRectMake(tableView.rowHeight, 0.0f, tableView.frame.size.width - tableView.rowHeight, tableView.rowHeight);
+
+        [ret.contentView addSubview:nameLabel];
+
+    }
+    return ret;
+}
+
+-(void)bindPerson:(Person *)person tableView:(UITableView*)tableView {
+    UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:4];
+    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
+    [person loadImageIntoImageView:imageView];
+    
+    UILabel* nameLabel = (UILabel*)[self.contentView viewWithTag:2];
+    nameLabel.text = person.displayname;
+}
+
+
 
 @end

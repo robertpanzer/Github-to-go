@@ -8,6 +8,8 @@
 
 #import "PersonViewController.h"
 #import "QuartzCore/QuartzCore.h"
+#import "NetworkProxy.h"
+#import "PersonListTableViewController.h"
 
 static NSString *kName = @"name";
 static NSString *kLogin = @"login";
@@ -25,9 +27,11 @@ static NSString *kFollowing = @"following";
 
 static NSArray *keys;
 
-static NSArray *titles;
+static NSDictionary *titles;
 
 static NSSet* isBool;
+
+static NSSet* showDisclosure;
 
 @interface PersonViewController ()
 
@@ -41,6 +45,7 @@ static NSSet* isBool;
 @synthesize imageView;
 @synthesize nameLabel;
 @synthesize tableHeader;
+@synthesize letUserSelectCells;
 
 +(void)initialize {
     keys = [NSArray arrayWithObjects:
@@ -48,27 +53,22 @@ static NSSet* isBool;
             [NSArray arrayWithObjects:kPublicRepos, kPublicGists, nil],
             [NSArray arrayWithObjects:kFollowers, kFollowing, nil],
             nil];
-    titles = [NSArray arrayWithObjects:
-              [NSArray arrayWithObjects:
-               NSLocalizedString(@"Name", @"Name"), 
-               NSLocalizedString(@"Login", @"Login"), 
-               NSLocalizedString(@"eMail", @"eMail"), 
-               NSLocalizedString(@"Created at", @"Created at"),
-               NSLocalizedString(@"Location", @"Location"),
-               NSLocalizedString(@"Biography", @"Biography"),
-               NSLocalizedString(@"Hireable", @"Hireable"),
-               nil],
-              [NSArray arrayWithObjects:
-               NSLocalizedString(@"Public repos", @"Public repos"),
-               NSLocalizedString(@"Public gists", @"Public gists"), 
-               nil],
-              [NSArray arrayWithObjects:
-               NSLocalizedString(@"Followers", @"Followers"),
-               NSLocalizedString(@"Following", @"Following"),
-               nil],
+    titles = [NSDictionary dictionaryWithObjectsAndKeys:
+              NSLocalizedString(@"Name", @"Name"), kName,
+              NSLocalizedString(@"Login", @"Login"), kLogin,
+              NSLocalizedString(@"eMail", @"eMail"), kEmail,
+              NSLocalizedString(@"Created at", @"Created at"), kCreatedAt,
+              NSLocalizedString(@"Location", @"Location"), kLocation,
+              NSLocalizedString(@"Biography", @"Biography"), kBio,
+              NSLocalizedString(@"Hireable", @"Hireable"), kHireable,
+              NSLocalizedString(@"Public repos", @"Public repos"), kPublicRepos,
+              NSLocalizedString(@"Public gists", @"Public gists"), kPublicGists, 
+              NSLocalizedString(@"Followers", @"Followers"), kFollowers,
+              NSLocalizedString(@"Following", @"Following"), kFollowing,
               nil
               ];
     isBool = [[NSSet alloc] initWithObjects:kHireable, nil];
+    showDisclosure = [NSSet setWithObjects:kFollowers, kFollowing, kPublicRepos, nil];
 }
 
 - (id)initWithPerson:(Person*)aPerson;
@@ -84,14 +84,14 @@ static NSSet* isBool;
 {
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.tableHeader;
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
     self.imageView.layer.cornerRadius = 10.0f;
     self.imageView.layer.borderWidth = 1.0f;
+    self.imageView.layer.masksToBounds = YES;
     self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    
+    self.nameLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+    self.navigationItem.title = person.displayname;
 }
 
 
@@ -99,6 +99,7 @@ static NSSet* isBool;
     [super viewWillAppear:animated];
     [self.person loadImageIntoImageView:self.imageView];
     self.nameLabel.text = self.person.displayname;
+    self.letUserSelectCells = YES;
 }
 
 - (void)viewDidUnload
@@ -133,11 +134,14 @@ static NSSet* isBool;
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
+    NSString *key = [[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
     }
+    cell.accessoryType = [showDisclosure containsObject:key] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     if ([[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] == kBio) {
         cell.detailTextLabel.numberOfLines = 0;
         cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
@@ -146,7 +150,7 @@ static NSSet* isBool;
         cell.detailTextLabel.textAlignment = UITextAlignmentRight;
     }
 
-    cell.textLabel.text = [[titles objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    cell.textLabel.text = [titles objectForKey:key];
     cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
     
     return cell;
@@ -157,13 +161,45 @@ static NSSet* isBool;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    if (!letUserSelectCells) {
+        return;
+    }
+    NSString *key = [[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSString *title = [titles objectForKey:key];
+    if ([key isEqualToString:kFollowers]) {
+        letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/followers", person.url];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                NSMutableArray *persons = [NSMutableArray array];
+                for (NSDictionary *jsonObject in data) {
+                    [persons addObject:[[Person alloc] initWithJSONObject:jsonObject]];
+                    
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    PersonListTableViewController *personListTableViewController = [[PersonListTableViewController alloc] initWithPersons:persons title:title];
+                    [self.navigationController pushViewController:personListTableViewController animated:YES];
+                });
+            }
+        }];
+    } else if ([key isEqualToString:kFollowing]) {
+        letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/following", person.url];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                NSMutableArray *persons = [NSMutableArray array];
+                for (NSDictionary *jsonObject in data) {
+                    [persons addObject:[[Person alloc] initWithJSONObject:jsonObject]];
+                    
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    PersonListTableViewController *personListTableViewController = [[PersonListTableViewController alloc] initWithPersons:persons title:title];
+                    [self.navigationController pushViewController:personListTableViewController animated:YES];
+                });
+            }
+        }];
+    }
+    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

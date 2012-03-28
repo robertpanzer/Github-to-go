@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UIView *tableHeader;
+@property (nonatomic) BOOL letUserSelectCells;
 
 -(id)initWithPerson:(Person*)aPerson;
 

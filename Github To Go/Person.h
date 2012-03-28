@@ -32,7 +32,8 @@
 @property(strong, nonatomic) NSNumber *following;
 @property(strong, nonatomic) NSNumber *followers;
 @property(strong, nonatomic) NSString *bio;
-
+@property(strong, nonatomic) NSString *url;
+@property(strong, nonatomic) NSString *avatarId;
 
 -(id)initWithJSONObject:(NSDictionary*)dictionary;
 

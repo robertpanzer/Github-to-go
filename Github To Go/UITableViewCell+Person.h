@@ -15,4 +15,9 @@
 
 -(void)bindPerson:(Person *)person role:(NSString*)role tableView:(UITableView*)tableView;
 
+
++(UITableViewCell*)createSimplePersonCellForTableView:(UITableView*)tableView;
+
+-(void)bindPerson:(Person *)person tableView:(UITableView*)tableView;
+
 @end

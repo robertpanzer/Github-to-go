@@ -28,7 +28,8 @@ static long sequenceCounter = 0;
 @synthesize publicRepos;
 @synthesize bio;
 @synthesize repos;
-@synthesize createdAt, followers, following, hireable, location, blog;
+@synthesize createdAt, followers, following, hireable, location, blog, url;
+@synthesize avatarId;
 
 + (void)initialize {
     url2Image = [[NSMutableDictionary alloc] init];
@@ -39,7 +40,6 @@ static long sequenceCounter = 0;
 - (id)initWithJSONObject:(NSDictionary*)dictionary {
     self = [super init];
     if (self) {
-        NSString* avatarId = nil;
         if (dictionary != nil && ![dictionary isEqual:[NSNull null]]) {
             self.login = [dictionary objectForKey:@"login"];
             self.name = [dictionary objectForKey:@"name"];
@@ -53,7 +53,8 @@ static long sequenceCounter = 0;
             self.followers = [dictionary objectForKey:@"followers"];
             self.following = [dictionary objectForKey:@"following"];
             self.bio = [dictionary objectForKey:@"bio"];
-            avatarId = [dictionary objectForKey:@"gravatar_id"];
+            self.avatarId = [dictionary objectForKey:@"gravatar_id"];
+            self.url = [dictionary objectForKey:@"url"];
         }
         if (self.avatarUrl == nil && avatarId != nil) {
             self.avatarUrl = [NSString stringWithFormat:@"https://secure.gravatar.com/avatar/%@?d=https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png", avatarId];
@@ -67,13 +68,12 @@ static long sequenceCounter = 0;
 - (id)initWithJSONObject:(NSDictionary*)dictionary JSONObject:(NSDictionary*)secondDictionary {
     self = [super init];
     if (self) {
-        NSString* avatarId = nil;
         if (dictionary != nil && ![dictionary isEqual:[NSNull null]]) {
             self.login = [dictionary objectForKey:@"login"];
             self.name = [dictionary objectForKey:@"name"];
             self.email = [dictionary objectForKey:@"email"];
             self.avatarUrl = [dictionary objectForKey:@"avatar_url"];
-            avatarId = [dictionary objectForKey:@"gravatar_id"];
+            self.avatarId = [dictionary objectForKey:@"gravatar_id"];
         }
         if (![secondDictionary isEqual:[NSNull null]]) {
             if (self.login == nil) {
@@ -88,8 +88,8 @@ static long sequenceCounter = 0;
             if (self.avatarUrl == nil) {
                 self.avatarUrl = [secondDictionary objectForKey:@"avatar_url"];
             }
-            if (avatarId == nil) {
-                avatarId = [secondDictionary objectForKey:@"garavatr_id"];
+            if (self.avatarId == nil) {
+                self.avatarId = [secondDictionary objectForKey:@"garavatr_id"];
             }
         }
         if (self.avatarUrl == nil && avatarId != nil) {
