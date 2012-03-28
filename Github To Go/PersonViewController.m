@@ -7,6 +7,7 @@
 //
 
 #import "PersonViewController.h"
+#import "QuartzCore/QuartzCore.h"
 
 static NSString *kName = @"name";
 static NSString *kLogin = @"login";
@@ -37,6 +38,9 @@ static NSSet* isBool;
 @implementation PersonViewController
 
 @synthesize person;
+@synthesize imageView;
+@synthesize nameLabel;
+@synthesize tableHeader;
 
 +(void)initialize {
     keys = [NSArray arrayWithObjects:
@@ -79,16 +83,29 @@ static NSSet* isBool;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.tableView.tableHeaderView = self.tableHeader;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.imageView.layer.cornerRadius = 10.0f;
+    self.imageView.layer.borderWidth = 1.0f;
+    self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+}
+
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.person loadImageIntoImageView:self.imageView];
+    self.nameLabel.text = self.person.displayname;
 }
 
 - (void)viewDidUnload
 {
+    [self setImageView:nil];
+    [self setNameLabel:nil];
+    [self setTableHeader:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -117,14 +134,16 @@ static NSSet* isBool;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
     }
     if ([[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] == kBio) {
         cell.detailTextLabel.numberOfLines = 0;
+        cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
     } else {
         cell.detailTextLabel.numberOfLines = 1;
+        cell.detailTextLabel.textAlignment = UITextAlignmentRight;
     }
 
     cell.textLabel.text = [[titles objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];

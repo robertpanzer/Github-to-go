@@ -12,6 +12,9 @@
 @interface PersonViewController : UITableViewController
 
 @property(strong, nonatomic) Person *person;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) IBOutlet UIView *tableHeader;
 
 -(id)initWithPerson:(Person*)aPerson;
 

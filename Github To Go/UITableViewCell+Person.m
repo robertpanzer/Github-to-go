@@ -78,14 +78,19 @@
     
     UILabel* emailLabel = (UILabel*)[self.contentView viewWithTag:3];
     if (person.email == nil) {
-        nameLabel.frame = CGRectMake(130.0f, 14.0f, tableView.frame.size.width - 160.0f, 14.0f);
+        nameLabel.frame = CGRectMake(130.0f, 14.0f, tableView.frame.size.width - 180.0f, 14.0f);
         emailLabel.hidden = YES;
     } else {
-        nameLabel.frame = CGRectMake(130.0f, 3.0f, tableView.frame.size.width - 160.0f, 15.0f);
+        nameLabel.frame = CGRectMake(130.0f, 3.0f, tableView.frame.size.width - 180.0f, 15.0f);
         emailLabel.hidden = NO;
-        emailLabel.frame = CGRectMake(130.0f, 23.0f, tableView.frame.size.width - 160.0f, 15.0f);
+        emailLabel.frame = CGRectMake(130.0f, 23.0f, tableView.frame.size.width - 180.0f, 15.0f);
         emailLabel.text = person.email;
     }    
+    if (person.login != nil) {
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else {
+        self.accessoryType = UITableViewCellAccessoryNone;
+    }
 
 }
 

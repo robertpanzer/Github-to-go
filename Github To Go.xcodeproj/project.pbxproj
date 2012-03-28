@@ -244,6 +244,8 @@
 		944D665E151FBEAC002208FB /* Person */ = {
 			isa = PBXGroup;
 			children = (
+				94C6566F1503727D00E85813 /* UITableViewCell+Person.h */,
+				94C656701503727D00E85813 /* UITableViewCell+Person.m */,
 				946CB2A514B4651700BBFDAD /* Person.h */,
 				946CB2A614B4651700BBFDAD /* Person.m */,
 				944D6660151FBEDB002208FB /* PersonViewController.h */,
@@ -382,8 +384,6 @@
 				9466DBD014B7AC9D00238151 /* Repository */,
 				9466DBD514B7AD6300238151 /* Commit */,
 				944D665E151FBEAC002208FB /* Person */,
-				94C6566F1503727D00E85813 /* UITableViewCell+Person.h */,
-				94C656701503727D00E85813 /* UITableViewCell+Person.m */,
 				942130BE14B455C000969D38 /* NetworkProxy.h */,
 				942130BF14B455C000969D38 /* NetworkProxy.m */,
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
