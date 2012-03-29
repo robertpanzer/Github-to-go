@@ -71,7 +71,8 @@
 
     UILabel* datelabel = (UILabel*)[self.contentView viewWithTag:4];
     datelabel.frame = CGRectMake(imageView.frame.size.width, 0.0f, tableView.frame.size.width - imageView.frame.size.width - 40.0f, 14.0f);
-    datelabel.text = issueComment.createdAt;
+    NSString *s = [NSDateFormatter localizedStringFromDate:issueComment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
+    datelabel.text = s;
 
     UILabel* bodyLabel = (UILabel*)[self.contentView viewWithTag:3];
     bodyLabel.text = issueComment.body;

@@ -81,10 +81,11 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
         cell.detailTextLabel.numberOfLines = 2;
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
+        cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
     }
     // Configure the cell...
     PullRequest* pullRequest = ((PullRequest*)[self.pullRequests objectAtIndex:indexPath.row]);

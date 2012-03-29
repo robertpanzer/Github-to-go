@@ -19,6 +19,7 @@
 @property(strong) IBOutlet UITextView* messageTextView;
 @property(strong) NSString* commitSha;
 @property(strong) NSString* message;
+@property(nonatomic) BOOL letUserSelectCells;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository;
 @end

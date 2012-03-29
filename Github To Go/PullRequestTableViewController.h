@@ -14,6 +14,7 @@
 @property(strong, nonatomic) PullRequest* pullRequest;
 @property(strong, nonatomic) NSArray* issueComments;
 @property(strong, nonatomic) NSArray* reviewComments;
+@property(nonatomic) BOOL letUserSelectCells;
 
 -(id) initWithPullRequest:(PullRequest*)aPullRequest;
 

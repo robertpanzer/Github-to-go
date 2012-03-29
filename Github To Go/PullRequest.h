@@ -12,7 +12,7 @@
 
 @interface PullRequest : NSObject
 
-@property(strong) NSString* createdAt;
+@property(strong) NSDate* createdAt;
 @property(strong) NSString* state;
 @property(strong) Person* creator;
 @property(strong) NSString* title;
@@ -30,7 +30,7 @@
 @interface PullRequestIssueComment : NSObject
 
 @property(strong, nonatomic) NSString* body;
-@property(strong, nonatomic) NSString* createdAt;
+@property(strong, nonatomic) NSDate *createdAt;
 @property(strong, nonatomic) Person* user;
 
 - (id)initWithJSONObject:(NSDictionary*)jsonObject;

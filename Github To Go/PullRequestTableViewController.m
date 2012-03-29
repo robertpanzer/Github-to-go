@@ -12,7 +12,7 @@
 #import "NetworkProxy.h"
 #import "UITableViewCell+CommitFile.h"
 #import "UITableViewCell+PullRequest.h"
-
+#import "PersonViewController.h"
 
 static NSArray *keyPaths;
 static NSDictionary* titles;
@@ -40,6 +40,7 @@ static NSString* titleMerged  = @"Merged";
 @synthesize pullRequest;
 @synthesize issueComments;
 @synthesize reviewComments;
+@synthesize letUserSelectCells;
 
 +(void)initialize {
     keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kState, kCreator, kMerged, nil];
@@ -79,7 +80,7 @@ static NSString* titleMerged  = @"Merged";
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    self.letUserSelectCells = YES;
     if (reviewComments == nil) {
         [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.reviewCommentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
             if (statusCode == 200) {
@@ -167,20 +168,21 @@ static NSString* titleMerged  = @"Merged";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    UITableViewCell* cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"%f %f %f %f", cell.textLabel.frame.origin.x,
-          cell.textLabel.frame.origin.y,
-          cell.textLabel.frame.size.width,
-          cell.textLabel.frame.size.height);
-    NSLog(@"%@ %f", cell.textLabel.font.fontName, cell.textLabel.font.pointSize);
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    NSString *key = [keyPaths objectAtIndex:indexPath.row];
+    if ([key isEqualToString:kCreator]) {
+        if (self.letUserSelectCells) {
+            self.letUserSelectCells = YES;
+            [[NetworkProxy sharedInstance] loadStringFromURL:self.pullRequest.creator.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+                if (statusCode == 200) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        Person *person = [[Person alloc] initWithJSONObject:data];
+                        PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:person];
+                        [self.navigationController pushViewController:pwc animated:YES];
+                    });
+                }
+            }];
+        }
+    }
 }
 
 

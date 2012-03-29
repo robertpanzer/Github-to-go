@@ -23,6 +23,7 @@
 @synthesize repository;
 @synthesize commitSha;
 @synthesize message;
+@synthesize letUserSelectCells;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository {
     self = [super initWithNibName:@"CommitViewController" bundle:nil];
@@ -78,6 +79,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.letUserSelectCells = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -213,31 +215,35 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSLog(@"%f", cell.textLabel.frame.origin.y);
-    if (indexPath.section == 0) {
-        if (indexPath.row == 2 || indexPath.row == 3) {
-            NSString *url = nil;
-            if (indexPath.row == 2) {
-                url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.committer.login];
-            } else if (indexPath.row == 3) {
-                url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.author.login];
-            }
-            [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
-                if (statusCode == 200) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        Person *person = [[Person alloc] initWithJSONObject:data];
-                        PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:person];
-                        [self.navigationController pushViewController:pwc animated:YES];
-                    });
+    if (self.letUserSelectCells) {
+        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        NSLog(@"%f", cell.textLabel.frame.origin.y);
+        if (indexPath.section == 0) {
+            if (indexPath.row == 2 || indexPath.row == 3) {
+                self.letUserSelectCells = NO;
+                NSString *url = nil;
+                if (indexPath.row == 2) {
+                    url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.committer.login];
+                } else if (indexPath.row == 3) {
+                    url = [NSString stringWithFormat:@"https://api.github.com/users/%@", commit.author.login];
                 }
-            }];
+                [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+                    if (statusCode == 200) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            Person *person = [[Person alloc] initWithJSONObject:data];
+                            PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:person];
+                            [self.navigationController pushViewController:pwc animated:YES];
+                        });
+                    }
+                }];
+            }
+        } else if (indexPath.section == 1) {
+            self.letUserSelectCells = NO;
+            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
+            
+            BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
+            [self.navigationController pushViewController:blobViewController animated:YES];
         }
-    } else if (indexPath.section == 1) {
-        CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-          
-        BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
-        [self.navigationController pushViewController:blobViewController animated:YES];
     }
 }
 

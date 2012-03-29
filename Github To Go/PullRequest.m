@@ -7,6 +7,7 @@
 //
 
 #import "PullRequest.h"
+#import "NSString+ISO8601Parsing.h"
 
 @implementation PullRequest
 
@@ -27,7 +28,7 @@
         self.repository = aRepository;
         self.number = [jsonObject valueForKey:@"number"];
         self.state = [jsonObject valueForKey:@"state"];
-        self.createdAt = [jsonObject valueForKey:@"created_at"];
+        self.createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
         self.creator = [[Person alloc] initWithJSONObject:[jsonObject valueForKey:@"user"]];
         self.title = [jsonObject valueForKey:@"title"];
         self.body = [jsonObject valueForKey:@"body"];
@@ -51,7 +52,7 @@
     self = [super init];
     if (self) {
         self.body = [jsonObject valueForKey:@"body"];
-        self.createdAt = [jsonObject valueForKey:@"created_at"];
+        self.createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
         self.user = [[Person alloc] initWithJSONObject:[jsonObject valueForKey:@"user"]];
     }
     return self;

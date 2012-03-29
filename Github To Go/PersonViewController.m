@@ -208,7 +208,7 @@ static NSSet* showDisclosure;
         UIFont* font = [UIFont systemFontOfSize:13.0f];
         NSString* value = [self stringValueForIndexPath:indexPath];
         if (value != nil) {
-            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 100.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 110.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
             
             CGFloat height = size.height + 10;
             
