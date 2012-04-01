@@ -10,14 +10,6 @@
 #import "Repository.h"
 #import "PullToRefreshTableViewController.h"
 
-@interface RepoSearchTableViewController : UITableViewController <UISearchBarDelegate> 
-
-@property(strong) NSArray* repos;
-@property(strong) IBOutlet UISearchBar* searchBar;
-@property BOOL letUserSelectCells;
-@end
-
-
 @interface RepoBrowserTableViewController : PullToRefreshTableViewController 
 
 - (IBAction)onFetchRepos;

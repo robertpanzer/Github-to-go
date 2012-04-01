@@ -24,7 +24,6 @@
 
 @synthesize myRepos;
 @synthesize watchedRepos;
-//@synthesize repoSearchTableViewController;
 @synthesize initialized;
 
 
@@ -33,7 +32,7 @@
     self = [super initWithStyle:UITableViewStyleGrouped];//NibName:@"RepoBrowserTableViewController" bundle:nil];
     if (self) {
         self.title = NSLocalizedString(@"Repositories", @"Repositories");
-        self.tabBarItem.image = [UIImage imageNamed:@"first"];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:2];
         self.initialized = NO;
     }
     return self;
@@ -168,11 +167,6 @@
         repo = [self.myRepos objectAtIndex:indexPath.row - 1];
     } else if (indexPath.section == 1 && indexPath.row > 0) {
         repo = [self.watchedRepos objectAtIndex:indexPath.row - 1];
-    } else if (indexPath.section == 2) {
-        RepoSearchTableViewController *repoSearchTableViewController = [[RepoSearchTableViewController alloc] init];
-
-        [self.navigationController pushViewController:repoSearchTableViewController animated:YES];
-        return;
     } else {
         return;
     }
@@ -281,108 +275,3 @@
 
 
 
-@implementation RepoSearchTableViewController 
-
-@synthesize repos, searchBar, letUserSelectCells;
-
-- (id)init
-{
-    self = [super initWithNibName:@"RepoSearchTableViewController" bundle:nil];
-    if (self) {
-        letUserSelectCells = YES;
-    }
-    return self;
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    return YES;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.frame = CGRectMake(0.0f, 40.0f, self.tableView.frame.size.width, self.tableView.frame.size.height - 40.0f);
-    self.tableView.tableHeaderView = self.searchBar;
-    
-}
-
--(void)viewDidUnload {
-    self.searchBar = nil;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.repos.count;
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        
-    }
-
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
-    
-    // Configure the cell...
-    Repository* repo = [repos objectAtIndex:indexPath.row];
-    cell.textLabel.text = repo.fullName;
-    cell.detailTextLabel.text = repo.description;
-    return cell;
-}
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (letUserSelectCells) {
-        Repository* repo = nil;
-        repo = [self.repos objectAtIndex:indexPath.row];
-        
-        UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
-        [self.navigationController pushViewController:repoViewController animated:YES];
-    } else {
-        letUserSelectCells = YES;
-        [self.searchBar resignFirstResponder];
-    }
-}
-
-
-#pragma mark - UISearchBarDelegate methods
-
-
-
--(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {    
-    NSString *searchUrl = [NSString stringWithFormat:@"http://github.com/api/v2/json/repos/search/%@", aSearchBar.text];
-    
-    letUserSelectCells = YES;
-    [aSearchBar resignFirstResponder];
-    
-    [[NetworkProxy sharedInstance] loadStringFromURL:searchUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-        NSMutableArray* newRepos = [[NSMutableArray alloc] init];
-        NSArray* foundRepos = [data valueForKey:@"repositories"];
-        for (NSDictionary* jsonRepo in foundRepos) {
-            Repository* repo = [[Repository alloc] initFromJSONObject:jsonRepo];
-            [newRepos addObject:repo]; 
-        }
-        self.repos = newRepos;
-        dispatch_async(dispatch_get_main_queue(), ^() {
-            [self.tableView reloadData];
-        });
-    }];
-    
-}
-
--(void)searchBarTextDidBeginEditing:(UISearchBar *)aSearchBar {
-    letUserSelectCells = NO;
-}
-
-@end
