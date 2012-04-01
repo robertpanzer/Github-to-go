@@ -10,6 +10,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "NetworkProxy.h"
 #import "PersonListTableViewController.h"
+#import "RepositoryListViewController.h"
 #import "EventTableViewController.h"
 #import "GithubEvent.h"
 #import "HistoryList.h"
@@ -209,6 +210,21 @@ static NSSet* showDisclosure;
                 });
             }
         }];
+    } else if ([key isEqualToString:kPublicRepos]) {
+        letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/repos", person.url];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                NSMutableArray *repos = [NSMutableArray array];
+                for (NSDictionary *jsonObject in data) {
+                    [repos addObject:[[Repository alloc] initFromJSONObject:jsonObject]];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    RepositoryListViewController *repoListTableViewController = [[RepositoryListViewController alloc] initWithRepositories:repos];
+                    [self.navigationController pushViewController:repoListTableViewController animated:YES];
+                });
+            }
+        }];
     } else if ([key isEqualToString:kEvents]) {
         letUserSelectCells = NO;
         NSString *url = [NSString stringWithFormat:@"%@/events/public", person.url];
@@ -237,10 +253,12 @@ static NSSet* showDisclosure;
 
 -(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath {
     NSString *key = [[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    id value = [person valueForKey:key];
+    id value = [person valueForKeyPath:key];
     
     if (value == [NSNull null]) {
         return nil;
+    } else if ([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSArray class]]) {
+        return [NSString stringWithFormat:@"%d", [value count]];
     } else if ([value isKindOfClass:[NSDate class]]) {
         return [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterNoStyle];
     } else if ([isBool containsObject:key]) {

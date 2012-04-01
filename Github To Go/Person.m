@@ -28,7 +28,7 @@ static long sequenceCounter = 0;
 @synthesize publicRepos;
 @synthesize bio;
 @synthesize repos;
-@synthesize createdAt, followers, following, hireable, location, blog, url;
+@synthesize createdAt, followers, following, hireable, location, blog, url, username;
 @synthesize avatarId;
 
 + (void)initialize {
@@ -43,6 +43,7 @@ static long sequenceCounter = 0;
         if (dictionary != nil && ![dictionary isEqual:[NSNull null]]) {
             self.login = [dictionary objectForKey:@"login"];
             self.name = [dictionary objectForKey:@"name"];
+            self.username = [dictionary objectForKey:@"username"];
             self.email = [dictionary objectForKey:@"email"];
             self.publicRepos = [dictionary objectForKey:@"public_repos"];
             self.blog = [dictionary objectForKey:@"blog"];
@@ -55,6 +56,9 @@ static long sequenceCounter = 0;
             self.bio = [dictionary objectForKey:@"bio"];
             self.avatarId = [dictionary objectForKey:@"gravatar_id"];
             self.url = [dictionary objectForKey:@"url"];
+            if ((self.url == nil || self.url.length == 0) && self.login.length > 0) {
+                self.url = [NSString stringWithFormat:@"https://api.github.com/users/%@", self.login];
+            }
         }
         if (self.avatarUrl == nil && avatarId != nil) {
             self.avatarUrl = [NSString stringWithFormat:@"https://secure.gravatar.com/avatar/%@", avatarId];
@@ -91,6 +95,9 @@ static long sequenceCounter = 0;
                 self.avatarId = [secondDictionary objectForKey:@"garavatr_id"];
             }
         }
+        if ((self.url == nil || self.url.length == 0) && self.login.length > 0) {
+            self.url = [NSString stringWithFormat:@"https://api.github.com/users/%@", self.login];
+        }
         if (self.avatarUrl == nil && avatarId != nil) {
             self.avatarUrl = [NSString stringWithFormat:@"https://secure.gravatar.com/avatar/%@?d=https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png", avatarId];
         }
@@ -102,6 +109,7 @@ static long sequenceCounter = 0;
     self = [super init];
     if (self) {
         self.login = aLogin;
+        self.url = [NSString stringWithFormat:@"https://api.github.com/users/%@", self.login];
     }
     return self;
 }
@@ -158,13 +166,14 @@ static long sequenceCounter = 0;
 }
 
 -(NSString*)displayname {
-    if (self.name) {
+    if (self.name && self.name.length > 0) {
         return self.name;
-    } else if (self.login) {
+    } else if (self.login && self.login.length > 0) {
         return self.login;
-    } else {
-        return self.login;
+    } else if (self.username && self.username.length > 0) {
+        return self.username;
     }
+    return nil;
 }
 
 

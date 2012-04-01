@@ -88,7 +88,8 @@
     if (self.letUserSelectCells) {
         self.letUserSelectCells = NO;
         Person *person = [persons objectAtIndex:indexPath.row];
-        [[NetworkProxy sharedInstance] loadStringFromURL:person.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+        NSString *url = [NSString stringWithFormat:@"https://api.github.com/users/%@", person.login];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     Person *newPerson = [[Person alloc] initWithJSONObject:data];

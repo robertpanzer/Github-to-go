@@ -42,7 +42,7 @@
         if ([ownerObject isKindOfClass:[NSString class]]) {
             self.owner = [[Person alloc] initWithLogin:ownerObject];
         } else if (ownerObject != nil) {
-            self.owner = [[Person alloc] initWithJSONObject:ownerObject JSONObject:nil];
+            self.owner = [[Person alloc] initWithJSONObject:ownerObject];
         }
 
         self.repoId = [jsonObject valueForKey:@"id"];

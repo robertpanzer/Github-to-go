@@ -18,6 +18,7 @@
 
 @property(strong, nonatomic) NSString* login;
 @property(strong, nonatomic) NSString* name;
+@property(strong, nonatomic) NSString* username;
 @property(strong, nonatomic) NSString* email;
 @property(strong, nonatomic) NSString* avatarUrl;
 @property(unsafe_unretained, readonly) NSString* displayname;

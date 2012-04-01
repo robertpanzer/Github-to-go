@@ -98,6 +98,8 @@
     if (ret == nil) {
         ret = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PersonCell"];
         
+        ret.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         UIImageView* imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(0.0f, 0.0f, tableView.rowHeight-2.0f, tableView.rowHeight-2.0f);
         imageView.tag = 4;

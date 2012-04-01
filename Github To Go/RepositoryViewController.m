@@ -10,9 +10,11 @@
 #import "NetworkProxy.h"
 #import "BranchesBrowserViewController.h"
 #import "UITableViewCell+Person.h"
+#import "PersonViewController.h"
+
 
 static NSString *kName = @"name";
-static NSString *kDexcription = @"description";
+static NSString *kDescription = @"description";
 static NSString *kOwner = @"owner";
 static NSString *kRepoId = @"repoId";
 static NSString *kPrivate = @"private";
@@ -40,7 +42,18 @@ static NSSet *isBool;
 
 +(void)initialize {
     keys = [NSArray arrayWithObjects:
-            kName, kDexcription, kOwner, kRepoId, kPrivate, kWatchers, kFork, kForks, kCreatedAt, kLanguage, kOpenIssues, nil];
+            kName, 
+            kDescription, 
+            kOwner, 
+            kRepoId, 
+            kPrivate, 
+            kWatchers, 
+            kFork, 
+            kForks, 
+            kCreatedAt, 
+            kLanguage, 
+            kOpenIssues, 
+            nil];
     descriptions = [NSArray arrayWithObjects:@"Name", @"Description", @"Owner", @"Id", @"Private", @"Watchers", @"Fork", @"Forks", @"Created at", @"Language", @"Open issues", nil];
     isBool = [NSSet setWithObjects:kPrivate, kFork, nil];
 }
@@ -149,11 +162,24 @@ static NSSet *isBool;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.section == 1 && indexPath.row == 0) {
-        BranchesBrowserViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
-        [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
+    NSString *key = [keys objectAtIndex:indexPath.row];
+
+    if (key == kOwner) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:self.repository.owner.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    Person *newPerson = [[Person alloc] initWithJSONObject:data];
+                    PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:newPerson];
+                    [self.navigationController pushViewController:pwc animated:YES];
+                });
+            }
+        }];
     }
+    
+//    if (indexPath.section == 1 && indexPath.row == 0) {
+//        BranchesBrowserViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
+//        [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
+//    }
 }
 
 

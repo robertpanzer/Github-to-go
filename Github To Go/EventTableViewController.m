@@ -292,7 +292,9 @@
                 } else {
                     for (NSDictionary* event in eventArray) {
                         GithubEvent* eventObject = [EventFactory createEventFromJsonObject:event];
-                        [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
+                        if (eventObject != nil) {
+                            [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
+                        }
                     }
                     pagesLoaded++;
                 }

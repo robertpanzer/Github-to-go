@@ -18,6 +18,7 @@
 #import "Settings.h"
 #import "UIRepositoryRootViewController.h"
 #import "RepositoryStorage.h"
+#import "UITableViewCell+Repository.h"
 
 @implementation RepoBrowserTableViewController
 
@@ -100,7 +101,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -120,22 +121,11 @@
 {
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-
-    }
-    
-    if (indexPath.section == 2) {
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-        cell.textLabel.text = @"Find";
-        cell.detailTextLabel.text = nil;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-        return cell;
-    }
-    
     if (indexPath.row == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
@@ -148,11 +138,7 @@
         return cell;
     } 
 
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:11.0f];
-
+    UITableViewCell *cell = [UITableViewCell createRepositoryCellForTableView:self.tableView];
     // Configure the cell...
     Repository* repo = nil;
     if (indexPath.section == 0) {
@@ -160,8 +146,7 @@
     } else if (indexPath.section == 1) {
         repo = (Repository*)[watchedRepos objectAtIndex:indexPath.row - 1];
     }
-    cell.textLabel.text = repo.fullName;
-    cell.detailTextLabel.text = repo.description;
+    [cell bindRepository:repo tableView:self.tableView];
     return cell;
 }
 

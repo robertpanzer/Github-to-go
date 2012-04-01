@@ -10,6 +10,11 @@
 		9402273C14C167260036A676 /* CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402273B14C167260036A676 /* CommitFile.m */; };
 		9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402274014C1A1140036A676 /* FileDiffViewController.m */; };
 		9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9402274114C1A1140036A676 /* FileDiffViewController.xib */; };
+		940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940339951528A43F004ABDDD /* SearchTableViewController.m */; };
+		940339981528A43F004ABDDD /* SearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940339961528A43F004ABDDD /* SearchTableViewController.xib */; };
+		9403399B1528B4C6004ABDDD /* UITableViewCell+Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */; };
+		9403399F1528C8D5004ABDDD /* RepositoryListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9403399D1528C8D5004ABDDD /* RepositoryListViewController.m */; };
+		940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9403399E1528C8D5004ABDDD /* RepositoryListViewController.xib */; };
 		9404B4FC150CB38E0077BA8E /* UITableViewCell+CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */; };
 		9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */; };
 		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
@@ -87,6 +92,14 @@
 		9402273F14C1A1140036A676 /* FileDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDiffViewController.h; sourceTree = "<group>"; };
 		9402274014C1A1140036A676 /* FileDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileDiffViewController.m; sourceTree = "<group>"; };
 		9402274114C1A1140036A676 /* FileDiffViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileDiffViewController.xib; sourceTree = "<group>"; };
+		940339941528A43F004ABDDD /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
+		940339951528A43F004ABDDD /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
+		940339961528A43F004ABDDD /* SearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchTableViewController.xib; sourceTree = "<group>"; };
+		940339991528B4C6004ABDDD /* UITableViewCell+Repository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Repository.h"; sourceTree = "<group>"; };
+		9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Repository.m"; sourceTree = "<group>"; };
+		9403399C1528C8D5004ABDDD /* RepositoryListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryListViewController.h; sourceTree = "<group>"; };
+		9403399D1528C8D5004ABDDD /* RepositoryListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryListViewController.m; sourceTree = "<group>"; };
+		9403399E1528C8D5004ABDDD /* RepositoryListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryListViewController.xib; sourceTree = "<group>"; };
 		9404B4FA150CB38E0077BA8E /* UITableViewCell+CommitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+CommitFile.h"; sourceTree = "<group>"; };
 		9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+CommitFile.m"; sourceTree = "<group>"; };
 		9404B4FE150CE6F70077BA8E /* UITableViewCell+PullRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+PullRequest.h"; sourceTree = "<group>"; };
@@ -232,6 +245,16 @@
 			name = CommitFile;
 			sourceTree = "<group>";
 		};
+		940339931528A423004ABDDD /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				940339941528A43F004ABDDD /* SearchTableViewController.h */,
+				940339951528A43F004ABDDD /* SearchTableViewController.m */,
+				940339961528A43F004ABDDD /* SearchTableViewController.xib */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
 		9424DE4D14B9D95000B6538E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +337,11 @@
 				945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */,
 				945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */,
 				945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */,
+				940339991528B4C6004ABDDD /* UITableViewCell+Repository.h */,
+				9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */,
+				9403399C1528C8D5004ABDDD /* RepositoryListViewController.h */,
+				9403399D1528C8D5004ABDDD /* RepositoryListViewController.m */,
+				9403399E1528C8D5004ABDDD /* RepositoryListViewController.xib */,
 			);
 			name = Repository;
 			sourceTree = "<group>";
@@ -375,6 +403,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				940339931528A423004ABDDD /* Search */,
 				949F506D151D2704009D5DC3 /* Github To Go.entitlements */,
 				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
 				941FCF89150E18A10046F72F /* Icon.png */,
@@ -539,6 +568,8 @@
 				946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */,
 				944D6664151FC034002208FB /* PersonViewController.xib in Resources */,
 				94CC3C3C1523B31B00F4B25B /* PersonListTableViewController.xib in Resources */,
+				940339981528A43F004ABDDD /* SearchTableViewController.xib in Resources */,
+				940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +624,9 @@
 				94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */,
 				944D6662151FBEDB002208FB /* PersonViewController.m in Sources */,
 				94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */,
+				940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */,
+				9403399B1528B4C6004ABDDD /* UITableViewCell+Repository.m in Sources */,
+				9403399F1528C8D5004ABDDD /* RepositoryListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

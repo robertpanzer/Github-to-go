@@ -292,38 +292,43 @@
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
     NSString* type = [jsonObject objectForKey:@"type"];
-    
-    if ([type isEqualToString:@"PushEvent"]) {
-        return [[PushEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"IssueCommentEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"PullRequestEvent"]) {
-        return [[PullRequestEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"ForkEvent"]) {
-        return [[ForkEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"CommitCommentEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"WatchEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"CreateEvent"]) {
-        NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
-        if ([@"repository" isEqualToString:refType]) {
-            return [[CreateRepositoryEvent alloc] initWithJSON:jsonObject];
+    @try {
+        if ([type isEqualToString:@"PushEvent"]) {
+            return [[PushEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"IssueCommentEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"PullRequestEvent"]) {
+            return [[PullRequestEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"ForkEvent"]) {
+            return [[ForkEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"CommitCommentEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"WatchEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"CreateEvent"]) {
+            NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
+            if ([@"repository" isEqualToString:refType]) {
+                return [[CreateRepositoryEvent alloc] initWithJSON:jsonObject];
+            } else {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            }
+        } else if ([type isEqualToString:@"DeleteEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"DownloadEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"FollowEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"IssuesEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
+            return [[GithubEvent alloc] initWithJSON:jsonObject];
         } else {
             return [[GithubEvent alloc] initWithJSON:jsonObject];
         }
-    } else if ([type isEqualToString:@"DeleteEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"DownloadEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"FollowEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"IssuesEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
-    } else {
-        return [[GithubEvent alloc] initWithJSON:jsonObject];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Exception in GithubEvent.initWithJson: %@\n%@", exception, exception.callStackSymbols);
+        return nil;
     }
     
 }
