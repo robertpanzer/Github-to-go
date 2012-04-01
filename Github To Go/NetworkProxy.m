@@ -30,6 +30,7 @@ static NetworkProxy* networkProxyInstance;
 @property(strong) NSDictionary* headerFields;
 @property(nonatomic, copy) void (^block)(int, NSDictionary*, id);
 @property(nonatomic, copy) void (^errorBlock)(NSError*);
+
 @end
 
 @implementation ConnectionData 
@@ -58,12 +59,18 @@ static NetworkProxy* networkProxyInstance;
 -(ConnectionData*)connectionDataForConnection:(NSURLConnection*)connection;
 
 -(void)addBasicAuthenticationHeaderToRequest:(NSMutableURLRequest*)request;
+
+-(void)increaseConnectionCount;
+
+-(void)decreaseConnectionCount;
+
 @end
 
 @implementation NetworkProxy
 
 @synthesize connectionDataSet;
 @synthesize operationQueue;
+@synthesize openConnections;
 
 +(void)initialize {
     networkProxyInstance = [[NetworkProxy alloc] init];
@@ -79,6 +86,7 @@ static NetworkProxy* networkProxyInstance;
         networkProxyInstance = self;
         self.connectionDataSet = [[NSMutableSet alloc] init];
         self.operationQueue = [[NSOperationQueue alloc] init];
+        self.openConnections = 0;
     }
     return self;
 }
@@ -95,14 +103,13 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
-    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:^(NSError* error) {
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alertView show];
-    }];
+    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:errorBlock];
 }
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
         
+    [self increaseConnectionCount];
+    
     NSString* escapedUrlString = [[urlString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
     NSURL* url = [[NSURL alloc] initWithString:escapedUrlString];
@@ -110,8 +117,8 @@ static NetworkProxy* networkProxyInstance;
     request.timeoutInterval = 30;
     request.HTTPMethod = aVerb;
     [self addBasicAuthenticationHeaderToRequest:request];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 
+    
     ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
     connectionData.receivedData = [[NSMutableData alloc] init];
     connectionData.block = block;
@@ -122,7 +129,9 @@ static NetworkProxy* networkProxyInstance;
 }
 
 -(void)sendData:(id)data ToUrl:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
-    
+
+    [self increaseConnectionCount];
+
     NSString* escapedUrlString = [[urlString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 
     NSURL* url = [NSURL URLWithString:escapedUrlString];
@@ -144,7 +153,6 @@ static NetworkProxy* networkProxyInstance;
     }
     request.HTTPBody = nsData;
 
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     ConnectionData* connectionData = [[ConnectionData alloc] initWithUrl:urlString];
     connectionData.receivedData = [[NSMutableData alloc] init];
@@ -158,10 +166,9 @@ static NetworkProxy* networkProxyInstance;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    [self decreaseConnectionCount];
     // do something with the data
     // receivedData is declared as a method instance elsewhere
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
     NSMutableData* receivedData = connectionData.receivedData;
@@ -225,10 +232,10 @@ static NetworkProxy* networkProxyInstance;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [self decreaseConnectionCount];
     NSLog(@"Failed: %@", error);
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         connectionData.errorBlock(error);
     });
 }
@@ -247,8 +254,6 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
         }
     }
     [[challenge sender] cancelAuthenticationChallenge:challenge];
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Authentication failed" message:@"Wrong password or unknown user!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [alertView show];
 }
                            
 - (ConnectionData*)connectionDataForConnection:(NSURLConnection*)connection {
@@ -266,6 +271,20 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
         NSData *passwordData = [[NSString stringWithFormat:@"%@:%@", [Settings sharedInstance].username, [Settings sharedInstance].password] dataUsingEncoding:NSASCIIStringEncoding];
         NSString *pwd = [NSString stringWithFormat:@"Basic %@", [passwordData base64EncodingWithLineLength:1024]];
         [request setValue:pwd forHTTPHeaderField:@"Authorization"];
+    }
+}
+
+-(void)increaseConnectionCount {
+    self.openConnections++;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+-(void)decreaseConnectionCount {
+    if (self.openConnections > 0) {
+        self.openConnections --;
+    }
+    if (self.openConnections <= 0) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }
 }
 

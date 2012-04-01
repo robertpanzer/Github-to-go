@@ -17,15 +17,18 @@
     UITextField* passwordTextfield;
     
 }
-
+@property(strong, nonatomic) IBOutlet UITableViewCell *accountSectionCell;
 @property(strong, readonly) IBOutlet UITableViewCell* userNameCell;
 @property(strong, readonly) IBOutlet UITableViewCell* passwordCell;
 @property(strong, readonly) IBOutlet UITextField* usernameTextfield;
 @property(strong, readonly) IBOutlet UITextField* passwordTextfield;
 
+@property (weak, nonatomic) IBOutlet UILabel *successLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *accountCheckActivityIndicator;
           
 
 - (IBAction)usernameChanged:(id)sender;
 - (IBAction)passwordChanged:(id)sender;
 
+-(void)validateAccountSettings;
 @end

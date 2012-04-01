@@ -25,7 +25,7 @@
     
     [[UINavigationBar appearance] setTintColor:[UIColor darkGrayColor]];
     [[UIToolbar appearance] setTintColor:[UIColor darkGrayColor]];
-    [[UILabel appearance] setFont:[UIFont systemFontOfSize:13.0f]];
+//    [[UILabel appearance] setFont:[UIFont systemFontOfSize:13.0f]];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     

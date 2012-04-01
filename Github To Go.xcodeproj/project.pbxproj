@@ -81,7 +81,6 @@
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
 		94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */; };
-		94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */; };
 		94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */; };
 		94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */; };
 /* End PBXBuildFile section */
@@ -211,7 +210,6 @@
 		94D50E0D14E478D7000C92E2 /* GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubEvent.m; sourceTree = "<group>"; };
 		94E9F5EE151E747100AF5DD2 /* UITableViewCell+Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Commit.h"; sourceTree = "<group>"; };
 		94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Commit.m"; sourceTree = "<group>"; };
-		94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoSearchTableViewController.xib; sourceTree = "<group>"; };
 		94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestCommentViewController.h; sourceTree = "<group>"; };
 		94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestCommentViewController.m; sourceTree = "<group>"; };
 		94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestAddCommentViewController.xib; sourceTree = "<group>"; };
@@ -423,7 +421,6 @@
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
 				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
-				94F78EEA1511108C0066A3E0 /* RepoSearchTableViewController.xib */,
 				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
 				949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */,
@@ -563,7 +560,6 @@
 				941FCF8A150E18A10046F72F /* Icon.png in Resources */,
 				941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */,
 				941FCF95150EAD1A0046F72F /* PullRequestRootViewController.xib in Resources */,
-				94F78EEB1511108C0066A3E0 /* RepoSearchTableViewController.xib in Resources */,
 				94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */,
 				946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */,
 				944D6664151FC034002208FB /* PersonViewController.xib in Resources */,

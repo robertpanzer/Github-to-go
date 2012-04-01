@@ -62,7 +62,7 @@
 -(void)bindPerson:(Person *)person role:(NSString*)role tableView:(UITableView*)tableView {
     
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:4];
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
+    imageView.image = nil;
     [person loadImageIntoImageView:imageView];
 
     UILabel* rolelabel = (UILabel*)[self.contentView viewWithTag:1];
