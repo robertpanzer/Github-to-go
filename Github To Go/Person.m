@@ -57,9 +57,8 @@ static long sequenceCounter = 0;
             self.url = [dictionary objectForKey:@"url"];
         }
         if (self.avatarUrl == nil && avatarId != nil) {
-            self.avatarUrl = [NSString stringWithFormat:@"https://secure.gravatar.com/avatar/%@?d=https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png", avatarId];
-        }
-        
+            self.avatarUrl = [NSString stringWithFormat:@"https://secure.gravatar.com/avatar/%@", avatarId];
+        }        
     }
     return self;
 }

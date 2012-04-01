@@ -70,7 +70,6 @@ static NSInteger TIME_TAG = 5;
     UILabel *timeLabel = (UILabel*)[self.contentView viewWithTag:TIME_TAG];
 
     imageView.image = nil;
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
 
     NSString *firstLine = [[commit.message componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] objectAtIndex:0];
     CGSize size = [firstLine sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 58.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];

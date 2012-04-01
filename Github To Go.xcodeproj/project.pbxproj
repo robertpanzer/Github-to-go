@@ -63,7 +63,6 @@
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
 		94A12FD914BB972A00453774 /* CommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A12FD714BB972A00453774 /* CommitViewController.m */; };
 		94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A12FD814BB972A00453774 /* CommitViewController.xib */; };
-		94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */ = {isa = PBXBuildFile; fileRef = 94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
 		94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2CF150A7050005EA1BD /* PullRequest.m */; };
@@ -175,7 +174,6 @@
 		94A12FD614BB972A00453774 /* CommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitViewController.h; sourceTree = "<group>"; };
 		94A12FD714BB972A00453774 /* CommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitViewController.m; sourceTree = "<group>"; };
 		94A12FD814BB972A00453774 /* CommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitViewController.xib; sourceTree = "<group>"; };
-		94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gravatar-orgs.png"; sourceTree = "<group>"; };
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
@@ -382,7 +380,6 @@
 				941FCF89150E18A10046F72F /* Icon.png */,
 				94BCF2CC150A7037005EA1BD /* PullRequest */,
 				94D50E0514E472B9000C92E2 /* Events */,
-				94B0CE9D14DEE31E005F787C /* gravatar-orgs.png */,
 				9402273E14C1A0D10036A676 /* CommitFile */,
 				9424DE4D14B9D95000B6538E /* Settings */,
 				9466DBD114B7ACBC00238151 /* Branch */,
@@ -533,7 +530,6 @@
 				9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */,
 				945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */,
 				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
-				94B0CE9E14DEE31E005F787C /* gravatar-orgs.png in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
 				941FCF8A150E18A10046F72F /* Icon.png in Resources */,
 				941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */,

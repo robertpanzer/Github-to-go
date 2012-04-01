@@ -192,7 +192,7 @@
     } else if (indexPath.section == 1) {
         cell = [UITableViewCell createCommitFileCellForTableView:tableView];
         CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-        [cell bindCommitFile:commitFile];
+        [cell bindCommitFile:commitFile tableView:self.tableView];
         return cell;
     }
     return nil;

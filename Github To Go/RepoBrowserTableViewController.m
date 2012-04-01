@@ -52,6 +52,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 20.0f, 20.0f)];
+    self.tableView.backgroundView.backgroundColor = [UIColor lightGrayColor];
 
 //    repoSearchTableViewController = [[RepoSearchTableViewController alloc] init];
     
@@ -316,7 +318,7 @@
     [super viewDidLoad];
     self.tableView.frame = CGRectMake(0.0f, 40.0f, self.tableView.frame.size.width, self.tableView.frame.size.height - 40.0f);
     self.tableView.tableHeaderView = self.searchBar;
-//    self.searchBar.delegate = self;
+    
 }
 
 -(void)viewDidUnload {

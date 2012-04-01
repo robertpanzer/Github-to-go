@@ -140,4 +140,8 @@
     return nil;
 }
 
+-(NSString*)description {
+    return [NSString stringWithFormat:@"%@ with %d objects", [[self class] description], self.count];
+}
+
 @end

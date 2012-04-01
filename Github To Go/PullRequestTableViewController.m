@@ -31,6 +31,8 @@ static NSString* titleState   = @"State";
 static NSString* titleCreator = @"Creator";
 static NSString* titleMerged  = @"Merged";
 
+static NSSet *isBool;
+
 @interface PullRequestTableViewController ()
 
 @end
@@ -51,6 +53,8 @@ static NSString* titleMerged  = @"Merged";
                                                         titleCreator, kCreator,
                                                         titleMerged, kMerged,
                                                         nil ];
+    
+    isBool = [NSSet setWithObjects:kMerged, nil];
 }
 
 - (id)initWithPullRequest:(PullRequest*)aPullRequest
@@ -155,7 +159,12 @@ static NSString* titleMerged  = @"Merged";
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
             }
             cell.textLabel.text = [titles valueForKey:keyPath];
-            cell.detailTextLabel.text = [value description];
+            if ([isBool containsObject:keyPath]) {
+                cell.detailTextLabel.text = [(NSNumber*)value boolValue] ? NSLocalizedString(@"Yes", @"Yes") : NSLocalizedString(@"No", @"No");
+                
+            } else {
+                cell.detailTextLabel.text = [value description];
+            }
             return cell;
         }
     } else {

@@ -13,7 +13,7 @@
 
 +(UITableViewCell*) createCommitFileCellForTableView:(UITableView*)tableView;
 
--(void)bindCommitFile:(CommitFile*)commitFile;
+-(void)bindCommitFile:(CommitFile*)commitFile tableView:(UITableView*)tableView;
 
 +(CGFloat)tableView:(UITableView*)tableView heightForRowForCommitFile:(CommitFile*)commitFile;
 @end

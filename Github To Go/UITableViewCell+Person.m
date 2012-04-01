@@ -122,7 +122,6 @@
 
 -(void)bindPerson:(Person *)person tableView:(UITableView*)tableView {
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:4];
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
     [person loadImageIntoImageView:imageView];
     
     UILabel* nameLabel = (UILabel*)[self.contentView viewWithTag:2];

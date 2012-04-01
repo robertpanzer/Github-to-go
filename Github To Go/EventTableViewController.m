@@ -33,12 +33,25 @@
 @synthesize isLoading;
 @synthesize pagesLoaded;
 @synthesize baseUrl;
+@synthesize allEvents;
 
 -(id) initWithAllEvents {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         self.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:0];
-
+        if ([Settings sharedInstance].isUsernameSet) {
+            NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
+            if (![newBaseUrl isEqualToString:self.baseUrl]) {
+                self.baseUrl = newBaseUrl;
+                self.eventHistory = [[HistoryList alloc] init];
+                self.pagesLoaded = 0;
+                self.complete = NO;
+                [self loadEvents];
+                self.allEvents = YES;
+            }
+        } else {
+            self.baseUrl = @"https://api.github.com/events";
+        }
         self.eventHistory = [[HistoryList alloc] init];
         self.isLoading = NO;
         self.complete = NO;
@@ -51,10 +64,25 @@
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         self.repository = aRepository;
+        self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", self.repository.fullName];
         self.eventHistory = [[HistoryList alloc] init];
         self.isLoading = NO;
         self.complete = NO;
         self.pagesLoaded = 0;
+        self.allEvents = NO;
+    }
+    return self;
+}
+
+-(id)initWithUrl:(NSString*)url {
+    self = [super initWithNibName:@"EventTableViewController" bundle:nil];
+    if (self) {
+        self.baseUrl = url;
+        self.eventHistory = [[HistoryList alloc] init];
+        self.isLoading = NO;
+        self.complete = NO;
+        self.pagesLoaded = 0;
+        self.allEvents = NO;
     }
     return self;
 }
@@ -93,22 +121,7 @@
 {
     [super viewWillAppear:animated];
 
-    self.navigationController.navigationBar.hidden = (self.repository == nil);
-
-    if (self.repository != nil) {
-        self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", repository.fullName];
-    } else if ([Settings sharedInstance].isUsernameSet) {
-        NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
-        if (![newBaseUrl isEqualToString:self.baseUrl]) {
-            self.baseUrl = newBaseUrl;
-            self.eventHistory = [[HistoryList alloc] init];
-            self.pagesLoaded = 0;
-            self.complete = NO;
-            [self loadEvents];
-        }
-    } else {
-        self.baseUrl = @"https://api.github.com/events";
-    }
+    self.navigationController.navigationBar.hidden = self.allEvents;
     
     if (pagesLoaded == 0) {
         [self loadEvents];
@@ -282,10 +295,10 @@
                         [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
                     }
                     pagesLoaded++;
-                    dispatch_async(dispatch_get_main_queue(), ^() {
-                        [self.tableView reloadData];
-                    });
                 }
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    [self.tableView reloadData];
+                });
                 isLoading = NO;
             }
         }];

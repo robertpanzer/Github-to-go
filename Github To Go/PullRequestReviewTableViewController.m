@@ -93,7 +93,7 @@
 {
     CommitFile* commitFile = [self.files objectAtIndex:indexPath.row];
     UITableViewCell *cell = [UITableViewCell createCommitFileCellForTableView:self.tableView];
-    [cell bindCommitFile:commitFile];
+    [cell bindCommitFile:commitFile tableView:self.tableView];
     return cell;
 }
 

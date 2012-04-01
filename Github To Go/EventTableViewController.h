@@ -18,9 +18,13 @@
 @property int pagesLoaded;
 @property BOOL isLoading;
 @property BOOL complete;
+@property BOOL allEvents;
 @property(strong, nonatomic) IBOutlet UITableViewCell* loadNextTableViewCell;
 
 -(id)initWithRepository:(Repository*)aRepository;
 
 -(id)initWithAllEvents;
+
+-(id)initWithUrl:(NSString*)url;
+
 @end

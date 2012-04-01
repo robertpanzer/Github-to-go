@@ -10,6 +10,9 @@
 #import "QuartzCore/QuartzCore.h"
 #import "NetworkProxy.h"
 #import "PersonListTableViewController.h"
+#import "EventTableViewController.h"
+#import "GithubEvent.h"
+#import "HistoryList.h"
 
 static NSString *kName = @"name";
 static NSString *kLogin = @"login";
@@ -24,6 +27,8 @@ static NSString *kPublicGists = @"publicGists";
 
 static NSString *kFollowers = @"followers";
 static NSString *kFollowing = @"following";
+
+static NSString *kEvents = @"events";
 
 static NSArray *keys;
 
@@ -52,6 +57,7 @@ static NSSet* showDisclosure;
             [NSArray arrayWithObjects:kName, kLogin, kEmail, kCreatedAt, kLocation, kBio, kHireable, nil],
             [NSArray arrayWithObjects:kPublicRepos, kPublicGists, nil],
             [NSArray arrayWithObjects:kFollowers, kFollowing, nil],
+            [NSArray arrayWithObjects:kEvents, nil],
             nil];
     titles = [NSDictionary dictionaryWithObjectsAndKeys:
               NSLocalizedString(@"Name", @"Name"), kName,
@@ -65,10 +71,11 @@ static NSSet* showDisclosure;
               NSLocalizedString(@"Public gists", @"Public gists"), kPublicGists, 
               NSLocalizedString(@"Followers", @"Followers"), kFollowers,
               NSLocalizedString(@"Following", @"Following"), kFollowing,
+              NSLocalizedString(@"Events", @"Events"), kEvents,
               nil
               ];
     isBool = [[NSSet alloc] initWithObjects:kHireable, nil];
-    showDisclosure = [NSSet setWithObjects:kFollowers, kFollowing, kPublicRepos, nil];
+    showDisclosure = [NSSet setWithObjects:kFollowers, kFollowing, kPublicRepos, kEvents, nil];
 }
 
 - (id)initWithPerson:(Person*)aPerson;
@@ -151,7 +158,11 @@ static NSSet* showDisclosure;
     }
 
     cell.textLabel.text = [titles objectForKey:key];
-    cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
+    if (key != kEvents) {
+        cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
+    } else {
+        cell.detailTextLabel.text = nil;
+    }
     
     return cell;
 }
@@ -198,6 +209,12 @@ static NSSet* showDisclosure;
                 });
             }
         }];
+    } else if ([key isEqualToString:kEvents]) {
+        letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/events/public", person.url];
+        EventTableViewController *eventListTableViewController = [[EventTableViewController alloc] initWithUrl:url];
+        [self.navigationController pushViewController:eventListTableViewController animated:YES];
+
     }
     
 }

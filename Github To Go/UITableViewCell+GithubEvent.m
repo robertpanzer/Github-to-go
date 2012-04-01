@@ -7,14 +7,17 @@
 //
 
 #import "UITableViewCell+GithubEvent.h"
+#import "QuartzCore/QuartzCore.h"
 
 @implementation UITableViewCell (GithubEvent)
 
 -(void)bindGithubEvent:(GithubEvent *)anEvent {
     
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:1];
+    imageView.layer.cornerRadius = 5.0f;
+    imageView.image = nil;
+    
     UILabel* label = (UILabel*)[self.contentView viewWithTag:2];
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
     label.text = anEvent.text;
     [anEvent.person loadImageIntoImageView:imageView];
     self.accessoryType = UITableViewCellAccessoryNone;
