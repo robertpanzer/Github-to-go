@@ -161,23 +161,27 @@ static NSArray* actionSheetTitles;
     NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repository.fullName];
     if ([WatchRepo isEqualToString:titleClicked]) {
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
-            if (status == 204) {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is being watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alertView show];
-            } else {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Starting to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alertView show];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == 204) {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is being watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                } else {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Starting to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                }
+            });
         } ];
     } else if ([StopWatchingRepo isEqualToString:titleClicked]) {
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
-            if (status == 204) {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is no longer watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alertView show];
-            } else {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alertView show];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == 204) {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is no longer watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                } else {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                }
+            });
         } ];
     }
     
