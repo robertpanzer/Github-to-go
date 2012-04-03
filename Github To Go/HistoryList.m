@@ -76,13 +76,15 @@
     
     BOOL inserted = NO;
     for (int i = 0; i < objectsForDay.count; i++) {
-        NSDate *time = [timesForDay objectAtIndex:i];
-        if ([time earlierDate:aDate] == time) {
-            [timesForDay insertObject:aDate atIndex:i];
-            [objectsForDay insertObject:anObject atIndex:i];
-            inserted = YES;
-            row = i;
-            break;
+        if (i < timesForDay.count) {
+            NSDate *time = [timesForDay objectAtIndex:i];
+            if ([time earlierDate:aDate] == time) {
+                [timesForDay insertObject:aDate atIndex:i];
+                [objectsForDay insertObject:anObject atIndex:i];
+                inserted = YES;
+                row = i;
+                break;
+            }
         }
     }
     if (!inserted) {
