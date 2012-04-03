@@ -21,6 +21,8 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 @implementation Settings
 
+@synthesize passwordValidated;
+
 +(void)initialize {
     Settings* newSettings = [[Settings alloc] init];
     sharedInstance = newSettings;

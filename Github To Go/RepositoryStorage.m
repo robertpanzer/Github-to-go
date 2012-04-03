@@ -7,6 +7,8 @@
 //
 
 #import "RepositoryStorage.h"
+#import "Settings.h"
+#import "NetworkProxy.h"
 
 static RepositoryStorage* sharedStorage;
 
@@ -21,6 +23,8 @@ static RepositoryStorage* sharedStorage;
 
 @synthesize ownRepositories;
 @synthesize watchedRepositories;
+@synthesize followedPersons;
+
 
 +(void)initialize {
     sharedStorage = [[RepositoryStorage alloc] init];
@@ -51,6 +55,26 @@ static RepositoryStorage* sharedStorage;
 -(BOOL)repositoryIsWatched:(Repository*)repository {
     BOOL ret = [watchedRepositories objectForKey:repository.fullName] != nil;
     return ret;
+}
+
+-(void)loadFollowed {
+    if ([Settings sharedInstance].isUsernameSet) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/following" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                NSMutableDictionary *newFollowedPersons = [NSMutableDictionary dictionary];
+                for (NSDictionary *jsonObject in data) {
+                    Person *person = [[Person alloc] initWithJSONObject:jsonObject];
+                    if (person.login) {
+                        [newFollowedPersons setObject:person forKey:person.login];
+                        NSLog(@"Following %@", person.login);
+                    }
+                }
+                self.followedPersons = newFollowedPersons;
+            }
+        } errorBlock:^(NSError * error) {
+            // Simply ignore it.
+        }];
+    }
 }
 
 @end

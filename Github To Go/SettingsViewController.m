@@ -11,6 +11,12 @@
 #import "Settings.h"
 #import "NetworkProxy.h"
 
+@interface SettingsViewController()
+
+-(void)showAuthenticationSuccess:(BOOL)success;
+
+@end
+
 @implementation SettingsViewController
 
 @synthesize accountSectionCell;
@@ -74,13 +80,16 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.accountCheckActivityIndicator.hidden = YES;
+    self.successLabel.hidden = YES;
+    if ([Settings sharedInstance].passwordValidated != nil) {
+        [self showAuthenticationSuccess:[[Settings sharedInstance].passwordValidated boolValue]];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.accountCheckActivityIndicator.hidden = YES;
-    self.successLabel.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -189,4 +198,17 @@
    }]; 
 }
 
+-(void)showAuthenticationSuccess:(BOOL)success {
+    NSLog(@"%@", self.successLabel);
+    if (success) {
+        self.successLabel.text = @"\u2713";
+        self.successLabel.textColor = [UIColor greenColor];
+    } else {
+        self.successLabel.text = @"\u2717";
+        self.successLabel.textColor = [UIColor redColor];
+    }
+    self.successLabel.hidden = NO;
+    self.accountCheckActivityIndicator.hidden = YES;
+    
+}
 @end

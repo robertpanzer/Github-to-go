@@ -11,6 +11,8 @@
 
 @interface RepositoryStorage : NSObject
 
+@property(strong, nonatomic) NSMutableDictionary* followedPersons;
+
 +(RepositoryStorage*)sharedStorage;
 
 -(void)addOwnRepository:(Repository*)repository;
@@ -18,5 +20,7 @@
 -(void)addWatchedRepository:(Repository*)repository;
 
 -(BOOL)repositoryIsWatched:(Repository*)repository;
+
+-(void)loadFollowed;
 
 @end

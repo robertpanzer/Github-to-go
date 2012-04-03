@@ -19,6 +19,7 @@
 @property(strong, nonatomic) NSString* password;
 
 @property(readonly) BOOL isUsernameSet;
+@property(strong, nonatomic) NSNumber *passwordValidated;
 
 + (Settings*) sharedInstance;
 

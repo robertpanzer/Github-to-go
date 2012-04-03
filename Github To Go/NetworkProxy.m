@@ -196,6 +196,14 @@ static NetworkProxy* networkProxyInstance;
         } else {
             object = receivedData;
         }
+        if ([@"api.github.com" isEqualToString:connection.originalRequest.URL.host]) {
+            if ([connectionData.statusCode intValue]< 400) {
+                [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:YES];
+            } else {
+                [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
+            }
+        }
+
         block([connectionData.statusCode intValue], connectionData.headerFields, object);
     }];    
     // release the connection, and the data object
@@ -243,7 +251,6 @@ static NetworkProxy* networkProxyInstance;
 -(void)connection:(NSURLConnection *)connection
 didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    NSLog(@"didReceiveAuthenticationChallenge %@", challenge);
     if ([challenge previousFailureCount] == 0) {
         NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
         NSURLCredential* credential = [credentialStorage defaultCredentialForProtectionSpace:[challenge protectionSpace]];
@@ -252,6 +259,9 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
                    forAuthenticationChallenge:challenge];
             return;
         }
+    }
+    if ([@"api.github.com" isEqualToString:connection.originalRequest.URL.host]) {
+        [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
     }
     [[challenge sender] cancelAuthenticationChallenge:challenge];
 }
