@@ -14,6 +14,8 @@
 #import "EventTableViewController.h"
 #import "GithubEvent.h"
 #import "HistoryList.h"
+#import "RepositoryStorage.h"
+
 
 static NSString *kName = @"name";
 static NSString *kLogin = @"login";
@@ -39,9 +41,15 @@ static NSSet* isBool;
 
 static NSSet* showDisclosure;
 
+static NSString *follow, *unfollow;
+
+
+
 @interface PersonViewController ()
 
 -(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath;
+
+-(void)showPersonActions;
 
 @end
 
@@ -77,6 +85,10 @@ static NSSet* showDisclosure;
               ];
     isBool = [[NSSet alloc] initWithObjects:kHireable, nil];
     showDisclosure = [NSSet setWithObjects:kFollowers, kFollowing, kPublicRepos, kEvents, nil];
+    
+    follow = NSLocalizedString(@"Follow", @"Follow Action");
+    unfollow = NSLocalizedString(@"Unfollow", @"Unfollow Action");
+    
 }
 
 - (id)initWithPerson:(Person*)aPerson;
@@ -108,6 +120,8 @@ static NSSet* showDisclosure;
     [self.person loadImageIntoImageView:self.imageView];
     self.nameLabel.text = self.person.displayname;
     self.letUserSelectCells = YES;
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showPersonActions)];
 }
 
 - (void)viewDidUnload
@@ -271,5 +285,53 @@ static NSSet* showDisclosure;
     }
     
 }
+
+-(void)showPersonActions {
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    if ([[RepositoryStorage sharedStorage].followedPersons objectForKey:self.person.login] == nil) {
+        [actionSheet addButtonWithTitle:NSLocalizedString(@"Follow", @"Follow")];
+    } else {
+        [actionSheet addButtonWithTitle:NSLocalizedString(@"Unfollow", @"Unfollow")];
+    }
+    
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
+    NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/following/%@", self.person.login];
+    if ([follow isEqualToString:titleClicked]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == 204) {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"User is being followed now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                    [[RepositoryStorage sharedStorage].followedPersons setObject:self.person forKey:self.person.login];
+                } else {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Following user failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                }
+            });
+            [[RepositoryStorage sharedStorage] loadFollowed];
+        } ];
+    } else if ([unfollow isEqualToString:titleClicked]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (status == 204) {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"User is no longer followed now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                    [[RepositoryStorage sharedStorage].followedPersons removeObjectForKey:self.person.login];
+                } else {
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to follow user failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    [alertView show];
+                }
+            });
+            [[RepositoryStorage sharedStorage] loadFollowed];
+        } ];
+    }
+    
+}
+
 
 @end

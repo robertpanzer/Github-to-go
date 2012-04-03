@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Person.h"
 
-@interface PersonViewController : UITableViewController
+@interface PersonViewController : UITableViewController <UIActionSheetDelegate>
 
 @property(strong, nonatomic) Person *person;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

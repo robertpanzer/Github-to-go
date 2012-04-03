@@ -13,6 +13,7 @@
 #import "SettingsViewController.h"
 #import "EventTableViewController.h"
 #import "SearchTableViewController.h"
+#import "RepositoryStorage.h"
 
 @implementation AppDelegate
 
@@ -44,6 +45,9 @@
     self.window.rootViewController = self.tabBarController;
         
     [self.window makeKeyAndVisible];
+    
+    [[RepositoryStorage sharedStorage] loadFollowed];
+    
     return YES;
 }
 
