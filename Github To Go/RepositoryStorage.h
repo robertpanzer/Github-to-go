@@ -13,6 +13,10 @@
 
 @property(strong, nonatomic) NSMutableDictionary* followedPersons;
 
+@property(strong) NSMutableDictionary* ownRepositories;
+
+@property(strong) NSMutableDictionary* watchedRepositories;
+
 +(RepositoryStorage*)sharedStorage;
 
 -(void)addOwnRepository:(Repository*)repository;

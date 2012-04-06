@@ -69,9 +69,6 @@
 }
 
 -(void) swiped:(UIPanGestureRecognizer*)recognizer {
-    if (self.tableView.contentOffset.y < -40.0f) {
-        self.tableView.contentOffset = CGPointMake(0.0f, -40.0f);
-    }
     if (self.tableView.contentOffset.y < 0) {
         switch (recognizer.state) {
             case UIGestureRecognizerStateBegan:
@@ -84,7 +81,7 @@
             case UIGestureRecognizerStateChanged:
             case UIGestureRecognizerStatePossible:
                 if (self.tableView.contentOffset.y < -20.0f) {
-                    self.reloadLabel.text = NSLocalizedString(@"Drop to reload", @"Drop to reload");
+                    self.reloadLabel.text = NSLocalizedString(@"Release to reload", @"Release to reload");
                     self.reloadPossible = YES; 
                 } else if (self.tableView.contentOffset.y < 0.0f) {
                     self.reloadLabel.text = NSLocalizedString(@"Pull to reload", @"Pull to reload");

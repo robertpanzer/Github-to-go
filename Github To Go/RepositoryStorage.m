@@ -14,8 +14,6 @@ static RepositoryStorage* sharedStorage;
 
 @interface RepositoryStorage() 
 
-@property(strong) NSMutableDictionary* ownRepositories;
-@property(strong) NSMutableDictionary* watchedRepositories;
 
 @end
 

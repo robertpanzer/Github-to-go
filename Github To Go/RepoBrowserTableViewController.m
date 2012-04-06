@@ -183,7 +183,9 @@
         [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
             NSMutableArray* newRepos = [[NSMutableArray alloc] init];
             for (NSDictionary* repoObject in data) {
-                [newRepos addObject:[[Repository alloc] initFromJSONObject:repoObject]];
+                Repository *repo = [[Repository alloc] initFromJSONObject:repoObject];
+                [[RepositoryStorage sharedStorage] addOwnRepository:repo];
+                [newRepos addObject:repo];
             }
 
             dispatch_async(dispatch_get_main_queue(), ^(){

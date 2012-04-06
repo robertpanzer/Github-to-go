@@ -15,6 +15,7 @@
 #import "Settings.h"
 #import "UIRepositoryRootViewController.h"
 #import "BranchViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface EventTableViewController()
 
@@ -182,6 +183,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 55.0f, 55.0f)];
+        imageView.layer.cornerRadius = 10.0f;
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
         label.numberOfLines = 0;

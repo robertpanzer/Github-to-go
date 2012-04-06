@@ -19,8 +19,6 @@
     
         ret = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PersonCell"];
         
-        ret.selectionStyle= UITableViewCellSelectionStyleNone;
-        
         UIImageView* imageView = [[UIImageView alloc] init];
         imageView.frame = CGRectMake(80.0f, 0.0f, tableView.rowHeight-2.0f, tableView.rowHeight-2.0f);
         imageView.tag = 4;
@@ -42,7 +40,7 @@
         nameLabel.tag = 2;
         nameLabel.opaque = NO;
         nameLabel.backgroundColor = [UIColor clearColor];
-        nameLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        nameLabel.font = [UIFont systemFontOfSize:13.0f];
         nameLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
         nameLabel.textAlignment = UITextAlignmentRight;
         [ret.contentView addSubview:nameLabel];
@@ -88,8 +86,10 @@
     }    
     if (person.login != nil) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.selectionStyle= UITableViewCellSelectionStyleBlue;
     } else {
         self.accessoryType = UITableViewCellAccessoryNone;
+        self.selectionStyle= UITableViewCellSelectionStyleNone;
     }
 }
 

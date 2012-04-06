@@ -21,18 +21,21 @@
     label.text = anEvent.text;
     [anEvent.person loadImageIntoImageView:imageView];
     self.accessoryType = UITableViewCellAccessoryNone;
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 -(void)bindPushEvent:(PushEvent*)anEvent {
     [self bindGithubEvent:anEvent];
     if (anEvent.commits.count > 0) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
 }
 
 -(void)bindPullRequestEvent:(PullRequestEvent*)anEvent {
     [self bindGithubEvent:anEvent];
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
 @end

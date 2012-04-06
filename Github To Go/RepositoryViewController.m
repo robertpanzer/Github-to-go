@@ -149,6 +149,7 @@ static NSSet *isBool;
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
             cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
             cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
         cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
