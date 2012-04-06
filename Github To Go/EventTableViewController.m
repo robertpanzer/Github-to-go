@@ -15,6 +15,8 @@
 #import "Settings.h"
 #import "UIRepositoryRootViewController.h"
 #import "BranchViewController.h"
+#import "Commit.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface EventTableViewController()
@@ -203,6 +205,8 @@
         [cell bindPushEvent:(PushEvent*)event];
     } else if ([event isKindOfClass:[PullRequestEvent class]]) {
         [cell bindPullRequestEvent:(PullRequestEvent*)event];
+    } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
+        [cell bindCommitCommentEvent:(CommitCommentEvent*)event];
     } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
         [cell bindGithubEvent:event];
         if (self.repository == nil) {
@@ -268,6 +272,17 @@
                     PullRequest *currentPullRequest = [[PullRequest alloc] initWithJSONObject:data repository:pullRequest.repository];
                     PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:currentPullRequest];
                     [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+                });
+            }
+        }];
+    } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
+        NSString *url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@", event.repository.fullName, [(CommitCommentEvent*)event commitSha]];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                Commit *commit = [[Commit alloc] initWithJSONObject:data repository:event.repository];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    CommitViewController *commitViewController = [[CommitViewController alloc] initWithCommit:commit repository:event.repository];
+                    [self.navigationController pushViewController:commitViewController animated:YES];
                 });
             }
         }];

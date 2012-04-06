@@ -13,8 +13,6 @@
 
 @interface GithubEvent() 
 
--(void)parseCommitComment:(NSDictionary*)jsonObject;
-
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject;
 
 -(void)parseWatchEvent:(NSDictionary*)jsonObject;
@@ -59,8 +57,6 @@
             
             if ([type isEqualToString:@"IssueCommentEvent"]) {
                 [self parseIssueCommentEvent:jsonObject];
-            } else if ([type isEqualToString:@"CommitCommentEvent"]) {
-                [self parseCommitComment:jsonObject];
             } else if ([type isEqualToString:@"WatchEvent"]) {
                 [self parseWatchEvent:jsonObject];
             } else if ([type isEqualToString:@"CreateEvent"]) {
@@ -103,13 +99,6 @@
 }
 
 
-
--(void)parseCommitComment:(NSDictionary *)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ commented on commit %@:\n%@",
-                 self.person.displayname,
-                 [jsonObject valueForKeyPath:@"payload.comment.commit_id"],
-                 [jsonObject valueForKeyPath:@"payload.comment.body"] ];
-}
 
 -(void)parseWatchEvent:(NSDictionary *)jsonObject {
     self.text = [NSString stringWithFormat:@"%@ %@ watching %@",
@@ -288,6 +277,27 @@
 
 @end
 
+@implementation CommitCommentEvent 
+
+@synthesize commitSha;
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super initWithJSON:jsonObject];
+    if (self != nil) {
+        self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"repo"]];
+        self.text = [NSString stringWithFormat:@"%@ commented on commit %@:\n%@",
+                     self.person.displayname,
+                     [jsonObject valueForKeyPath:@"payload.comment.commit_id"],
+                     [jsonObject valueForKeyPath:@"payload.comment.body"] ];
+        self.commitSha = [jsonObject valueForKeyPath:@"payload.comment.commit_id"];
+    }
+    
+    return self;
+}
+
+
+@end
+
 @implementation EventFactory
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
@@ -302,7 +312,7 @@
         } else if ([type isEqualToString:@"ForkEvent"]) {
             return [[ForkEvent alloc] initWithJSON:jsonObject];
         } else if ([type isEqualToString:@"CommitCommentEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
+            return [[CommitCommentEvent alloc] initWithJSON:jsonObject];
         } else if ([type isEqualToString:@"WatchEvent"]) {
             return [[GithubEvent alloc] initWithJSON:jsonObject];
         } else if ([type isEqualToString:@"CreateEvent"]) {
