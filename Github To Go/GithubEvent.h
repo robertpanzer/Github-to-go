@@ -48,6 +48,12 @@
 @end
 
 
+@interface PullRequestReviewCommentEvent : GithubEvent
+
+@property (strong, nonatomic) NSString *commitSha;
+
+@end
+
 @interface CreateRepositoryEvent: GithubEvent 
 
 @end

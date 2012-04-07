@@ -298,6 +298,26 @@
 
 @end
 
+@implementation PullRequestReviewCommentEvent
+
+@synthesize commitSha;
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super initWithJSON:jsonObject];
+    if (self != nil) {
+        self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"repo"]];
+        self.text = [NSString stringWithFormat:@"%@ commented on commit %@ of pull request:\n%@",
+                     self.person.displayname,
+                     [jsonObject valueForKeyPath:@"payload.comment.commit_id"],
+                     [jsonObject valueForKeyPath:@"payload.comment.body"] ];
+        self.commitSha = [jsonObject valueForKeyPath:@"payload.comment.commit_id"];
+    }
+    
+    return self;
+}
+
+@end
+
 @implementation EventFactory
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
@@ -331,7 +351,7 @@
         } else if ([type isEqualToString:@"IssuesEvent"]) {
             return [[GithubEvent alloc] initWithJSON:jsonObject];
         } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
+            return [[PullRequestReviewCommentEvent alloc] initWithJSON:jsonObject];
         } else {
             return [[GithubEvent alloc] initWithJSON:jsonObject];
         }

@@ -15,5 +15,8 @@
 
 -(void)bindCommitFile:(CommitFile*)commitFile tableView:(UITableView*)tableView;
 
-+(CGFloat)tableView:(UITableView*)tableView heightForRowForCommitFile:(CommitFile*)commitFile;
+-(void)bindCommitFile:(CommitFile *)commitFile comments:(NSArray*)comments tableView:(UITableView*)tableView;
+
++(CGFloat)tableView:(UITableView*)tableView heightForRowForCommitFile:(CommitFile*)commitFile comments:(NSArray*)comments;
+
 @end

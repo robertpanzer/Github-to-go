@@ -83,6 +83,9 @@
 		94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */; };
 		94F78EEE1511FCBE0066A3E0 /* PullRequestCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */; };
 		94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */; };
+		94FAB63A152F32EC00C89D7C /* CommitComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FAB639152F32EC00C89D7C /* CommitComment.m */; };
+		94FAB6411530E6C400C89D7C /* Comment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6401530E6C400C89D7C /* Comment@2x.png */; };
+		94FAB6431530E91F00C89D7C /* Comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6421530E91F00C89D7C /* Comment.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +216,10 @@
 		94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestCommentViewController.h; sourceTree = "<group>"; };
 		94F78EED1511FCBE0066A3E0 /* PullRequestCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestCommentViewController.m; sourceTree = "<group>"; };
 		94F78EEF15120F480066A3E0 /* PullRequestAddCommentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestAddCommentViewController.xib; sourceTree = "<group>"; };
+		94FAB638152F32EC00C89D7C /* CommitComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitComment.h; sourceTree = "<group>"; };
+		94FAB639152F32EC00C89D7C /* CommitComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitComment.m; sourceTree = "<group>"; };
+		94FAB6401530E6C400C89D7C /* Comment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Comment@2x.png"; sourceTree = "<group>"; };
+		94FAB6421530E91F00C89D7C /* Comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Comment.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +239,8 @@
 		9402273E14C1A0D10036A676 /* CommitFile */ = {
 			isa = PBXGroup;
 			children = (
+				94FAB6421530E91F00C89D7C /* Comment.png */,
+				94FAB6401530E6C400C89D7C /* Comment@2x.png */,
 				9402273A14C167260036A676 /* CommitFile.h */,
 				9402273B14C167260036A676 /* CommitFile.m */,
 				9402273F14C1A1140036A676 /* FileDiffViewController.h */,
@@ -367,6 +376,8 @@
 				94A12FD814BB972A00453774 /* CommitViewController.xib */,
 				94E9F5EE151E747100AF5DD2 /* UITableViewCell+Commit.h */,
 				94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */,
+				94FAB638152F32EC00C89D7C /* CommitComment.h */,
+				94FAB639152F32EC00C89D7C /* CommitComment.m */,
 			);
 			name = Commit;
 			sourceTree = "<group>";
@@ -566,6 +577,8 @@
 				94CC3C3C1523B31B00F4B25B /* PersonListTableViewController.xib in Resources */,
 				940339981528A43F004ABDDD /* SearchTableViewController.xib in Resources */,
 				940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */,
+				94FAB6411530E6C400C89D7C /* Comment@2x.png in Resources */,
+				94FAB6431530E91F00C89D7C /* Comment.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,6 +636,7 @@
 				940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */,
 				9403399B1528B4C6004ABDDD /* UITableViewCell+Repository.m in Sources */,
 				9403399F1528C8D5004ABDDD /* RepositoryListViewController.m in Sources */,
+				94FAB63A152F32EC00C89D7C /* CommitComment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

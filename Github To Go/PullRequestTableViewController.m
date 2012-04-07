@@ -17,19 +17,21 @@
 static NSArray *keyPaths;
 static NSDictionary* titles;
 
-static NSString* kNumber  = @"number";
-static NSString* kTitle   = @"title";
-static NSString* kBody    = @"body";
-static NSString* kState   = @"state";
-static NSString* kCreator = @"creator";
-static NSString* kMerged  = @"merged";
+static NSString* kNumber    = @"number";
+static NSString* kCreatedAt = @"createdAt";
+static NSString* kTitle     = @"title";
+static NSString* kBody      = @"body";
+static NSString* kState     = @"state";
+static NSString* kCreator   = @"creator";
+static NSString* kMerged    = @"merged";
 
-static NSString* titleNumber  = @"Number";
-static NSString* titleTitle   = @"Title";
-static NSString* titleBody    = @"Body";
-static NSString* titleState   = @"State";
-static NSString* titleCreator = @"Creator";
-static NSString* titleMerged  = @"Merged";
+static NSString* titleNumber;
+static NSString* titleTitle;
+static NSString* titleBody;
+static NSString* titleState;
+static NSString* titleCreator;
+static NSString* titleMerged;
+static NSString* titleCreateAt;
 
 static NSSet *isBool;
 
@@ -45,13 +47,24 @@ static NSSet *isBool;
 @synthesize letUserSelectCells;
 
 +(void)initialize {
-    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kState, kCreator, kMerged, nil];
+    
+    titleNumber   = NSLocalizedString(@"Number", @"Pull Request Number");
+    titleTitle    = NSLocalizedString(@"Title", "Pull Request Title");
+    titleBody     = NSLocalizedString(@"Body", @"Pull Request Body");
+    titleState    = NSLocalizedString(@"State", @"Pull Request State");
+    titleCreator  = NSLocalizedString(@"Creator", @"Pull Request Creator");
+    titleMerged   = NSLocalizedString(@"Merged", @"Pull Request Merged");
+    titleCreateAt = NSLocalizedString(@"Created at", @"Pull Request Created At");
+
+    
+    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kCreatedAt, kState, kCreator, kMerged, nil];
     titles = [NSDictionary dictionaryWithObjectsAndKeys:titleNumber, kNumber,
                                                         titleTitle,kTitle,
                                                         titleBody, kBody,
                                                         titleState, kState,
                                                         titleCreator, kCreator,
                                                         titleMerged, kMerged,
+                                                        titleCreateAt, kCreatedAt,
                                                         nil ];
     
     isBool = [NSSet setWithObjects:kMerged, nil];
@@ -85,21 +98,21 @@ static NSSet *isBool;
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.letUserSelectCells = YES;
-    if (reviewComments == nil) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.reviewCommentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-            if (statusCode == 200) {
-                NSArray* commentsArray = (NSArray*)data;
-                NSMutableArray* newComments = [NSMutableArray array];
-                for (NSDictionary* jsonObject in commentsArray) {
-                    PullRequestReviewComment* reviewComment = [[PullRequestReviewComment alloc] initWithJSONObject:jsonObject];
-                }
-                self.reviewComments = newComments;
-                dispatch_async(dispatch_get_main_queue(), ^() {
-                    [self.tableView reloadData];
-                });
-            }
-        }];
-    }
+//    if (reviewComments == nil) {
+//        [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.reviewCommentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+//            if (statusCode == 200) {
+//                NSArray* commentsArray = (NSArray*)data;
+//                NSMutableArray* newComments = [NSMutableArray array];
+//                for (NSDictionary* jsonObject in commentsArray) {
+//                    PullRequestReviewComment* reviewComment = [[PullRequestReviewComment alloc] initWithJSONObject:jsonObject];
+//                }
+//                self.reviewComments = newComments;
+//                dispatch_async(dispatch_get_main_queue(), ^() {
+//                    [self.tableView reloadData];
+//                });
+//            }
+//        }];
+//    }
 
 }
 
@@ -162,6 +175,8 @@ static NSSet *isBool;
             if ([isBool containsObject:keyPath]) {
                 cell.detailTextLabel.text = [(NSNumber*)value boolValue] ? NSLocalizedString(@"Yes", @"Yes") : NSLocalizedString(@"No", @"No");
                 
+            } else if ([value isKindOfClass:[NSDate class]]) {
+                cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
             } else {
                 cell.detailTextLabel.text = [value description];
             }

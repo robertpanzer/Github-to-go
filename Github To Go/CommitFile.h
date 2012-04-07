@@ -25,7 +25,8 @@
 @property (strong) NSMutableDictionary* linesOfNewFile;
 @property int largestOldLineNo;
 @property int largestNewLineNo;
-
+@property (strong, nonatomic) NSMutableDictionary *patchLineToDiffViewLine;
+@property (strong, nonatomic) NSMutableDictionary *diffViewLineToPatchLine;
 
 
 - (id)initWithJSONObject:(NSDictionary*)jsonObject commit:(Commit*)aCommit;

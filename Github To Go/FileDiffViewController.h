@@ -21,5 +21,4 @@
 
 - (id)initWithCommitFile:(CommitFile*)aCommitFile;
 
-- (IBAction)showFile:(id)sender;
 @end

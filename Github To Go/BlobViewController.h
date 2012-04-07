@@ -14,17 +14,20 @@
 
 @interface BlobViewController : UIViewController <UIWebViewDelegate> 
 
-@property(strong) IBOutlet UIWebView* webView;
-@property(strong) Blob* blob;
-@property(strong) NSString* absolutePath;
-@property(strong) NSString* url;
-@property(strong) NSString* commitSha;
-@property(strong) Repository* repository;
-@property(strong) CommitFile* commitFile;
+@property(strong, nonatomic) IBOutlet UIWebView* webView;
+@property(strong, nonatomic) Blob* blob;
+@property(strong, nonatomic) NSString* absolutePath;
+@property(strong, nonatomic) NSString* url;
+@property(strong, nonatomic) NSString* commitSha;
+@property(strong, nonatomic) Repository* repository;
+@property(strong, nonatomic) CommitFile* commitFile;
+@property(strong, nonatomic) NSArray *comments;
 @property BOOL showDiffs;
 
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
 
-- (id)initWithCommitFile:(CommitFile*)aCommitFile;
+- (id)initWithCommitFile:(CommitFile*)aCommitFile comments:(NSArray*)aComments;
+
+
 
 @end

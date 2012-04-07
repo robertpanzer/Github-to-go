@@ -21,7 +21,6 @@
     if (self) {
         absolutePath = anAbsolutePath;
         commitSha = aCommitSha;
-        NSLog(@"Absolute path: %@", absolutePath);
         self.url = [jsonObject valueForKey:@"url"];
         NSMutableArray* newSubTrees = [[NSMutableArray alloc] init];
         NSMutableArray* newBlobs = [[NSMutableArray alloc] init];

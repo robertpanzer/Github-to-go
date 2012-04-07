@@ -19,4 +19,6 @@
 
 -(void)bindCommitCommentEvent:(CommitCommentEvent*)anEvent;
 
+-(void)bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)anEvent;
+
 @end

@@ -11,6 +11,7 @@
 
 static UIColor *addColor;
 static UIColor *deleteColor;
+static UIImage *commentsImage;
 
 @implementation UITableViewCell (CommitFile)
 
@@ -46,6 +47,28 @@ static UIColor *deleteColor;
         statusLabel.layer.cornerRadius = 5;
         statusLabel.opaque = NO;
         [cell addSubview:statusLabel];
+
+        if (commentsImage == nil) {
+            commentsImage = [UIImage imageNamed:@"Comment"];
+        }
+
+        UIImageView *commentsImageView = [[UIImageView alloc] initWithImage:commentsImage];
+        commentsImageView.hidden = YES;
+        commentsImageView.opaque = NO;
+        commentsImageView.tag = 44;
+        [cell addSubview:commentsImageView];
+        
+//        UILabel *commentsLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0f, 0.0f, 10.0f, 10.0f)];
+//        commentsLabel.backgroundColor = [UIColor darkGrayColor];
+//        commentsLabel.textColor = [UIColor lightTextColor];
+//        commentsLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+//        commentsLabel.textAlignment = UITextAlignmentCenter;
+//        commentsLabel.tag = 43;
+//        commentsLabel.layer.cornerRadius = 5;
+//        commentsLabel.opaque = NO;
+//        commentsLabel.text = @"c";
+//        [cell addSubview:commentsLabel];
+
     }
     return cell;
 }
@@ -76,13 +99,71 @@ static UIColor *deleteColor;
     
     nameLabel.frame = CGRectMake(40.0f, 0.0f, self.frame.size.width - 70, height);
     
+    UILabel *commentsLabel = (UILabel*)[self viewWithTag:43];
+    commentsLabel.hidden = YES;
+    
 }
 
-+(CGFloat)tableView:(UITableView *)tableView heightForRowForCommitFile:(CommitFile *)commitFile {
-    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 70.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+-(void)bindCommitFile:(CommitFile *)commitFile comments:(NSArray*)comments tableView:(UITableView*)tableView {
+    UILabel *statusLabel = (UILabel*)[self viewWithTag:42];
+    statusLabel.frame = CGRectMake(17.0f, 13.0f, 18.0f, 18.0f);
+    if ([commitFile.status isEqualToString:@"added"]) {
+        statusLabel.text = @"A";
+        statusLabel.backgroundColor = addColor;
+    } else if ([commitFile.status isEqualToString:@"removed"]) {
+        statusLabel.text = @"D";
+        statusLabel.backgroundColor = deleteColor;
+    } else {
+        statusLabel.text = @"M";
+        statusLabel.backgroundColor = [UIColor darkGrayColor];
+    }
+    
+    UILabel *nameLabel = (UILabel*)[self viewWithTag:41];
+    nameLabel.text = commitFile.fileName;
+    
+    CGFloat width = 0.0;
+    if (comments.count == 0) {
+        width = tableView.frame.size.width - 70.0f;
+    } else {
+        width = tableView.frame.size.width - 105.0f;
+    }
+
+    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(width, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGFloat height = tableView.rowHeight;
+    if (size.height > tableView.rowHeight) {
+        height = size.height;
+    }
+    
+    nameLabel.frame = CGRectMake(40.0f, 0.0f, width, height);
+    
+//    UILabel *commentsLabel = (UILabel*)[self viewWithTag:43];
+//    
+//    commentsLabel.hidden = comments.count == 0;
+//    commentsLabel.frame = CGRectMake(self.frame.size.width - 30.0f, 10.0f, 18.0f, 18.0f);
+
+    UIView *commentsImageView = [self viewWithTag:44];
+    commentsImageView.hidden = comments.count == 0;
+    commentsImageView.frame = CGRectMake(self.frame.size.width - 65.0f, 10.0f, 32.0f, 32.0f);
+    
+}
+
+
++(CGFloat)tableView:(UITableView *)tableView heightForRowForCommitFile:(CommitFile *)commitFile comments:(NSArray*)comments {
+    
+    CGFloat width = 0.0;
+    if (comments.count == 0) {
+        width = tableView.frame.size.width - 70.0f;
+    } else {
+        width = tableView.frame.size.width - 105.0f;
+    }
+    
+    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(width, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat height = size.height + 6;
     
     return height > tableView.rowHeight ? height : tableView.rowHeight;
    
 }
+
+
 @end

@@ -59,16 +59,3 @@
 }
 
 @end
-
-@implementation PullRequestReviewComment 
-
-- (id)initWithJSONObject:(NSDictionary *)jsonObject
-{
-    self = [super init];
-    if (self) {
-        NSLog(@"%@", jsonObject);
-    }
-    return self;
-}
-
-@end

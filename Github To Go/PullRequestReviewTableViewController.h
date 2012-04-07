@@ -13,6 +13,6 @@
 
 @property (strong, nonatomic) PullRequest* pullRequest;
 @property (strong, nonatomic) NSArray *files;
-
+@property (strong, nonatomic) NSDictionary *comments;
 -(id) initWithPullRequest:(PullRequest*)aPullRequest;
 @end

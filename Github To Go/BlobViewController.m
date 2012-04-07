@@ -9,7 +9,7 @@
 #import "BlobViewController.h"
 #import "NetworkProxy.h"
 #import "BranchViewController.h"
-
+#import "CommitComment.h"
 
 
 @implementation NSString (RPFiltering)
@@ -19,6 +19,17 @@
     filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
     filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
     filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@" " withString:@"&nbsp;"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"\r\n" withString:@"<br>"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
+    return filteredLine;
+}
+
+- (NSString*) escapeCharsToHtmlWithoutNbsp {
+    NSString* filteredLine = self;
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"\r\n" withString:@"<br>"];
+    filteredLine = [filteredLine stringByReplacingOccurrencesOfString:@"\n" withString:@"<br>"];
     return filteredLine;
 }
 
@@ -39,7 +50,7 @@
         oldLineNoString = [oldLineNo description];
         newLineNoString = [newLineNo description];
     }
-    NSString* ret = [NSString stringWithFormat:@"<tr class=\"%@\"><td>%@</td><td>%@</td><td>%@</td></tr>\n", class, oldLineNoString, newLineNoString, [self escapeCharsToHtml]];
+    NSString* ret = [NSString stringWithFormat:@"<tr class=\"%@\"><td class=\"ln\">%@</td><td class=\"ln\">%@</td><td>%@</td></tr>\n", class, oldLineNoString, newLineNoString, [self escapeCharsToHtml]];
     return ret;
 }
 
@@ -55,9 +66,14 @@
     return ret;
 }
 
+
 @end
 
 @interface BlobViewController()
+
+-(NSArray*)commentsForOldLine:(NSNumber*)lineNumber;
+-(NSArray*)commentsForNewLine:(NSNumber*)lineNumber;
+-(NSString*)wrapComments:(NSArray*)aComments;
 
 @end
 
@@ -71,6 +87,7 @@
 @synthesize repository;
 @synthesize commitFile;
 @synthesize showDiffs;
+@synthesize comments;
 
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString *)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository
 {
@@ -87,17 +104,18 @@
     return self;
 }
 
-- (id)initWithCommitFile:(CommitFile*)aCommitFile
+- (id)initWithCommitFile:(CommitFile*)aCommitFile comments:(NSArray*)aComments
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
         self.url = aCommitFile.rawUrl;
         self.commitFile = aCommitFile;
-        repository = aCommitFile.commit.repository;
+        self.comments = aComments;
+        self.repository = aCommitFile.commit.repository;
         
-        absolutePath = aCommitFile.fileName;
-        commitSha = aCommitFile.commit.sha;
-        showDiffs = YES;
+        self.absolutePath = aCommitFile.fileName;
+        self.commitSha = aCommitFile.commit.sha;
+        self.showDiffs = YES;
         self.navigationItem.title = [absolutePath pathComponents].lastObject;
         
     }
@@ -143,12 +161,17 @@
                 [html appendString:@"table td { border-left: 1px solid; border-right: 1px solid; border-collapse: collapse; vertical-align: top;}\n"];
                 [html appendString:@"table tr:first-child { border-top: 1px solid;}\n"];
                 [html appendString:@"table tr:last-child { border-bottom: 1px solid;}\n"];
-                [html appendString:@"tr td:nth-child(1) {text-align: right; min-width: 20px;}\n"];
+                [html appendString:@"tr td:nth-child(1) {min-width: 20px;}\n"];
                 if (self.commitFile != nil) {
-                    [html appendString:@"tr td:nth-child(2) {text-align: right; min-width: 20px;}\n"];
+                    [html appendString:@"tr td:nth-child(2) {min-width: 20px;}\n"];
                 }
+                [html appendString:@".ln { text-align: right}\n"];
                 [html appendString:@".old { background-color: #FF8080;height:12pt}\n"];
                 [html appendString:@".new { background-color: #80FF80;height:12pt;}\n"];
+                [html appendString:@".comment { background-color: #A0A0A0; height:12pt; font-family: Helvetica; -webkit-border-radius: 10px; margin:3px;}\n"];
+                
+                [html appendString:@".commentFirstLine { text-align: left; background-color: #C0C0C0; height:12pt; font-family: Helvetica; border: solid 1px; }\n"];
+                [html appendString:@".commentBody { text-align: left; background-color: #E0E0E0; height:12pt; font-family: Helvetica; border: solid 1px; }"];
                 
                 [html appendString:@".oldAndNew { background-color: clear; height:12pt;}\n"];
                 [html appendString:@"body { font-family: Courier; font-size: 11pt;}\n"];
@@ -182,12 +205,22 @@
                                 oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
                                 if (oldLine != nil) {
                                     [html appendString:[oldLine wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter] newLineNo:nil]];
+                                    
+                                    NSArray *lineComments = [self commentsForOldLine:[NSNumber numberWithInt:oldLineCounter]];
+                                    if (lineComments != nil) {
+                                        [html appendString:[self wrapComments:lineComments]];
+                                    }
+                                    
                                     oldLineCounter++;
                                 }
                             } while (oldLine != nil);
                         }
                         if (newLine != nil) {
                             [html appendString:[newLine wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
+                            NSArray *lineComments = [self commentsForNewLine:[NSNumber numberWithInt:i]];
+                            if (lineComments != nil) {
+                                [html appendString:[self wrapComments:lineComments]];
+                            }
                         } else if (lines.count >= i) {
                             NSString* line = [lines objectAtIndex:i - 1];
                             [html appendString:[line wrapToHtmlWithOldLineNo:[NSNumber numberWithInt:oldLineCounter++] newLineNo:[NSNumber numberWithInt:i]]];
@@ -197,7 +230,7 @@
                 [html appendString:@"</table>\n"];
                 [html appendString:@"</body>\n"];
                 [html appendString:@"</html>\n"];
-                //            NSLog(@"HTML:\n%@", html);
+//                 NSLog(@"HTML:\n%@", html);
                 dispatch_async(dispatch_get_main_queue(), ^() {
                     self.webView.delegate = self;
                     [self.webView setScalesPageToFit:YES];
@@ -241,12 +274,60 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([request.URL.path isEqualToString:@"/open"]) {
-        NSLog(@"Params %@", request.URL.description );
-        NSRange range = [request.URL.description rangeOfString:@"line="];
-        NSString* lineno = [request.URL.description substringFromIndex:range.location + range.length ];
-        NSLog(@"Hier %@ ", lineno);
+//        NSRange range = [request.URL.description rangeOfString:@"line="];
+//        NSString* lineno = [request.URL.description substringFromIndex:range.location + range.length ];
     }
     return YES;
+}
+
+
+
+-(NSArray*)commentsForOldLine:(NSNumber*)lineNumber
+{
+    NSString *key = [NSString stringWithFormat:@"-%d", [lineNumber intValue]];
+    NSNumber *patchLine = [self.commitFile.diffViewLineToPatchLine objectForKey:key];
+    NSMutableArray *ret = [NSMutableArray array];
+    for (CommitComment *comment in self.comments) {
+        if (comment.position == [patchLine intValue]) {
+            [ret addObject:comment];
+        }
+    }
+    if (ret.count > 0) {
+        return ret;
+    } else {
+        return nil;
+    }
+}
+
+-(NSArray*)commentsForNewLine:(NSNumber*)lineNumber
+{
+    NSString *key = [NSString stringWithFormat:@"+%d", [lineNumber intValue]];
+    NSNumber *patchLine = [self.commitFile.diffViewLineToPatchLine objectForKey:key];
+    NSMutableArray *ret = [NSMutableArray array];
+    for (CommitComment *comment in self.comments) {
+        if (comment.position == [patchLine intValue]) {
+            [ret addObject:comment];
+        }
+    }
+    if (ret.count > 0) {
+        return ret;
+    } else {
+        return nil;
+    }
+}
+
+-(NSString*)wrapComments:(NSArray*)aComments {
+    NSMutableString *ret = [NSMutableString string];
+    for (CommitComment *comment in aComments) {
+        
+        NSString *firstLine = [NSString stringWithFormat:NSLocalizedString(@"%@ commented on %@", @"%@ commented on %@"), comment.user.displayname, [NSDateFormatter localizedStringFromDate:comment.createdAt dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle]];
+        
+        [ret appendString:@"<tr><td/><td/><td>\n"];
+        [ret appendFormat:@"<table><tr class=\"commentFirstLine\"><td>%@\n", firstLine ];
+        [ret appendFormat:@"<tr class=\"commentBody\"><td>%@\n", [comment.body escapeCharsToHtmlWithoutNbsp]];
+        [ret appendString:@"</table>\n"];
+    }
+    return ret;
 }
 
 @end

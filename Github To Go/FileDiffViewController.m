@@ -66,12 +66,4 @@
     return YES;
 }
 
--(void)showFile:(id)sender {
-    
-    NSString* rawUrl = commitFile.rawUrl;
-    
-//    BlobViewController* blobViewController = [[BlobViewController alloc] initWithUrl:rawUrl diffs:self.commitFile.patch absolutePath:commitFile.fileName commitSha:self.commitFile.commit.sha repository:self.commitFile.commit.repository];
-//    [self.navigationController pushViewController:blobViewController animated:YES];
-}
-
 @end

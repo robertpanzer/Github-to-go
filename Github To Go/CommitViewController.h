@@ -13,12 +13,13 @@
 
 @interface CommitViewController : UITableViewController 
 
-@property(strong) Commit* commit;
-@property(strong) Repository* repository;
-@property(strong) IBOutlet UITableViewCell* messageCell;
-@property(strong) IBOutlet UITextView* messageTextView;
-@property(strong) NSString* commitSha;
-@property(strong) NSString* message;
+@property(strong, nonatomic) Commit* commit;
+@property(strong, nonatomic) NSDictionary* comments;
+@property(strong, nonatomic) Repository* repository;
+@property(strong, nonatomic) IBOutlet UITableViewCell* messageCell;
+@property(strong, nonatomic) IBOutlet UITextView* messageTextView;
+@property(strong, nonatomic) NSString* commitSha;
+@property(strong, nonatomic) NSString* message;
 @property(nonatomic) BOOL letUserSelectCells;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository;

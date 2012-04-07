@@ -12,6 +12,7 @@
 #import "CommitFile.h"
 #import "UITableViewCell+CommitFile.h"
 #import "BlobViewController.h"
+#import "CommitComment.h"
 
 @interface PullRequestReviewTableViewController ()
 
@@ -21,6 +22,7 @@
 
 @synthesize pullRequest;
 @synthesize files;
+@synthesize comments;
 
 - (id)initWithPullRequest:(PullRequest*)aPullRequest
 {
@@ -69,7 +71,28 @@
             }
         }];
     }
-    
+    [[NetworkProxy sharedInstance] loadStringFromURL:self.pullRequest.reviewCommentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
+        if (statusCode == 200) {
+            NSMutableDictionary *newComments = [NSMutableDictionary dictionary];
+            for (NSDictionary *jsonObject in data) {
+                CommitComment *comment = [[CommitComment alloc] initWithJSONObject:jsonObject];
+                if (comment.position >= 0) {
+                    NSMutableArray *commentsForFile = [newComments objectForKey:comment.path];
+                    if (commentsForFile == nil) {
+                        commentsForFile = [NSMutableArray array];
+                        [newComments setObject:commentsForFile forKey:comment.path];
+                    }
+                    [commentsForFile addObject:comment];
+                }
+            }
+            self.comments = newComments;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        }
+    }];
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -93,7 +116,7 @@
 {
     CommitFile* commitFile = [self.files objectAtIndex:indexPath.row];
     UITableViewCell *cell = [UITableViewCell createCommitFileCellForTableView:self.tableView];
-    [cell bindCommitFile:commitFile tableView:self.tableView];
+    [cell bindCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName] tableView:self.tableView];
     return cell;
 }
 
@@ -104,14 +127,14 @@
 {
 
     CommitFile *commitFile = [self.files objectAtIndex:indexPath.row];
-    BlobViewController *blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
+    BlobViewController *blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
     [self.navigationController pushViewController:blobViewController animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     CommitFile* commitFile = [self.files objectAtIndex:indexPath.row];
-    return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile];
+    return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
 }
 
 @end

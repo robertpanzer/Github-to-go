@@ -49,7 +49,6 @@
                 self.eventHistory = [[HistoryList alloc] init];
                 self.pagesLoaded = 0;
                 self.complete = NO;
-                [self loadEvents];
                 self.allEvents = YES;
             }
         } else {
@@ -215,6 +214,8 @@
     } else if ([event isKindOfClass:[ForkEvent class]]) {
         [cell bindGithubEvent:event];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
+        [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
     } else {
         [cell bindGithubEvent:event];
     }
@@ -286,6 +287,17 @@
                 });
             }
         }];
+    } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
+        NSString *url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@", event.repository.fullName, [(CommitCommentEvent*)event commitSha]];
+        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                Commit *commit = [[Commit alloc] initWithJSONObject:data repository:event.repository];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    CommitViewController *commitViewController = [[CommitViewController alloc] initWithCommit:commit repository:event.repository];
+                    [self.navigationController pushViewController:commitViewController animated:YES];
+                });
+            }
+        }];
     } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
                 || [event isKindOfClass:[ForkEvent class]]) {
         UIRepositoryRootViewController *repositoryRootViewController = [[UIRepositoryRootViewController alloc] initWithRepository:event.repository];
@@ -320,7 +332,12 @@
                 });
             }
             isLoading = NO;
-        }];
+        }
+         errorBlock:^(NSError *error) {
+             self.isLoading = NO;
+             UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+             [alertView show];
+         }];
     }    
 }
 

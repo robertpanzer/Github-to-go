@@ -37,8 +37,3 @@
 
 @end
 
-@interface PullRequestReviewComment : NSObject
-
--(id)initWithJSONObject:(NSDictionary*)jsonObject;
-
-@end

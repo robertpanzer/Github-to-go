@@ -24,6 +24,8 @@
 @synthesize linesOfNewFile;
 @synthesize largestOldLineNo;
 @synthesize largestNewLineNo;
+@synthesize patchLineToDiffViewLine;
+@synthesize diffViewLineToPatchLine;
 
 - (id)initWithJSONObject:(NSDictionary*)jsonObject commit:(Commit *)aCommit{
     self = [super init];
@@ -41,6 +43,8 @@
         
         self.linesOfNewFile = [NSMutableDictionary dictionary];
         self.linesOfOldFile = [NSMutableDictionary dictionary];
+        self.patchLineToDiffViewLine = [NSMutableDictionary dictionary];
+        self.diffViewLineToPatchLine = [NSMutableDictionary dictionary];
         
         @try {
             NSArray* lines = [self.patch componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
@@ -61,12 +65,16 @@
                     [linesOfNewFile setObject:[line substringFromIndex:1] 
                                  forKey:lineNo];
                     largestNewLineNo = newLineCounter;
+                    [self.patchLineToDiffViewLine setObject:[NSString stringWithFormat:@"+%d", newLineCounter] forKey:[NSNumber numberWithInt:i]];
+                    [self.diffViewLineToPatchLine setObject:[NSNumber numberWithInt:i] forKey:[NSString stringWithFormat:@"+%d", newLineCounter]];
                     newLineCounter++;
                 } else if ([line hasPrefix:@"-"]) {
                     NSNumber* lineNo = [NSNumber numberWithInt:oldLineCounter];
                     [linesOfOldFile setObject:[line substringFromIndex:1] 
                                  forKey:lineNo];
                     largestOldLineNo = oldLineCounter;
+                    [self.patchLineToDiffViewLine setObject:[NSString stringWithFormat:@"-%d", oldLineCounter] forKey:[NSNumber numberWithInt:i]];
+                    [self.diffViewLineToPatchLine setObject:[NSNumber numberWithInt:i] forKey:[NSString stringWithFormat:@"-%d", oldLineCounter]];
                     oldLineCounter++;
                 } else if ([line hasPrefix:@" "]){
                     oldLineCounter++;
@@ -81,8 +89,6 @@
                 NSLog(@"%@", st);
             }
         }
-        NSLog(@"Old Lines:\n%@", linesOfOldFile);
-        NSLog(@"New Lines:\n%@", linesOfNewFile);
     }
     return self;
 }

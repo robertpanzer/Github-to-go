@@ -9,6 +9,7 @@
 #import "CommitViewController.h"
 #import "NetworkProxy.h"
 #import "CommitFile.h"
+#import "CommitComment.h"
 #import "FileDiffViewController.h"
 #import "BlobViewController.h"
 #import "PersonViewController.h"
@@ -24,6 +25,7 @@
 @synthesize commitSha;
 @synthesize message;
 @synthesize letUserSelectCells;
+@synthesize comments;
 
 -(id)initWithCommit:(Commit*)aCommit repository:(Repository*)aRepository {
     self = [super initWithNibName:@"CommitViewController" bundle:nil];
@@ -61,10 +63,23 @@
         }
     }];
     NSString* commentsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@/comments", repository.fullName, self.commitSha];
-    NSLog(@"Comments URL: %@", commentsUrl);
     [[NetworkProxy sharedInstance] loadStringFromURL:commentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
-            NSLog(@"Comments %@", data);
+            NSMutableDictionary *newComments = [NSMutableDictionary dictionary];
+            for (NSDictionary *jsonObject in data) {
+                CommitComment *comment = [[CommitComment alloc] initWithJSONObject:jsonObject];
+                NSMutableArray *commentsForFile = [newComments objectForKey:comment.path];
+                if (commentsForFile == nil) {
+                    commentsForFile = [NSMutableArray array];
+                    [newComments setObject:commentsForFile forKey:comment.path];
+                }
+                [commentsForFile addObject:comment];
+            }
+            self.comments = newComments;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
         }
     }];
 }
@@ -172,7 +187,6 @@
                 case 1:
                     cell.textLabel.text = @"SHA"; 
                     cell.detailTextLabel.text = self.commit.sha;
-                    NSLog(@"SHA: %@", self.commit.sha);
                     break;
                 case 4:
                     cell.textLabel.text = @"Deletions"; 
@@ -192,7 +206,7 @@
     } else if (indexPath.section == 1) {
         cell = [UITableViewCell createCommitFileCellForTableView:tableView];
         CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-        [cell bindCommitFile:commitFile tableView:self.tableView];
+        [cell bindCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName] tableView:self.tableView];
         return cell;
     }
     return nil;
@@ -216,8 +230,6 @@
 {
     
     if (self.letUserSelectCells) {
-        UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-        NSLog(@"%f", cell.textLabel.frame.origin.y);
         if (indexPath.section == 0) {
             if (indexPath.row == 2 || indexPath.row == 3) {
                 self.letUserSelectCells = NO;
@@ -241,7 +253,7 @@
             self.letUserSelectCells = NO;
             CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
             
-            BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile];
+            BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
             [self.navigationController pushViewController:blobViewController animated:YES];
         }
     }
@@ -259,7 +271,7 @@
         return height > tableView.rowHeight ? height : tableView.rowHeight;
     } else if (indexPath.section == 1) {
         CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row];
-        return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile];
+        return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
     } else {
         return tableView.rowHeight;
     }

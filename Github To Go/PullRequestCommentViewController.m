@@ -189,7 +189,6 @@
     NSDictionary *comment = [NSDictionary dictionaryWithObject:self.textView.text forKey:@"body"];
     [[NetworkProxy sharedInstance] sendData:comment ToUrl:self.pullRequest.issueCommentsUrl verb:@"POST" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
         if (statusCode == 201) {
-            NSLog(@"Successfull");
             [(PullRequestCommentViewController*)self.parentViewController loadComments];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissModalViewControllerAnimated:YES];
