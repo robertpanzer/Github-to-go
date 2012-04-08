@@ -88,6 +88,8 @@
 		94FAB6431530E91F00C89D7C /* Comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6421530E91F00C89D7C /* Comment.png */; };
 		94FAB6471531A2A500C89D7C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6461531A2A400C89D7C /* background.png */; };
 		94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6481531A2FA00C89D7C /* background@2x.png */; };
+		94FAB6501532359D00C89D7C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB64E1532359D00C89D7C /* settings.png */; };
+		94FAB6511532359D00C89D7C /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB64F1532359D00C89D7C /* settings@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -224,6 +226,8 @@
 		94FAB6421530E91F00C89D7C /* Comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Comment.png; sourceTree = "<group>"; };
 		94FAB6461531A2A400C89D7C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		94FAB6481531A2FA00C89D7C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
+		94FAB64E1532359D00C89D7C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		94FAB64F1532359D00C89D7C /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +273,8 @@
 		9424DE4D14B9D95000B6538E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				94FAB64E1532359D00C89D7C /* settings.png */,
+				94FAB64F1532359D00C89D7C /* settings@2x.png */,
 				9424DE4F14B9D97300B6538E /* SettingsViewController.h */,
 				9424DE5014B9D97300B6538E /* SettingsViewController.m */,
 				9424DE5114B9D97300B6538E /* SettingsViewController.xib */,
@@ -587,6 +593,8 @@
 				94FAB6431530E91F00C89D7C /* Comment.png in Resources */,
 				94FAB6471531A2A500C89D7C /* background.png in Resources */,
 				94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */,
+				94FAB6501532359D00C89D7C /* settings.png in Resources */,
+				94FAB6511532359D00C89D7C /* settings@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
