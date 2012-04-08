@@ -46,18 +46,17 @@
             NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
             if (![newBaseUrl isEqualToString:self.baseUrl]) {
                 self.baseUrl = newBaseUrl;
-                self.eventHistory = [[HistoryList alloc] init];
-                self.pagesLoaded = 0;
-                self.complete = NO;
-                self.allEvents = YES;
             }
         } else {
             self.baseUrl = @"https://api.github.com/events";
         }
+        self.allEvents = YES;
         self.eventHistory = [[HistoryList alloc] init];
         self.isLoading = NO;
         self.complete = NO;
         self.pagesLoaded = 0;
+        
+        [[Settings sharedInstance] addObserver:self forKeyPath:@"username" options:NSKeyValueObservingOptionOld  context:nil];
     }
     return self;
 }
@@ -346,4 +345,19 @@
     [self loadEvents];
 }
 
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    self.eventHistory = [[HistoryList alloc] init];
+    [self.tableView reloadData];
+    self.pagesLoaded = 0;
+    self.complete = NO;
+    if ([Settings sharedInstance].isUsernameSet) {
+        NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
+        if (![newBaseUrl isEqualToString:self.baseUrl]) {
+            self.baseUrl = newBaseUrl;
+        }
+    } else {
+        self.baseUrl = @"https://api.github.com/events";
+    }
+}
 @end

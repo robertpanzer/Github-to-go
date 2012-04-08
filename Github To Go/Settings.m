@@ -23,12 +23,10 @@ static NSURLProtectionSpace* protectionSpace = nil;
 
 @synthesize passwordValidated;
 
-+(void)initialize {
-    Settings* newSettings = [[Settings alloc] init];
-    sharedInstance = newSettings;
-}
-
 + (Settings *)sharedInstance {
+    if (sharedInstance == nil) {
+        sharedInstance = [[Settings alloc] init];
+    }
     return sharedInstance;
 }
 
