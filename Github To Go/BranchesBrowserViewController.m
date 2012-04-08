@@ -40,6 +40,10 @@
 {
     [super viewDidLoad];
 
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
+
     self.navigationItem.title = repository.fullName;
     NSString* url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/branches", repository.fullName];
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {

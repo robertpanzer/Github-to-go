@@ -48,8 +48,10 @@ static NSArray *kTitles;
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.searchBar;
     self.searchBar.delegate = self;
-    self.tableView.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 20.0f, 20.0f)];
-    self.tableView.backgroundView.backgroundColor = [UIColor lightGrayColor];
+
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
     
 }
 
@@ -111,6 +113,7 @@ static NSArray *kTitles;
             cell.textLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         }
         cell.textLabel.text = [kTitles objectAtIndex:indexPath.section];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     if (indexPath.row == 6) {
@@ -177,6 +180,11 @@ static NSArray *kTitles;
     }
 }
 
+
+-(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    self.letUserSelectCells = NO;
+    return YES;
+}
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {    
     self.letUserSelectCells = YES;

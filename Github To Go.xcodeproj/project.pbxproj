@@ -86,6 +86,8 @@
 		94FAB63A152F32EC00C89D7C /* CommitComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FAB639152F32EC00C89D7C /* CommitComment.m */; };
 		94FAB6411530E6C400C89D7C /* Comment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6401530E6C400C89D7C /* Comment@2x.png */; };
 		94FAB6431530E91F00C89D7C /* Comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6421530E91F00C89D7C /* Comment.png */; };
+		94FAB6471531A2A500C89D7C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6461531A2A400C89D7C /* background.png */; };
+		94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6481531A2FA00C89D7C /* background@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -220,6 +222,8 @@
 		94FAB639152F32EC00C89D7C /* CommitComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitComment.m; sourceTree = "<group>"; };
 		94FAB6401530E6C400C89D7C /* Comment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Comment@2x.png"; sourceTree = "<group>"; };
 		94FAB6421530E91F00C89D7C /* Comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Comment.png; sourceTree = "<group>"; };
+		94FAB6461531A2A400C89D7C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		94FAB6481531A2FA00C89D7C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -335,6 +339,7 @@
 				942130C214B455C000969D38 /* Repository.h */,
 				942130C314B455C000969D38 /* Repository.m */,
 				9435DC2314C935D800E0B15B /* CommitHistoryList.m */,
+				9435DC2214C935D800E0B15B /* CommitHistoryList.h */,
 				94B9880514B72986007AA6A6 /* RepositoryViewController.h */,
 				94B9880614B72986007AA6A6 /* RepositoryViewController.m */,
 				94B9880714B72986007AA6A6 /* RepositoryViewController.xib */,
@@ -361,7 +366,6 @@
 				9466DBD614B7B77800238151 /* BranchViewController.h */,
 				9466DBD714B7B77800238151 /* BranchViewController.m */,
 				9466DBD814B7B77800238151 /* BranchViewController.xib */,
-				9435DC2214C935D800E0B15B /* CommitHistoryList.h */,
 			);
 			name = Branch;
 			sourceTree = "<group>";
@@ -412,6 +416,8 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				94FAB6461531A2A400C89D7C /* background.png */,
+				94FAB6481531A2FA00C89D7C /* background@2x.png */,
 				940339931528A423004ABDDD /* Search */,
 				949F506D151D2704009D5DC3 /* Github To Go.entitlements */,
 				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
@@ -579,6 +585,8 @@
 				940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */,
 				94FAB6411530E6C400C89D7C /* Comment@2x.png in Resources */,
 				94FAB6431530E91F00C89D7C /* Comment.png in Resources */,
+				94FAB6471531A2A500C89D7C /* background.png in Resources */,
+				94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

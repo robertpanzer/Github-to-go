@@ -88,6 +88,10 @@ static NSSet *isBool;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
+
 }
 
 - (void)viewDidUnload
@@ -98,22 +102,6 @@ static NSSet *isBool;
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.letUserSelectCells = YES;
-//    if (reviewComments == nil) {
-//        [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.reviewCommentsUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
-//            if (statusCode == 200) {
-//                NSArray* commentsArray = (NSArray*)data;
-//                NSMutableArray* newComments = [NSMutableArray array];
-//                for (NSDictionary* jsonObject in commentsArray) {
-//                    PullRequestReviewComment* reviewComment = [[PullRequestReviewComment alloc] initWithJSONObject:jsonObject];
-//                }
-//                self.reviewComments = newComments;
-//                dispatch_async(dispatch_get_main_queue(), ^() {
-//                    [self.tableView reloadData];
-//                });
-//            }
-//        }];
-//    }
-
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

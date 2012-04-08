@@ -80,6 +80,11 @@ static NSSet *isBool;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
+
 
 }
 

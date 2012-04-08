@@ -55,16 +55,14 @@
     self.tableView.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 20.0f, 20.0f)];
     self.tableView.backgroundView.backgroundColor = [UIColor lightGrayColor];
 
-//    repoSearchTableViewController = [[RepoSearchTableViewController alloc] init];
-    
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-//    self.repoSearchTableViewController = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -112,6 +112,10 @@ static NSString *follow, *unfollow;
     
     self.nameLabel.font = [UIFont boldSystemFontOfSize:17.0f];
     self.navigationItem.title = person.displayname;
+    
+    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+    self.tableView.backgroundView = backgroundImageView;
 }
 
 

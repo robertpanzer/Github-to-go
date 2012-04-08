@@ -64,7 +64,6 @@ static RepositoryStorage* sharedStorage;
                     Person *person = [[Person alloc] initWithJSONObject:jsonObject];
                     if (person.login) {
                         [newFollowedPersons setObject:person forKey:person.login];
-                        NSLog(@"Following %@", person.login);
                     }
                 }
                 self.followedPersons = newFollowedPersons;
