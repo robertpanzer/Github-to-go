@@ -13,6 +13,7 @@
 @interface PullRequest : NSObject
 
 @property(strong) NSDate* createdAt;
+@property(strong) NSDate* updatedAt;
 @property(strong) NSString* state;
 @property(strong) Person* creator;
 @property(strong) NSString* title;

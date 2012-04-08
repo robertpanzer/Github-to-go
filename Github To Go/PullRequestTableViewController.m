@@ -19,6 +19,7 @@ static NSDictionary* titles;
 
 static NSString* kNumber    = @"number";
 static NSString* kCreatedAt = @"createdAt";
+static NSString* kUpdatedAt = @"updatedAt";
 static NSString* kTitle     = @"title";
 static NSString* kBody      = @"body";
 static NSString* kState     = @"state";
@@ -32,6 +33,7 @@ static NSString* titleState;
 static NSString* titleCreator;
 static NSString* titleMerged;
 static NSString* titleCreateAt;
+static NSString* titleUpdatedAt;
 
 static NSSet *isBool;
 
@@ -48,16 +50,17 @@ static NSSet *isBool;
 
 +(void)initialize {
     
-    titleNumber   = NSLocalizedString(@"Number", @"Pull Request Number");
-    titleTitle    = NSLocalizedString(@"Title", "Pull Request Title");
-    titleBody     = NSLocalizedString(@"Body", @"Pull Request Body");
-    titleState    = NSLocalizedString(@"State", @"Pull Request State");
-    titleCreator  = NSLocalizedString(@"Creator", @"Pull Request Creator");
-    titleMerged   = NSLocalizedString(@"Merged", @"Pull Request Merged");
-    titleCreateAt = NSLocalizedString(@"Created at", @"Pull Request Created At");
+    titleNumber    = NSLocalizedString(@"Number", @"Pull Request Number");
+    titleTitle     = NSLocalizedString(@"Title", "Pull Request Title");
+    titleBody      = NSLocalizedString(@"Body", @"Pull Request Body");
+    titleState     = NSLocalizedString(@"State", @"Pull Request State");
+    titleCreator   = NSLocalizedString(@"Creator", @"Pull Request Creator");
+    titleMerged    = NSLocalizedString(@"Merged", @"Pull Request Merged");
+    titleCreateAt  = NSLocalizedString(@"Created at", @"Pull Request Created At");
+    titleUpdatedAt = NSLocalizedString(@"Updated at", @"Pull Request Updated At");
 
     
-    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kCreatedAt, kState, kCreator, kMerged, nil];
+    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kCreatedAt, kUpdatedAt, kState, kCreator, kMerged, nil];
     titles = [NSDictionary dictionaryWithObjectsAndKeys:titleNumber, kNumber,
                                                         titleTitle,kTitle,
                                                         titleBody, kBody,
@@ -65,6 +68,7 @@ static NSSet *isBool;
                                                         titleCreator, kCreator,
                                                         titleMerged, kMerged,
                                                         titleCreateAt, kCreatedAt,
+                                                        titleUpdatedAt, kUpdatedAt,
                                                         nil ];
     
     isBool = [NSSet setWithObjects:kMerged, nil];
