@@ -54,7 +54,19 @@ static NSSet *isBool;
             kLanguage, 
             kOpenIssues, 
             nil];
-    descriptions = [NSArray arrayWithObjects:@"Name", @"Description", @"Owner", @"Id", @"Private", @"Watchers", @"Fork", @"Forks", @"Created at", @"Language", @"Open issues", nil];
+    descriptions = [NSArray arrayWithObjects:
+                    NSLocalizedString(@"Name", @"Repo name"), 
+                    NSLocalizedString(@"Description", @"Repo description"), 
+                    NSLocalizedString(@"Owner", @"Repo owner"), 
+                    NSLocalizedString(@"Id", @"Repo id"), 
+                    NSLocalizedString(@"Private", @"Repo private"), 
+                    NSLocalizedString(@"Watchers", @"Repo watchers"), 
+                    NSLocalizedString(@"Fork", @"Repo fork"), 
+                    NSLocalizedString(@"Forks", @"Repo forks"), 
+                    NSLocalizedString(@"Created at", @"Repo created at"), 
+                    NSLocalizedString(@"Language", @"Repo language"), 
+                    NSLocalizedString(@"Open issues", @"Repo open issues"), 
+                    nil];
     isBool = [NSSet setWithObjects:kPrivate, kFork, nil];
 }
 

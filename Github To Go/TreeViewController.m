@@ -194,7 +194,7 @@
                                                               delegate:self 
                                                      cancelButtonTitle:nil 
                                                 destructiveButtonTitle:nil 
-                                                     otherButtonTitles:@"Show history", @"Switch branch", nil];
+                                                     otherButtonTitles:NSLocalizedString(@"Show history", @"Button Show History"), @"Switch branch", nil];
     [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
     
 }

@@ -190,6 +190,7 @@
     self.waitScreen.hidden = NO;
     self.textView.editable = NO;
     NSDictionary *comment = [NSDictionary dictionaryWithObject:self.textView.text forKey:@"body"];
+    NSString *failedMessage = NSLocalizedString(@"Adding comment failed", @"Alert View title");
     [[NetworkProxy sharedInstance] sendData:comment ToUrl:self.pullRequest.issueCommentsUrl verb:@"POST" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
         if (statusCode == 201) {
             [(PullRequestCommentViewController*)self.parentViewController loadComments];
@@ -198,7 +199,7 @@
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Adding comment failed" message:[data valueForKey:@"message"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:failedMessage message:[data valueForKey:@"message"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alertView show];
                 self.waitScreen.hidden = true;
             });
@@ -206,7 +207,7 @@
     } errorBlock:^(NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Adding comment failed" message:[error description] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:failedMessage message:[error description] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                 [alertView show];
                 self.waitScreen.hidden = true;
             });

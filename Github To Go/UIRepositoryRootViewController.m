@@ -26,8 +26,8 @@ static NSArray* actionSheetTitles;
 @synthesize pullRequestTableViewController;
 
 +(void) initialize {
-    WatchRepo = @"Watch Repository";
-    StopWatchingRepo = @"Stop watching";
+    WatchRepo = NSLocalizedString(@"Watch Repository", @"Action Sheet Watch Repo");
+    StopWatchingRepo = NSLocalizedString(@"Stop watching", @"Action Sheet Stop Watching");
     actionSheetTitles = [NSArray arrayWithObjects:WatchRepo, StopWatchingRepo, nil];
 }
 
@@ -147,7 +147,7 @@ static NSArray* actionSheetTitles;
 }
 
 -(void)showActionSheet {
-    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") destructiveButtonTitle:nil otherButtonTitles:nil];
     if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
         [actionSheet addButtonWithTitle:WatchRepo];
     } else {
@@ -165,10 +165,10 @@ static NSArray* actionSheetTitles;
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is being watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                 } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Starting to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                 }
             });
@@ -177,10 +177,10 @@ static NSArray* actionSheetTitles;
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Repository is no longer watched now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                 } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to watch repository failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                 }
             });

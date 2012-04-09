@@ -128,9 +128,9 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
         cell.detailTextLabel.text = nil;
         if (indexPath.section == 0) {
-            cell.textLabel.text = @"My Repositories";
+            cell.textLabel.text = NSLocalizedString(@"My Repositories", @"Section My Repos");
         } else {
-            cell.textLabel.text = @"Watched Repositories";
+            cell.textLabel.text = NSLocalizedString(@"Watched Repositories", @"Section Watched Repos");
         }
         return cell;
     } 

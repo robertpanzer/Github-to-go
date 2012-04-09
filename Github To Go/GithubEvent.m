@@ -92,7 +92,7 @@
 -(void)parseIssueCommentEvent:(NSDictionary*)jsonObject {
     NSNumber* issueNumber = [jsonObject valueForKeyPath:@"payload.issue.number"];
     
-    self.text = [NSString stringWithFormat:@"%@ commented on issue %d:\n%@", 
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ commented on issue %d:\n%@", @"IssueCommentEvent"), 
                  self.person.displayname, 
                  issueNumber.intValue,
                  [jsonObject valueForKeyPath:@"payload.comment.body"]];
@@ -101,7 +101,7 @@
 
 
 -(void)parseWatchEvent:(NSDictionary *)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ %@ watching %@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ watching %@", @"WatchEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.action"],
                  [jsonObject valueForKeyPath:@"repo.name"] ];
@@ -111,12 +111,12 @@
 -(void)parseCreateEvent:(NSDictionary*)jsonObject {
     NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
     if (![@"repository" isEqualToString:refType]) {
-        self.text = [NSString stringWithFormat:@"%@ has created %@ %@",
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has created %@ %@", @"CreateEvent"),
                      self.person.displayname,
                      refType,
                      [jsonObject valueForKeyPath:@"payload.ref"] ];
     } else {
-        self.text = [NSString stringWithFormat:@"%@ has created %@ %@",
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has created %@ %@", @"CreateEvent"),
                      self.person.displayname,
                      refType,
                      [jsonObject valueForKeyPath:@"repo.name"]];
@@ -124,27 +124,27 @@
 }
 
 -(void)parseDeleteEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ has deleted %@ %@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has deleted %@ %@", @"DeleteEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.ref_type"],
                  [jsonObject valueForKeyPath:@"payload.ref"] ];
 }
 
 -(void)parseDownloadEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ has created download %@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has created download %@", @"DownloadEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.download.name"] ];
 }
 
 -(void)parseFollowEvent:(NSDictionary*)jsonObject {
     Person *followedPerson = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"payload.target"]];
-    self.text = [NSString stringWithFormat:@"%@ is following %@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ is following %@", @"FollowEvent"),
                  self.person.displayname,
                  followedPerson.displayname ];
 }
 
 -(void)parseIssuesEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ %@ issue %@:\n%@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ issue %@:\n%@", @"IssueEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.action"],
                  [jsonObject valueForKeyPath:@"payload.issue.number"],
@@ -152,13 +152,13 @@
 }
 
 -(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ commented on pull request:\n%@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ commented on pull request:\n%@", @"PullRequestReviewEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.comment.body"]];
 }
 
 -(void)parseGistEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:@"%@ %@d gist %@:\n%@",
+    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@d gist %@:\n%@", @"GistEvent"),
                  self.person.displayname,
                  [jsonObject valueForKeyPath:@"payload.action"],
                  [jsonObject valueForKeyPath:@"payload.gist.id"],
@@ -176,7 +176,7 @@
         } else {
             [newText appendString:@", "];
         }
-        NSString *action = [NSString stringWithFormat:@"%@ page %@", 
+        NSString *action = [NSString stringWithFormat:NSLocalizedString(@"%@ page %@", @"GollumEvent"), 
                             [gollumAction valueForKey:@"action"],
                             [gollumAction valueForKey:@"page_name"]
                             ];
@@ -199,7 +199,7 @@
         self.pullRequest.repository = self.repository;
         NSNumber* pullRequestNumber = [jsonObject valueForKeyPath:@"payload.pull_request.number"];
         NSString* action = [jsonObject valueForKeyPath:@"payload.action"];
-        self.text = [NSString stringWithFormat:@"%@ %@ pull request %d\n%@", 
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ pull request %d\n%@", @"PullRequestEvent"), 
                      self.person.displayname, 
                      action,
                      pullRequestNumber.intValue,
@@ -233,15 +233,15 @@
             NSDictionary* commit = [commitArray objectAtIndex:0];
             NSString* message = [commit valueForKeyPath:@"message"];
             if (message == nil) {
-                self.text = [NSString stringWithFormat:@"%@ has pushed a commit", 
+                self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has pushed a commit", @"PushEvent"), 
                              self.person.displayname];
             } else {
-                self.text = [NSString stringWithFormat:@"%@ has pushed a commit:\n%@", 
+                self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has pushed a commit:\n%@", @"PushEvent"), 
                              self.person.displayname, 
                              [commit valueForKeyPath:@"message"]];
             }        
         } else {
-            self.text = [NSString stringWithFormat:@"%@ has pushed %d commits", 
+            self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has pushed %d commits", @"PushEvent"), 
                          self.person.displayname, 
                          commitCount.intValue];
         }
@@ -266,7 +266,7 @@
     self = [super initWithJSON:jsonObject];
     if (self != nil) {
         self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"payload.forkee"]];
-        self.text = [NSString stringWithFormat:@"%@ has forked repository %@ to %@",
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ has forked repository %@ to %@", @"ForkEvent"),
                      self.person.displayname,
                      [jsonObject valueForKeyPath:@"repo.name"],
                      self.repository.fullName];
@@ -285,7 +285,7 @@
     self = [super initWithJSON:jsonObject];
     if (self != nil) {
         self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"repo"]];
-        self.text = [NSString stringWithFormat:@"%@ commented on commit %@:\n%@",
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ commented on commit %@:\n%@", @"CommitCommentEvent"),
                      self.person.displayname,
                      [jsonObject valueForKeyPath:@"payload.comment.commit_id"],
                      [jsonObject valueForKeyPath:@"payload.comment.body"] ];
@@ -306,7 +306,7 @@
     self = [super initWithJSON:jsonObject];
     if (self != nil) {
         self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"repo"]];
-        self.text = [NSString stringWithFormat:@"%@ commented on commit %@ of pull request:\n%@",
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ commented on commit %@ of pull request:\n%@", @"PullRequestReviewCommentEvent"),
                      self.person.displayname,
                      [jsonObject valueForKeyPath:@"payload.comment.commit_id"],
                      [jsonObject valueForKeyPath:@"payload.comment.body"] ];

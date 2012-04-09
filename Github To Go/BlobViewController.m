@@ -243,7 +243,7 @@
                     if ([data isKindOfClass:[NSData class]]) {
                         [self.webView loadData:data MIMEType:contentType textEncodingName:nil baseURL:nil];
                     } else {
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Unexpected content type %@", contentType] message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Unexpected content type %@", @"Unexpected content type"), contentType] message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [alertView show];
                     }
                 });
