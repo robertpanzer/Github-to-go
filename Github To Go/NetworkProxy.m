@@ -197,10 +197,12 @@ static NetworkProxy* networkProxyInstance;
             object = receivedData;
         }
         if ([@"api.github.com" isEqualToString:connection.originalRequest.URL.host]) {
-            if ([connectionData.statusCode intValue]< 400) {
-                [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:YES];
-            } else {
-                [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
+            if ([Settings sharedInstance].isUsernameSet) {
+                if ([connectionData.statusCode intValue]< 400) {
+                    [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:YES];
+                } else {
+                    [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
+                }
             }
         }
 
