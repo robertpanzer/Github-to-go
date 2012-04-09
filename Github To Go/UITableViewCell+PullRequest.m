@@ -62,7 +62,7 @@
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:1];
     imageView.layer.cornerRadius = 10.0f;
     imageView.layer.masksToBounds = YES;
-    imageView.image = [UIImage imageNamed:@"gravatar-orgs.png"];
+    imageView.image = nil;
     [issueComment.user loadImageIntoImageView:imageView];
     
     UILabel* namelabel = (UILabel*)[self.contentView viewWithTag:2];
