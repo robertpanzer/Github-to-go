@@ -68,6 +68,8 @@
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
 		94A12FD914BB972A00453774 /* CommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A12FD714BB972A00453774 /* CommitViewController.m */; };
 		94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A12FD814BB972A00453774 /* CommitViewController.xib */; };
+		94AB82291534CC66008E0FE7 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AB82281534CC66008E0FE7 /* default@2x.png */; };
+		94AB822D1534CE8A008E0FE7 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AB822C1534CE8A008E0FE7 /* default.png */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
 		94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94B9880714B72986007AA6A6 /* RepositoryViewController.xib */; };
 		94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2CF150A7050005EA1BD /* PullRequest.m */; };
@@ -92,7 +94,6 @@
 		94FAB6511532359D00C89D7C /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB64F1532359D00C89D7C /* settings@2x.png */; };
 		94FAB65F15337F8400C89D7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65915337F8400C89D7C /* InfoPlist.strings */; };
 		94FAB66015337F8400C89D7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65B15337F8400C89D7C /* Localizable.strings */; };
-		94FAB666153388D400C89D7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB664153388D400C89D7C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +197,8 @@
 		94A12FD614BB972A00453774 /* CommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitViewController.h; sourceTree = "<group>"; };
 		94A12FD714BB972A00453774 /* CommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitViewController.m; sourceTree = "<group>"; };
 		94A12FD814BB972A00453774 /* CommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitViewController.xib; sourceTree = "<group>"; };
+		94AB82281534CC66008E0FE7 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
+		94AB822C1534CE8A008E0FE7 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
 		94B9880614B72986007AA6A6 /* RepositoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryViewController.m; sourceTree = "<group>"; };
 		94B9880714B72986007AA6A6 /* RepositoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepositoryViewController.xib; sourceTree = "<group>"; };
@@ -233,10 +236,6 @@
 		94FAB64F1532359D00C89D7C /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
 		94FAB65A15337F8400C89D7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		94FAB65C15337F8400C89D7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
-		94FAB661153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/de.lproj/InfoPlist.strings"; sourceTree = "<absolute>"; };
-		94FAB662153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/en.lproj/de.lproj/Localizable.strings"; sourceTree = "<absolute>"; };
-		94FAB663153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/en.lproj/de.lproj/InfoPlist.strings"; sourceTree = "<absolute>"; };
-		94FAB665153388D400C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -431,7 +430,6 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
-				94FAB65315337F8000C89D7C /* de.lproj */,
 				94FAB65815337F8200C89D7C /* en.lproj */,
 				94FAB6461531A2A400C89D7C /* background.png */,
 				94FAB6481531A2FA00C89D7C /* background@2x.png */,
@@ -455,6 +453,7 @@
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
 				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
+				94AB82261534CC51008E0FE7 /* img */,
 				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
 				949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */,
@@ -484,6 +483,15 @@
 				949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		94AB82261534CC51008E0FE7 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				94AB822C1534CE8A008E0FE7 /* default.png */,
+				94AB82281534CC66008E0FE7 /* default@2x.png */,
+			);
+			name = img;
 			sourceTree = "<group>";
 		};
 		94BCF2CC150A7037005EA1BD /* PullRequest */ = {
@@ -522,14 +530,6 @@
 				94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */,
 			);
 			name = Events;
-			sourceTree = "<group>";
-		};
-		94FAB65315337F8000C89D7C /* de.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				94FAB664153388D400C89D7C /* Localizable.strings */,
-			);
-			path = de.lproj;
 			sourceTree = "<group>";
 		};
 		94FAB65815337F8200C89D7C /* en.lproj */ = {
@@ -626,7 +626,8 @@
 				94FAB6511532359D00C89D7C /* settings@2x.png in Resources */,
 				94FAB65F15337F8400C89D7C /* InfoPlist.strings in Resources */,
 				94FAB66015337F8400C89D7C /* Localizable.strings in Resources */,
-				94FAB666153388D400C89D7C /* Localizable.strings in Resources */,
+				94AB82291534CC66008E0FE7 /* default@2x.png in Resources */,
+				94AB822D1534CE8A008E0FE7 /* default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -695,7 +696,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				949FB13D14B3327800D3E713 /* en */,
-				94FAB661153388AD00C89D7C /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -704,7 +704,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				94FAB65A15337F8400C89D7C /* en */,
-				94FAB663153388AD00C89D7C /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -713,15 +712,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				94FAB65C15337F8400C89D7C /* en */,
-				94FAB662153388AD00C89D7C /* de */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		94FAB664153388D400C89D7C /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94FAB665153388D400C89D7C /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
