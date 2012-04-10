@@ -90,10 +90,9 @@
 		94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB6481531A2FA00C89D7C /* background@2x.png */; };
 		94FAB6501532359D00C89D7C /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB64E1532359D00C89D7C /* settings.png */; };
 		94FAB6511532359D00C89D7C /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB64F1532359D00C89D7C /* settings@2x.png */; };
-		94FAB65D15337F8400C89D7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65415337F8200C89D7C /* InfoPlist.strings */; };
-		94FAB65E15337F8400C89D7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65615337F8200C89D7C /* Localizable.strings */; };
 		94FAB65F15337F8400C89D7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65915337F8400C89D7C /* InfoPlist.strings */; };
 		94FAB66015337F8400C89D7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB65B15337F8400C89D7C /* Localizable.strings */; };
+		94FAB666153388D400C89D7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94FAB664153388D400C89D7C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -232,11 +231,12 @@
 		94FAB6481531A2FA00C89D7C /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
 		94FAB64E1532359D00C89D7C /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		94FAB64F1532359D00C89D7C /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
-		94FAB65215337EC700C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/de.lproj/InfoPlist.strings"; sourceTree = "<absolute>"; };
-		94FAB65515337F8200C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = InfoPlist.strings; sourceTree = "<group>"; };
-		94FAB65715337F8200C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Localizable.strings; sourceTree = "<group>"; };
 		94FAB65A15337F8400C89D7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		94FAB65C15337F8400C89D7C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
+		94FAB661153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/de.lproj/InfoPlist.strings"; sourceTree = "<absolute>"; };
+		94FAB662153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/en.lproj/de.lproj/Localizable.strings"; sourceTree = "<absolute>"; };
+		94FAB663153388AD00C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "/Users/robertpanzer/Documents/Develop/Github To Go/Github To Go/en.lproj/de.lproj/InfoPlist.strings"; sourceTree = "<absolute>"; };
+		94FAB665153388D400C89D7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,8 +527,7 @@
 		94FAB65315337F8000C89D7C /* de.lproj */ = {
 			isa = PBXGroup;
 			children = (
-				94FAB65415337F8200C89D7C /* InfoPlist.strings */,
-				94FAB65615337F8200C89D7C /* Localizable.strings */,
+				94FAB664153388D400C89D7C /* Localizable.strings */,
 			);
 			path = de.lproj;
 			sourceTree = "<group>";
@@ -625,10 +624,9 @@
 				94FAB6491531A2FE00C89D7C /* background@2x.png in Resources */,
 				94FAB6501532359D00C89D7C /* settings.png in Resources */,
 				94FAB6511532359D00C89D7C /* settings@2x.png in Resources */,
-				94FAB65D15337F8400C89D7C /* InfoPlist.strings in Resources */,
-				94FAB65E15337F8400C89D7C /* Localizable.strings in Resources */,
 				94FAB65F15337F8400C89D7C /* InfoPlist.strings in Resources */,
 				94FAB66015337F8400C89D7C /* Localizable.strings in Resources */,
+				94FAB666153388D400C89D7C /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,31 +695,16 @@
 			isa = PBXVariantGroup;
 			children = (
 				949FB13D14B3327800D3E713 /* en */,
-				94FAB65215337EC700C89D7C /* de */,
+				94FAB661153388AD00C89D7C /* de */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		94FAB65415337F8200C89D7C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94FAB65515337F8200C89D7C /* de */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		94FAB65615337F8200C89D7C /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				94FAB65715337F8200C89D7C /* de */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		94FAB65915337F8400C89D7C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				94FAB65A15337F8400C89D7C /* en */,
+				94FAB663153388AD00C89D7C /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -730,6 +713,15 @@
 			isa = PBXVariantGroup;
 			children = (
 				94FAB65C15337F8400C89D7C /* en */,
+				94FAB662153388AD00C89D7C /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		94FAB664153388D400C89D7C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				94FAB665153388D400C89D7C /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -766,7 +758,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Robert Panzer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -775,6 +767,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "94C5CFDB-5774-4CA9-B2B7-4E7E55A4DD2E";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

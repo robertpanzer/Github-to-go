@@ -53,7 +53,7 @@
     self.usernameTextfield.text = [Settings sharedInstance].username;
     self.passwordTextfield.text = [Settings sharedInstance].password;
     
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.frame.size.width, 20)];
     footerLabel.text = [NSString stringWithFormat:@"Version: %@", version];
     footerLabel.backgroundColor = [UIColor clearColor];
