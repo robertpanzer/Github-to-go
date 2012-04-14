@@ -14,7 +14,6 @@
 -(void)bindGithubEvent:(GithubEvent *)anEvent {
     
     UIImageView* imageView = (UIImageView*)[self.contentView viewWithTag:1];
-    imageView.layer.cornerRadius = 5.0f;
     imageView.image = nil;
     
     UILabel* label = (UILabel*)[self.contentView viewWithTag:2];

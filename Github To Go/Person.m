@@ -123,6 +123,8 @@ static long sequenceCounter = 0;
         if (image == [NSNull null]) {
             return;
         } else if (image != nil) {
+            imageView.layer.cornerRadius = 10.0f;
+            imageView.layer.masksToBounds = YES;
             imageView.image = image;
             return;
         }
