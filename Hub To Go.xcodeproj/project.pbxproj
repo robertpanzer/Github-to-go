@@ -177,17 +177,17 @@
 		9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
 		949DB8CF14F1522D000BE743 /* RepositoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryStorage.m; sourceTree = "<group>"; };
-		949F506D151D2704009D5DC3 /* Github To Go.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Github To Go.entitlements"; sourceTree = "<group>"; };
+		949F506D151D2704009D5DC3 /* Hub To Go.entitlements */ = {isa = PBXFileReference; path = "Hub To Go.entitlements"; sourceTree = "<group>"; };
 		949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ISO8601Parsing.h"; sourceTree = "<group>"; };
 		949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ISO8601Parsing.m"; sourceTree = "<group>"; };
-		949FB12F14B3327800D3E713 /* Github To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		949FB12F14B3327800D3E713 /* Hub To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hub To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		949FB13314B3327800D3E713 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		949FB13514B3327800D3E713 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		949FB13714B3327800D3E713 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		949FB13B14B3327800D3E713 /* Github To Go-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Github To Go-Info.plist"; sourceTree = "<group>"; };
+		949FB13B14B3327800D3E713 /* Hub To Go-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Hub To Go-Info.plist"; sourceTree = "<group>"; };
 		949FB13D14B3327800D3E713 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		949FB13F14B3327800D3E713 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Github To Go-Prefix.pch"; sourceTree = "<group>"; };
+		949FB14114B3327800D3E713 /* Hub To Go-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hub To Go-Prefix.pch"; sourceTree = "<group>"; };
 		949FB14214B3327800D3E713 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		949FB14314B3327800D3E713 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		949FB14814B3327800D3E713 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
@@ -412,7 +412,7 @@
 		949FB13014B3327800D3E713 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				949FB12F14B3327800D3E713 /* Github To Go.app */,
+				949FB12F14B3327800D3E713 /* Hub To Go.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -434,7 +434,7 @@
 				94FAB6461531A2A400C89D7C /* background.png */,
 				94FAB6481531A2FA00C89D7C /* background@2x.png */,
 				940339931528A423004ABDDD /* Search */,
-				949F506D151D2704009D5DC3 /* Github To Go.entitlements */,
+				949F506D151D2704009D5DC3 /* Hub To Go.entitlements */,
 				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
 				941FCF89150E18A10046F72F /* Icon.png */,
 				94BCF2CC150A7037005EA1BD /* PullRequest */,
@@ -477,10 +477,10 @@
 		949FB13A14B3327800D3E713 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				949FB13B14B3327800D3E713 /* Github To Go-Info.plist */,
+				949FB13B14B3327800D3E713 /* Hub To Go-Info.plist */,
 				949FB13C14B3327800D3E713 /* InfoPlist.strings */,
 				949FB13F14B3327800D3E713 /* main.m */,
-				949FB14114B3327800D3E713 /* Github To Go-Prefix.pch */,
+				949FB14114B3327800D3E713 /* Hub To Go-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -544,9 +544,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		949FB12E14B3327800D3E713 /* Github To Go */ = {
+		949FB12E14B3327800D3E713 /* Hub To Go */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 949FB15B14B3327800D3E713 /* Build configuration list for PBXNativeTarget "Github To Go" */;
+			buildConfigurationList = 949FB15B14B3327800D3E713 /* Build configuration list for PBXNativeTarget "Hub To Go" */;
 			buildPhases = (
 				949FB12B14B3327800D3E713 /* Sources */,
 				949FB12C14B3327800D3E713 /* Frameworks */,
@@ -556,9 +556,9 @@
 			);
 			dependencies = (
 			);
-			name = "Github To Go";
+			name = "Hub To Go";
 			productName = "Github To Go";
-			productReference = 949FB12F14B3327800D3E713 /* Github To Go.app */;
+			productReference = 949FB12F14B3327800D3E713 /* Hub To Go.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -569,7 +569,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = 949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Github To Go" */;
+			buildConfigurationList = 949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Hub To Go" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -582,7 +582,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				949FB12E14B3327800D3E713 /* Github To Go */,
+				949FB12E14B3327800D3E713 /* Hub To Go */,
 			);
 		};
 /* End PBXProject section */
@@ -767,12 +767,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "Github To Go/Github To Go.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Github To Go/Hub To Go.entitlements";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
-				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
+				GCC_PREFIX_HEADER = "Github To Go/Hub To Go-Prefix.pch";
+				INFOPLIST_FILE = "Github To Go/Hub To Go-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hub To Go";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -781,14 +781,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_ENTITLEMENTS = "Github To Go/Github To Go.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Github To Go/Hub To Go.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Github To Go/Github To Go-Prefix.pch";
-				INFOPLIST_FILE = "Github To Go/Github To Go-Info.plist";
+				GCC_PREFIX_HEADER = "Github To Go/Hub To Go-Prefix.pch";
+				INFOPLIST_FILE = "Github To Go/Hub To Go-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hub To Go";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				WRAPPER_EXTENSION = app;
@@ -798,7 +798,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Github To Go" */ = {
+		949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Hub To Go" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				949FB15914B3327800D3E713 /* Debug */,
@@ -807,7 +807,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		949FB15B14B3327800D3E713 /* Build configuration list for PBXNativeTarget "Github To Go" */ = {
+		949FB15B14B3327800D3E713 /* Build configuration list for PBXNativeTarget "Hub To Go" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				949FB15C14B3327800D3E713 /* Debug */,

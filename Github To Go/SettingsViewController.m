@@ -53,9 +53,11 @@
     self.usernameTextfield.text = [Settings sharedInstance].username;
     self.passwordTextfield.text = [Settings sharedInstance].password;
     
+    NSString *productName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *buildNo = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.frame.size.width, 20)];
-    footerLabel.text = [NSString stringWithFormat:@"Version: %@", version];
+    footerLabel.text = [NSString stringWithFormat:@"Version: %@ %@ %@", productName, version, buildNo];
     footerLabel.backgroundColor = [UIColor clearColor];
     footerLabel.textAlignment = UITextAlignmentCenter;
     footerLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
