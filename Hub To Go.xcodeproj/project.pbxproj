@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9402273C14C167260036A676 /* CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402273B14C167260036A676 /* CommitFile.m */; };
-		9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402274014C1A1140036A676 /* FileDiffViewController.m */; };
-		9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9402274114C1A1140036A676 /* FileDiffViewController.xib */; };
 		940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940339951528A43F004ABDDD /* SearchTableViewController.m */; };
 		940339981528A43F004ABDDD /* SearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940339961528A43F004ABDDD /* SearchTableViewController.xib */; };
 		9403399B1528B4C6004ABDDD /* UITableViewCell+Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */; };
@@ -99,9 +97,6 @@
 /* Begin PBXFileReference section */
 		9402273A14C167260036A676 /* CommitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitFile.h; sourceTree = "<group>"; };
 		9402273B14C167260036A676 /* CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitFile.m; sourceTree = "<group>"; };
-		9402273F14C1A1140036A676 /* FileDiffViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDiffViewController.h; sourceTree = "<group>"; };
-		9402274014C1A1140036A676 /* FileDiffViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileDiffViewController.m; sourceTree = "<group>"; };
-		9402274114C1A1140036A676 /* FileDiffViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileDiffViewController.xib; sourceTree = "<group>"; };
 		940339941528A43F004ABDDD /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
 		940339951528A43F004ABDDD /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		940339961528A43F004ABDDD /* SearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchTableViewController.xib; sourceTree = "<group>"; };
@@ -177,7 +172,7 @@
 		9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
 		949DB8CF14F1522D000BE743 /* RepositoryStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepositoryStorage.m; sourceTree = "<group>"; };
-		949F506D151D2704009D5DC3 /* Hub To Go.entitlements */ = {isa = PBXFileReference; path = "Hub To Go.entitlements"; sourceTree = "<group>"; };
+		949F506D151D2704009D5DC3 /* Hub To Go.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Hub To Go.entitlements"; sourceTree = "<group>"; };
 		949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ISO8601Parsing.h"; sourceTree = "<group>"; };
 		949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ISO8601Parsing.m"; sourceTree = "<group>"; };
 		949FB12F14B3327800D3E713 /* Hub To Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hub To Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -259,9 +254,6 @@
 				94FAB6401530E6C400C89D7C /* Comment@2x.png */,
 				9402273A14C167260036A676 /* CommitFile.h */,
 				9402273B14C167260036A676 /* CommitFile.m */,
-				9402273F14C1A1140036A676 /* FileDiffViewController.h */,
-				9402274014C1A1140036A676 /* FileDiffViewController.m */,
-				9402274114C1A1140036A676 /* FileDiffViewController.xib */,
 				9404B4FA150CB38E0077BA8E /* UITableViewCell+CommitFile.h */,
 				9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */,
 			);
@@ -605,7 +597,6 @@
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
-				9402274314C1A1140036A676 /* FileDiffViewController.xib in Resources */,
 				945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */,
 				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
@@ -659,7 +650,6 @@
 				9424DE5614B9FEDF00B6538E /* Settings.m in Sources */,
 				94A12FD914BB972A00453774 /* CommitViewController.m in Sources */,
 				9402273C14C167260036A676 /* CommitFile.m in Sources */,
-				9402274214C1A1140036A676 /* FileDiffViewController.m in Sources */,
 				9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */,
 				945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */,
 				945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */,

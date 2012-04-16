@@ -10,7 +10,6 @@
 #import "NetworkProxy.h"
 #import "CommitFile.h"
 #import "CommitComment.h"
-#import "FileDiffViewController.h"
 #import "BlobViewController.h"
 #import "PersonViewController.h"
 #import "UITableViewCell+Person.h"
