@@ -188,11 +188,19 @@
                     for (int i = 1; i <= lines.count; i++) {
                         NSString* line = [lines objectAtIndex:i - 1];
                         [html appendString:[line wrapToHtmlWithLineNo:[NSNumber numberWithInt:i]]];
+                        NSArray *lineComments = [self commentsForOldLine:[NSNumber numberWithInt:i]];
+                        if (lineComments != nil) {
+                            [html appendString:[self wrapComments:lineComments]];
+                        }
                     }
                 } else if ([self.commitFile.status isEqualToString:@"added"]) {
                     for (int i = 1; i <= lines.count; i++) {
                         NSString* line = [lines objectAtIndex:i - 1];
                         [html appendString:[line wrapToHtmlWithOldLineNo:nil newLineNo:[NSNumber numberWithInt:i]]];
+                        NSArray *lineComments = [self commentsForNewLine:[NSNumber numberWithInt:i]];
+                        if (lineComments != nil) {
+                            [html appendString:[self wrapComments:lineComments]];
+                        }
                     }
                 } else {
                     int maxLineNo = MAX( lines.count, MAX(commitFile.largestOldLineNo, commitFile.largestNewLineNo) );
