@@ -144,7 +144,7 @@
     } else if (section == 0) {
         return 7;
     } else if (section == 1) {
-        return commit.changedFiles.count;
+        return commit.changedFiles.count + 1;
     } else {
         return 0;
     }
@@ -155,6 +155,7 @@
 
     static NSString *CellIdentifier = @"Cell";
     static NSString *MessageCellIdentifier = @"MessageCell";
+    static NSString *FilesSectionCellIdentifier = @"FilesSectionCell";
     
     UITableViewCell *cell = nil;
     if (indexPath.section == 0) {
@@ -207,25 +208,23 @@
             return cell;
         }
     } else if (indexPath.section == 1) {
-        cell = [UITableViewCell createCommitFileCellForTableView:tableView];
-        CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
-        [cell bindCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName] tableView:self.tableView];
-        return cell;
+        if (indexPath.row == 0) {
+            cell = [tableView dequeueReusableCellWithIdentifier:FilesSectionCellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilesSectionCellIdentifier];
+                cell.textLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+            }
+            cell.textLabel.text = NSLocalizedString(@"Files", @"Files section in commit view");
+            return cell;
+        } else {
+            cell = [UITableViewCell createCommitFileCellForTableView:tableView];
+            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row - 1];
+            [cell bindCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName] tableView:self.tableView];
+            return cell;
+        }
     }
     return nil;
 }
-
--(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    switch (section) {
-        case 0:
-            return nil;
-        case 1:
-            return @"Files";
-        default:
-            return @"???";
-    }
-}
-
 
 #pragma mark - Table view delegate
 
@@ -272,8 +271,8 @@
         CGFloat height = size.height + 10;
 
         return height > tableView.rowHeight ? height : tableView.rowHeight;
-    } else if (indexPath.section == 1) {
-        CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1 && indexPath.row > 0) {
+        CommitFile* commitFile = [commit.changedFiles objectAtIndex:indexPath.row - 1];
         return [UITableViewCell tableView:tableView heightForRowForCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
     } else {
         return tableView.rowHeight;
