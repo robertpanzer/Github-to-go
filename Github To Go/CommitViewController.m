@@ -251,9 +251,9 @@
                     }
                 }];
             }
-        } else if (indexPath.section == 1) {
+        } else if (indexPath.section == 1 && indexPath.row > 1) {
             self.letUserSelectCells = NO;
-            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row];
+            CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row - 1];
             
             BlobViewController* blobViewController = [[BlobViewController alloc] initWithCommitFile:commitFile comments:[self.comments objectForKey:commitFile.fileName]];
             [self.navigationController pushViewController:blobViewController animated:YES];
