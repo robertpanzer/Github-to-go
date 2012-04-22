@@ -11,7 +11,11 @@
 @interface ReloadLabel : UIView
 
 @property(strong, nonatomic) UILabel *label;
+@property(strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property(strong, nonatomic) NSString *text;
+
+-(void) startActivity;
+-(void) stopActivity;
 @end
 
 
@@ -20,6 +24,11 @@
 @property(strong, nonatomic) ReloadLabel *reloadLabel;
 
 @property BOOL reloadPossible;
+@property BOOL isReloading;
 
 -(void)reload;
+
+-(void)willReload;
+-(void)reloadDidFinish;
+
 @end

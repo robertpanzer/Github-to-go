@@ -187,6 +187,7 @@
             }
 
             dispatch_async(dispatch_get_main_queue(), ^(){
+                [self reloadDidFinish];
                 if (self.myRepos.count == newRepos.count) {
                     self.myRepos = newRepos;
                     [self.tableView reloadData];
@@ -226,6 +227,7 @@
             }
 
             dispatch_async(dispatch_get_main_queue(), ^() {
+                [self reloadDidFinish];
                 if (self.watchedRepos.count == newRepos.count) {
                     self.watchedRepos = newRepos;
                     [self.tableView reloadData];

@@ -12,22 +12,29 @@
 
 @implementation ReloadLabel
 
-@synthesize label;
+@synthesize label, activityIndicator;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, frame.size.width, frame.size.height)];
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(frame.size.height, 0.0f, frame.size.width - frame.size.height, frame.size.height)];
         self.label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.label.textAlignment = UITextAlignmentCenter;
         self.label.backgroundColor = [UIColor clearColor];
         self.label.opaque = NO;
+        
+        self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.activityIndicator.frame = CGRectMake(0.0f, 0.0f, frame.size.height, frame.size.height);
+        self.activityIndicator.hidesWhenStopped = YES;
+        self.activityIndicator.opaque = NO;
+        
         self.backgroundColor = [UIColor clearColor];
         self.opaque = NO;
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:self.label];
+        [self addSubview:self.activityIndicator];
     }
     return self;
 }
@@ -39,6 +46,15 @@
 -(void)setText:(NSString *)text {
     label.text = text;
 }
+
+-(void)startActivity {
+    [self.activityIndicator startAnimating];
+}
+
+-(void)stopActivity {
+    [self.activityIndicator stopAnimating];
+}
+
 
 @end
 
@@ -53,6 +69,7 @@
 
 @synthesize reloadLabel;
 @synthesize reloadPossible;
+@synthesize isReloading;
 
 -(void)viewWillAppear:(BOOL)animated {
     if (self.reloadLabel == nil) {
@@ -91,6 +108,8 @@
             case UIGestureRecognizerStateEnded:
                 if (self.reloadPossible) {
                     if ([self respondsToSelector:@selector(reload)]) {
+                        [self.tableView setContentOffset:CGPointMake(0.0f, -40.0f) animated:NO]; 
+                        [self willReload];
                         [self reload];
                     }
                 }
@@ -100,5 +119,18 @@
 }
 
 -(void)reload {}
+
+-(void)willReload {
+    self.isReloading = YES;
+    [self.reloadLabel startActivity];
+}
+
+-(void)reloadDidFinish {
+    if (self.isReloading) {
+        [self.tableView setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES]; 
+        self.isReloading = NO;
+        [self.reloadLabel stopActivity];
+    }
+}
 
 @end

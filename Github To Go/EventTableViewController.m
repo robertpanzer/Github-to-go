@@ -330,9 +330,11 @@
                 });
             }
             isLoading = NO;
+            [self reloadDidFinish];
         }
          errorBlock:^(NSError *error) {
              self.isLoading = NO;
+             [self reloadDidFinish];
              UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network access failed!", @"Error message alert view") message:[error localizedDescription] delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") otherButtonTitles:nil];
              [alertView show];
          }];
