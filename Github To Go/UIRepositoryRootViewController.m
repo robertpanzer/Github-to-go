@@ -25,6 +25,7 @@ static NSArray* actionSheetTitles;
 @synthesize watched;
 @synthesize viewPicker;
 @synthesize pullRequestTableViewController;
+@synthesize issueListViewController;
 @synthesize viewSelectorButton;
 
 +(void) initialize {
@@ -64,11 +65,13 @@ static NSArray* actionSheetTitles;
     branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
     eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
     pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
+    issueListViewController = [[IssueListViewController alloc] initWithRepository:repository];
     
     repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    issueListViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
     [self.view addSubview:eventTableViewController.view];
     [self addChildViewController:eventTableViewController];
@@ -123,6 +126,8 @@ static NSArray* actionSheetTitles;
             [branchesBrowserViewController.view removeFromSuperview];
             [pullRequestTableViewController removeFromParentViewController];
             [pullRequestTableViewController.view removeFromSuperview];
+            [issueListViewController removeFromParentViewController];
+            [issueListViewController.view removeFromSuperview];
             [self addChildViewController:eventTableViewController];
             [self.view addSubview:eventTableViewController.view];
             break;
@@ -133,6 +138,8 @@ static NSArray* actionSheetTitles;
             [eventTableViewController.view removeFromSuperview];
             [pullRequestTableViewController removeFromParentViewController];
             [pullRequestTableViewController.view removeFromSuperview];
+            [issueListViewController removeFromParentViewController];
+            [issueListViewController.view removeFromSuperview];
             [self addChildViewController:branchesBrowserViewController];
             [self.view addSubview:branchesBrowserViewController.view];
             break;
@@ -143,6 +150,8 @@ static NSArray* actionSheetTitles;
             [eventTableViewController.view removeFromSuperview];
             [pullRequestTableViewController removeFromParentViewController];
             [pullRequestTableViewController.view removeFromSuperview];
+            [issueListViewController removeFromParentViewController];
+            [issueListViewController.view removeFromSuperview];
             [self addChildViewController:repositoryViewController];
             [self.view addSubview:repositoryViewController.view];
             break;
@@ -153,14 +162,29 @@ static NSArray* actionSheetTitles;
             [eventTableViewController.view removeFromSuperview];
             [repositoryViewController removeFromParentViewController];
             [repositoryViewController.view removeFromSuperview];
+            [issueListViewController removeFromParentViewController];
+            [issueListViewController.view removeFromSuperview];
             [self addChildViewController:pullRequestTableViewController];
             [self.view addSubview:pullRequestTableViewController.view];
+            break;
+        case 4:
+            [branchesBrowserViewController removeFromParentViewController];
+            [branchesBrowserViewController.view removeFromSuperview];
+            [eventTableViewController removeFromParentViewController];
+            [eventTableViewController.view removeFromSuperview];
+            [repositoryViewController removeFromParentViewController];
+            [repositoryViewController.view removeFromSuperview];
+            [pullRequestTableViewController removeFromParentViewController];
+            [pullRequestTableViewController.view removeFromSuperview];
+            [self addChildViewController:issueListViewController];
+            [self.view addSubview:issueListViewController.view];
             break;
     }
     repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
     pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    issueListViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
 }
 
@@ -217,7 +241,7 @@ static NSArray* actionSheetTitles;
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 4;
+    return 5;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
@@ -230,8 +254,8 @@ static NSArray* actionSheetTitles;
             return NSLocalizedString(@"Info", @"RepositoryViewPicker");
         case 3:
             return NSLocalizedString(@"Pulls", @"RepositoryViewPicker");
-//        case 4:
-//            return NSLocalizedString(@"Issues", @"RepositoryViewPicker");
+        case 4:
+            return NSLocalizedString(@"Issues", @"RepositoryViewPicker");
         default:
             return nil;
     }

@@ -13,6 +13,7 @@
 #import "BranchesBrowserViewController.h"
 #import "EventTableViewController.h"
 #import "PullRequestListTableViewController.h"
+#import "IssueListViewController.h"
 
 @interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate, UIPickerViewDataSource, UIPickerViewDelegate> 
 
@@ -21,6 +22,7 @@
 @property(strong) BranchesBrowserViewController* branchesBrowserViewController;
 @property(strong) EventTableViewController* eventTableViewController;
 @property(strong) PullRequestListTableViewController* pullRequestTableViewController;
+@property(strong) IssueListViewController *issueListViewController;
 @property BOOL watched;
 @property (weak, nonatomic) IBOutlet UIPickerView *viewPicker;
 @property (strong, nonatomic) UIBarButtonItem *viewSelectorButton;
