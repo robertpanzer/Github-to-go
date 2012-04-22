@@ -23,7 +23,9 @@ static NSArray* actionSheetTitles;
 @synthesize branchesBrowserViewController;
 @synthesize eventTableViewController;
 @synthesize watched;
+@synthesize viewPicker;
 @synthesize pullRequestTableViewController;
+@synthesize viewSelectorButton;
 
 +(void) initialize {
     WatchRepo = NSLocalizedString(@"Watch Repository", @"Action Sheet Watch Repo");
@@ -63,21 +65,33 @@ static NSArray* actionSheetTitles;
     eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
     pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
     
-    repositoryViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
     [self.view addSubview:eventTableViewController.view];
     [self addChildViewController:eventTableViewController];
     
+    
+    self.viewPicker.hidden = YES;
+    self.viewPicker.dataSource = self;
+    self.viewPicker.delegate = self;
+    
+    self.viewSelectorButton = [[UIBarButtonItem alloc] initWithTitle:@"Events" style:UIBarButtonItemStylePlain target:self action:@selector(showSwitchPicker)];
     if ([[RepositoryStorage sharedStorage].ownRepositories objectForKey:self.repository.fullName] == nil) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
+        self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:
+                                                   self.viewSelectorButton,
+                                                   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)],
+                                                   nil];
+    } else {
+        self.navigationItem.rightBarButtonItem = self.viewSelectorButton;
     }
 }
 
 - (void)viewDidUnload
 {
+    [self setViewPicker:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -97,7 +111,11 @@ static NSArray* actionSheetTitles;
 
 -(void)selectedSegmentChanged:(id)sender {
     UISegmentedControl* segmentedControl = sender;
-    switch (segmentedControl.selectedSegmentIndex) {
+    [self switchView:segmentedControl.selectedSegmentIndex];
+}
+
+-(void)switchView:(NSUInteger)index {
+    switch (index) {
         case 0:
             [repositoryViewController removeFromParentViewController];
             [repositoryViewController.view removeFromSuperview];
@@ -139,10 +157,10 @@ static NSArray* actionSheetTitles;
             [self.view addSubview:pullRequestTableViewController.view];
             break;
     }
-    repositoryViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
+    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
+    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
 
 }
 
@@ -186,6 +204,43 @@ static NSArray* actionSheetTitles;
             });
         } ];
     }
-    
 }
+
+
+-(void)showSwitchPicker {
+    self.viewPicker.hidden = NO;
+    [self.view bringSubviewToFront:viewPicker];
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return 4;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    switch (row) {
+        case 0:
+            return NSLocalizedString(@"Events", @"RepositoryViewPicker");
+        case 1:
+            return NSLocalizedString(@"Branches", @"RepositoryViewPicker");
+        case 2:
+            return NSLocalizedString(@"Info", @"RepositoryViewPicker");
+        case 3:
+            return NSLocalizedString(@"Pulls", @"RepositoryViewPicker");
+//        case 4:
+//            return NSLocalizedString(@"Issues", @"RepositoryViewPicker");
+        default:
+            return nil;
+    }
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.viewPicker.hidden = YES;
+    self.viewSelectorButton.title = [pickerView.delegate pickerView:pickerView titleForRow:row forComponent:component];
+    [self switchView:row];
+}
+
 @end

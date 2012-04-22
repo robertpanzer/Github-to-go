@@ -14,7 +14,7 @@
 #import "EventTableViewController.h"
 #import "PullRequestListTableViewController.h"
 
-@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate> 
+@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate, UIPickerViewDataSource, UIPickerViewDelegate> 
 
 @property(strong) Repository* repository;
 @property(strong) RepositoryViewController* repositoryViewController;
@@ -22,11 +22,17 @@
 @property(strong) EventTableViewController* eventTableViewController;
 @property(strong) PullRequestListTableViewController* pullRequestTableViewController;
 @property BOOL watched;
+@property (weak, nonatomic) IBOutlet UIPickerView *viewPicker;
+@property (strong, nonatomic) UIBarButtonItem *viewSelectorButton;
 
 
 - (id)initWithRepository:(Repository*)aRepository;
 
 - (IBAction)selectedSegmentChanged:(id)sender;
 
+-(void)switchView:(NSUInteger)index;
+
 - (void)showActionSheet;
+
+- (void)showSwitchPicker;
 @end
