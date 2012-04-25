@@ -251,7 +251,7 @@
                     }
                 }];
             }
-        } else if (indexPath.section == 1 && indexPath.row > 1) {
+        } else if (indexPath.section == 1 && indexPath.row >= 1) {
             self.letUserSelectCells = NO;
             CommitFile* commitFile = [self.commit.changedFiles objectAtIndex:indexPath.row - 1];
             
