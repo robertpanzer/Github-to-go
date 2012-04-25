@@ -189,14 +189,16 @@ static NSArray *kTitles;
 -(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {    
     self.letUserSelectCells = YES;
     [aSearchBar resignFirstResponder];
-
-    NSString *searchRepoUrl = [NSString stringWithFormat:@"http://github.com/api/v2/json/repos/search/%@", aSearchBar.text ];    
+    NSString *searchRepoUrl = [NSString stringWithFormat:@"https://api.github.com/legacy/repos/search/%@", aSearchBar.text ];    
     [[NetworkProxy sharedInstance] loadStringFromURL:searchRepoUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSMutableArray* newRepos = [[NSMutableArray alloc] init];
-        NSArray* foundRepositories = [data valueForKey:@"repositories"];
-        for (NSDictionary* jsonRepo in foundRepositories) {
-            Repository* repo = [[Repository alloc] initFromJSONObject:jsonRepo];
-            [newRepos addObject:repo]; 
+        if (statusCode == 200) {
+            NSLog(@"Data:\n%@", data);
+            NSArray* foundRepositories = [data valueForKey:@"repositories"];
+            for (NSDictionary* jsonRepo in foundRepositories) {
+                Repository* repo = [[Repository alloc] initFromJSONObject:jsonRepo];
+                [newRepos addObject:repo]; 
+            }
         }
         self.foundRepos = newRepos;
         dispatch_async(dispatch_get_main_queue(), ^() {
@@ -204,21 +206,23 @@ static NSArray *kTitles;
         });
     }];
 
-    
-    NSString *searchUserUrl = [NSString stringWithFormat:@"http://github.com/api/v2/json/user/search/%@", aSearchBar.text ];    
+
+    NSString *searchUserUrl = [NSString stringWithFormat:@"https://api.github.com/legacy/user/search/%@", aSearchBar.text ];    
     [[NetworkProxy sharedInstance] loadStringFromURL:searchUserUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSMutableArray* newUsers = [[NSMutableArray alloc] init];
-        NSArray* newFoundUsers = [data valueForKey:@"users"];
-        for (NSDictionary* jsonUser in newFoundUsers) {
-            Person* user = [[Person alloc] initWithJSONObject:jsonUser];
-            [newUsers addObject:user]; 
+        if (statusCode == 200) {
+            NSArray* newFoundUsers = [data valueForKey:@"users"];
+            for (NSDictionary* jsonUser in newFoundUsers) {
+                Person* user = [[Person alloc] initWithJSONObject:jsonUser];
+                [newUsers addObject:user]; 
+            }
         }
         self.foundUsers = newUsers;
         dispatch_async(dispatch_get_main_queue(), ^() {
             [self.tableView reloadData];
         });
     }];
-    
+
 }
 
 

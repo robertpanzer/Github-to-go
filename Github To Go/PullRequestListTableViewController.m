@@ -13,6 +13,7 @@
 
 @interface PullRequestListTableViewController ()
 
+-(void)loadPullRequests;
 
 @end
 

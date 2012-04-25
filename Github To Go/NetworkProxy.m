@@ -183,9 +183,7 @@ static NetworkProxy* networkProxyInstance;
         id object = nil;
         if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
             object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
-//        } else if ([contentType rangeOfString:@"image/"].location != NSNotFound) {
-//            object = [UIImage imageWithData:receivedData];
-        } else if ([contentType rangeOfString:@"text/plain"].location != NSNotFound) {
+        } else if ([contentType rangeOfString:@"text/"].location != NSNotFound) {
             object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
             if (object == nil) {
                 dispatch_async(dispatch_get_main_queue(), ^(){
