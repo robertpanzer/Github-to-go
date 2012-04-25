@@ -312,6 +312,7 @@
         NSString* url = [NSString stringWithFormat:@"%@?page=%d", self.baseUrl, pagesLoaded + 1];
         isLoading = YES;
         [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
+            [self reloadDidFinish];
             if (statusCode == 200) {
                 NSArray* eventArray = (NSArray*)data;
                 if (eventArray.count == 0) {
@@ -330,7 +331,6 @@
                 });
             }
             isLoading = NO;
-            [self reloadDidFinish];
         }
          errorBlock:^(NSError *error) {
              self.isLoading = NO;

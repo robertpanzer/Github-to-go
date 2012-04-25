@@ -49,10 +49,12 @@
 
 -(void)startActivity {
     [self.activityIndicator startAnimating];
+    self.activityIndicator.hidden = NO;
 }
 
 -(void)stopActivity {
     [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
 }
 
 
@@ -128,9 +130,9 @@
 -(void)reloadDidFinish {
     if (self.isReloading) {
         [self.tableView setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES]; 
-        self.isReloading = NO;
-        [self.reloadLabel stopActivity];
     }
+    self.isReloading = NO;
+    [self.reloadLabel stopActivity];
 }
 
 @end
