@@ -18,7 +18,6 @@
 		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
 		941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF8B150E1A5C0046F72F /* Icon@2x.png */; };
 		941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */; };
-		941FCF95150EAD1A0046F72F /* PullRequestRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */; };
 		941FCF991510980E0046F72F /* PullRequestReviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */; };
 		942130C414B455C000969D38 /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130BF14B455C000969D38 /* NetworkProxy.m */; };
 		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
@@ -38,7 +37,6 @@
 		944D6662151FBEDB002208FB /* PersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 944D6661151FBEDB002208FB /* PersonViewController.m */; };
 		944D6664151FC034002208FB /* PersonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D6663151FC034002208FB /* PersonViewController.xib */; };
 		945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */; };
-		945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */; };
 		945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271C414D74A3100F5610D /* UITreeRootViewController.m */; };
 		945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271C514D74A3100F5610D /* UITreeRootViewController.xib */; };
 		945C25F614E86D6F00479D21 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 945C25F514E86D6F00479D21 /* HistoryList.m */; };
@@ -66,6 +64,7 @@
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
 		94A12FD914BB972A00453774 /* CommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A12FD714BB972A00453774 /* CommitViewController.m */; };
 		94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A12FD814BB972A00453774 /* CommitViewController.xib */; };
+		94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AB35B2158A8FFF00FFE1C6 /* IssueViewController.m */; };
 		94AB82291534CC66008E0FE7 /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AB82281534CC66008E0FE7 /* default@2x.png */; };
 		94AB822D1534CE8A008E0FE7 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 94AB822C1534CE8A008E0FE7 /* default.png */; };
 		94B9880814B72986007AA6A6 /* RepositoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B9880614B72986007AA6A6 /* RepositoryViewController.m */; };
@@ -73,6 +72,8 @@
 		94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2CF150A7050005EA1BD /* PullRequest.m */; };
 		94BCF2D4150A7375005EA1BD /* PullRequestListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */; };
 		94BCF2E1150B5430005EA1BD /* PullRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */; };
+		94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C2F9FB158CBEDF0006640F /* QuartzCore.framework */; };
+		94C2F9FD158CBFE40006640F /* RPFlickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C2F9FA158CBE070006640F /* RPFlickViewController.m */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */; };
@@ -116,7 +117,6 @@
 		941FCF8B150E1A5C0046F72F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestRootViewController.h; sourceTree = "<group>"; };
 		941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestRootViewController.m; sourceTree = "<group>"; };
-		941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullRequestRootViewController.xib; sourceTree = "<group>"; };
 		941FCF971510980E0046F72F /* PullRequestReviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestReviewTableViewController.h; sourceTree = "<group>"; };
 		941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestReviewTableViewController.m; sourceTree = "<group>"; };
 		942130BE14B455C000969D38 /* NetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkProxy.h; sourceTree = "<group>"; };
@@ -150,7 +150,6 @@
 		944D6663151FC034002208FB /* PersonViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonViewController.xib; sourceTree = "<group>"; };
 		945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRepositoryRootViewController.h; sourceTree = "<group>"; };
 		945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRepositoryRootViewController.m; sourceTree = "<group>"; };
-		945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UIRepositoryRootViewController.xib; sourceTree = "<group>"; };
 		945271C314D74A3100F5610D /* UITreeRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITreeRootViewController.h; sourceTree = "<group>"; };
 		945271C414D74A3100F5610D /* UITreeRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITreeRootViewController.m; sourceTree = "<group>"; };
 		945271C514D74A3100F5610D /* UITreeRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UITreeRootViewController.xib; sourceTree = "<group>"; };
@@ -195,6 +194,8 @@
 		94A12FD614BB972A00453774 /* CommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitViewController.h; sourceTree = "<group>"; };
 		94A12FD714BB972A00453774 /* CommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitViewController.m; sourceTree = "<group>"; };
 		94A12FD814BB972A00453774 /* CommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitViewController.xib; sourceTree = "<group>"; };
+		94AB35B1158A8FFF00FFE1C6 /* IssueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IssueViewController.h; sourceTree = "<group>"; };
+		94AB35B2158A8FFF00FFE1C6 /* IssueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IssueViewController.m; sourceTree = "<group>"; };
 		94AB82281534CC66008E0FE7 /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		94AB822C1534CE8A008E0FE7 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		94B9880514B72986007AA6A6 /* RepositoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryViewController.h; sourceTree = "<group>"; };
@@ -207,6 +208,9 @@
 		94BCF2DE150B5430005EA1BD /* PullRequestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestTableViewController.h; sourceTree = "<group>"; };
 		94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestTableViewController.m; sourceTree = "<group>"; };
 		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
+		94C2F9F9158CBE070006640F /* RPFlickViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPFlickViewController.h; sourceTree = "<group>"; };
+		94C2F9FA158CBE070006640F /* RPFlickViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPFlickViewController.m; sourceTree = "<group>"; };
+		94C2F9FB158CBEDF0006640F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		94C6566B15025FAD00E85813 /* UITableViewCell+GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+GithubEvent.h"; sourceTree = "<group>"; };
 		94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+GithubEvent.m"; sourceTree = "<group>"; };
 		94C6566F1503727D00E85813 /* UITableViewCell+Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Person.h"; sourceTree = "<group>"; };
@@ -246,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */,
 				949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */,
 				949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */,
 				949FB13814B3327800D3E713 /* CoreGraphics.framework in Frameworks */,
@@ -362,7 +367,6 @@
 				94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */,
 				945271B814D5813B00F5610D /* UIRepositoryRootViewController.h */,
 				945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */,
-				945271BA14D5813B00F5610D /* UIRepositoryRootViewController.xib */,
 				940339991528B4C6004ABDDD /* UITableViewCell+Repository.h */,
 				9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */,
 				9403399C1528C8D5004ABDDD /* RepositoryListViewController.h */,
@@ -403,6 +407,7 @@
 		949FB12414B3327700D3E713 = {
 			isa = PBXGroup;
 			children = (
+				94C2F9FB158CBEDF0006640F /* QuartzCore.framework */,
 				949FB13914B3327800D3E713 /* Github To Go */,
 				949FB13214B3327800D3E713 /* Frameworks */,
 				949FB13014B3327800D3E713 /* Products */,
@@ -459,6 +464,8 @@
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
 				949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */,
 				949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */,
+				94C2F9F9158CBE070006640F /* RPFlickViewController.h */,
+				94C2F9FA158CBE070006640F /* RPFlickViewController.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
 				949FB14814B3327800D3E713 /* first.png */,
@@ -508,7 +515,6 @@
 				9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */,
 				941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */,
 				941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */,
-				941FCF93150EAD1A0046F72F /* PullRequestRootViewController.xib */,
 				941FCF971510980E0046F72F /* PullRequestReviewTableViewController.h */,
 				941FCF981510980E0046F72F /* PullRequestReviewTableViewController.m */,
 				94F78EEC1511FCBE0066A3E0 /* PullRequestCommentViewController.h */,
@@ -541,6 +547,8 @@
 				94EF40761543FEAB002FA8B5 /* IssueListViewController.xib */,
 				94EF407915440079002FA8B5 /* Issue.h */,
 				94EF407A15440079002FA8B5 /* Issue.m */,
+				94AB35B1158A8FFF00FFE1C6 /* IssueViewController.h */,
+				94AB35B2158A8FFF00FFE1C6 /* IssueViewController.m */,
 			);
 			name = Issues;
 			sourceTree = "<group>";
@@ -618,12 +626,10 @@
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
-				945271BC14D5813B00F5610D /* UIRepositoryRootViewController.xib in Resources */,
 				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
 				941FCF8A150E18A10046F72F /* Icon.png in Resources */,
 				941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */,
-				941FCF95150EAD1A0046F72F /* PullRequestRootViewController.xib in Resources */,
 				94F78EF015120F490066A3E0 /* PullRequestAddCommentViewController.xib in Resources */,
 				946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */,
 				944D6664151FC034002208FB /* PersonViewController.xib in Resources */,
@@ -651,6 +657,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94C2F9FD158CBFE40006640F /* RPFlickViewController.m in Sources */,
 				949FB14014B3327800D3E713 /* main.m in Sources */,
 				949FB14414B3327800D3E713 /* AppDelegate.m in Sources */,
 				942130C414B455C000969D38 /* NetworkProxy.m in Sources */,
@@ -700,6 +707,7 @@
 				94FAB63A152F32EC00C89D7C /* CommitComment.m in Sources */,
 				94EF40771543FEAB002FA8B5 /* IssueListViewController.m in Sources */,
 				94EF407B15440079002FA8B5 /* Issue.m in Sources */,
+				94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

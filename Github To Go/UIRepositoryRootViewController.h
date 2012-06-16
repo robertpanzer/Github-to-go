@@ -14,27 +14,16 @@
 #import "EventTableViewController.h"
 #import "PullRequestListTableViewController.h"
 #import "IssueListViewController.h"
+#import "RPFlickViewController.h"
 
-@interface UIRepositoryRootViewController : UIViewController<UIActionSheetDelegate, UIPickerViewDataSource, UIPickerViewDelegate> 
+@interface UIRepositoryRootViewController : RPFlickViewController<UIActionSheetDelegate> 
 
 @property(strong) Repository* repository;
-@property(strong) RepositoryViewController* repositoryViewController;
-@property(strong) BranchesBrowserViewController* branchesBrowserViewController;
-@property(strong) EventTableViewController* eventTableViewController;
-@property(strong) PullRequestListTableViewController* pullRequestTableViewController;
-@property(strong) IssueListViewController *issueListViewController;
 @property BOOL watched;
-@property (weak, nonatomic) IBOutlet UIPickerView *viewPicker;
-@property (strong, nonatomic) UIBarButtonItem *viewSelectorButton;
 
 
 - (id)initWithRepository:(Repository*)aRepository;
 
-- (IBAction)selectedSegmentChanged:(id)sender;
-
--(void)switchView:(NSUInteger)index;
-
 - (void)showActionSheet;
 
-- (void)showSwitchPicker;
 @end

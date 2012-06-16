@@ -19,14 +19,7 @@ static NSArray* actionSheetTitles;
 @implementation UIRepositoryRootViewController
 
 @synthesize repository;
-@synthesize repositoryViewController;
-@synthesize branchesBrowserViewController;
-@synthesize eventTableViewController;
 @synthesize watched;
-@synthesize viewPicker;
-@synthesize pullRequestTableViewController;
-@synthesize issueListViewController;
-@synthesize viewSelectorButton;
 
 +(void) initialize {
     WatchRepo = NSLocalizedString(@"Watch Repository", @"Action Sheet Watch Repo");
@@ -36,157 +29,47 @@ static NSArray* actionSheetTitles;
 
 - (id)initWithRepository:(Repository*)aRepository
 {
-    self = [super initWithNibName:@"UIRepositoryRootViewController" bundle:nil];
+    self = [super init];
     if (self) {
         // Custom initialization
         self.repository = aRepository;
         self.watched = [[RepositoryStorage sharedStorage] repositoryIsWatched:aRepository];
+        
+        UIViewController* repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
+        UIViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
+        UIViewController* eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
+        UIViewController* pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
+        UIViewController* issueListViewController = [[IssueListViewController alloc] initWithRepository:repository];
+
+        self.titles = [NSArray arrayWithObjects:@"Events", @"Branches", @"Info", @"Pulls", @"Issues", nil];
+        [self addChildViewController:eventTableViewController];
+        [self addChildViewController:branchesBrowserViewController];
+        [self addChildViewController:repositoryViewController];
+        [self addChildViewController:pullRequestTableViewController];
+        [self addChildViewController:issueListViewController];
+        
     }
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewWillAppear:animated];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = repository.fullName;
     
-    repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
-    branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
-    eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
-    pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
-    issueListViewController = [[IssueListViewController alloc] initWithRepository:repository];
-    
-    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    issueListViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-
-    [self.view addSubview:eventTableViewController.view];
-    [self addChildViewController:eventTableViewController];
-    
-    
-    self.viewPicker.hidden = YES;
-    self.viewPicker.dataSource = self;
-    self.viewPicker.delegate = self;
-    
-    self.viewSelectorButton = [[UIBarButtonItem alloc] initWithTitle:@"Events" style:UIBarButtonItemStylePlain target:self action:@selector(showSwitchPicker)];
     if ([[RepositoryStorage sharedStorage].ownRepositories objectForKey:self.repository.fullName] == nil) {
-        self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:
-                                                   self.viewSelectorButton,
-                                                   [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)],
-                                                   nil];
-    } else {
-        self.navigationItem.rightBarButtonItem = self.viewSelectorButton;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
     }
 }
-
-- (void)viewDidUnload
-{
-    [self setViewPicker:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.eventTableViewController = nil;
-    self.branchesBrowserViewController = nil;
-    self.repositoryViewController = nil;
-    self.pullRequestTableViewController = nil;
-}
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
 }
 
-
-
--(void)selectedSegmentChanged:(id)sender {
-    UISegmentedControl* segmentedControl = sender;
-    [self switchView:segmentedControl.selectedSegmentIndex];
-}
-
--(void)switchView:(NSUInteger)index {
-    switch (index) {
-        case 0:
-            [repositoryViewController removeFromParentViewController];
-            [repositoryViewController.view removeFromSuperview];
-            [branchesBrowserViewController removeFromParentViewController];
-            [branchesBrowserViewController.view removeFromSuperview];
-            [pullRequestTableViewController removeFromParentViewController];
-            [pullRequestTableViewController.view removeFromSuperview];
-            [issueListViewController removeFromParentViewController];
-            [issueListViewController.view removeFromSuperview];
-            [self addChildViewController:eventTableViewController];
-            [self.view addSubview:eventTableViewController.view];
-            break;
-        case 1:
-            [repositoryViewController removeFromParentViewController];
-            [repositoryViewController.view removeFromSuperview];
-            [eventTableViewController removeFromParentViewController];
-            [eventTableViewController.view removeFromSuperview];
-            [pullRequestTableViewController removeFromParentViewController];
-            [pullRequestTableViewController.view removeFromSuperview];
-            [issueListViewController removeFromParentViewController];
-            [issueListViewController.view removeFromSuperview];
-            [self addChildViewController:branchesBrowserViewController];
-            [self.view addSubview:branchesBrowserViewController.view];
-            break;
-        case 2:
-            [branchesBrowserViewController removeFromParentViewController];
-            [branchesBrowserViewController.view removeFromSuperview];
-            [eventTableViewController removeFromParentViewController];
-            [eventTableViewController.view removeFromSuperview];
-            [pullRequestTableViewController removeFromParentViewController];
-            [pullRequestTableViewController.view removeFromSuperview];
-            [issueListViewController removeFromParentViewController];
-            [issueListViewController.view removeFromSuperview];
-            [self addChildViewController:repositoryViewController];
-            [self.view addSubview:repositoryViewController.view];
-            break;
-        case 3:
-            [branchesBrowserViewController removeFromParentViewController];
-            [branchesBrowserViewController.view removeFromSuperview];
-            [eventTableViewController removeFromParentViewController];
-            [eventTableViewController.view removeFromSuperview];
-            [repositoryViewController removeFromParentViewController];
-            [repositoryViewController.view removeFromSuperview];
-            [issueListViewController removeFromParentViewController];
-            [issueListViewController.view removeFromSuperview];
-            [self addChildViewController:pullRequestTableViewController];
-            [self.view addSubview:pullRequestTableViewController.view];
-            break;
-        case 4:
-            [branchesBrowserViewController removeFromParentViewController];
-            [branchesBrowserViewController.view removeFromSuperview];
-            [eventTableViewController removeFromParentViewController];
-            [eventTableViewController.view removeFromSuperview];
-            [repositoryViewController removeFromParentViewController];
-            [repositoryViewController.view removeFromSuperview];
-            [pullRequestTableViewController removeFromParentViewController];
-            [pullRequestTableViewController.view removeFromSuperview];
-            [self addChildViewController:issueListViewController];
-            [self.view addSubview:issueListViewController.view];
-            break;
-    }
-    repositoryViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    branchesBrowserViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    eventTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    pullRequestTableViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-    issueListViewController.view.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height);
-
-}
 
 -(void)showActionSheet {
     UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") destructiveButtonTitle:nil otherButtonTitles:nil];
@@ -229,42 +112,4 @@ static NSArray* actionSheetTitles;
         } ];
     }
 }
-
-
--(void)showSwitchPicker {
-    self.viewPicker.hidden = NO;
-    [self.view bringSubviewToFront:viewPicker];
-}
-
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 5;
-}
-
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    switch (row) {
-        case 0:
-            return NSLocalizedString(@"Events", @"RepositoryViewPicker");
-        case 1:
-            return NSLocalizedString(@"Branches", @"RepositoryViewPicker");
-        case 2:
-            return NSLocalizedString(@"Info", @"RepositoryViewPicker");
-        case 3:
-            return NSLocalizedString(@"Pulls", @"RepositoryViewPicker");
-        case 4:
-            return NSLocalizedString(@"Issues", @"RepositoryViewPicker");
-        default:
-            return nil;
-    }
-}
-
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    self.viewPicker.hidden = YES;
-    self.viewSelectorButton.title = [pickerView.delegate pickerView:pickerView titleForRow:row forComponent:component];
-    [self switchView:row];
-}
-
 @end

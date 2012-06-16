@@ -12,19 +12,14 @@
 #import "PullRequestCommentViewController.h"
 #import "PullRequest.h"
 #import "BranchViewController.h"
+#import "RPFlickViewController.h"
 
-@interface PullRequestRootViewController : UIViewController
+@interface PullRequestRootViewController : RPFlickViewController
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 
-@property (strong, nonatomic) PullRequestTableViewController* infoViewController;
-@property (strong, nonatomic) PullRequestReviewTableViewController* reviewTableViewController;
-@property (strong, nonatomic) PullRequestCommentViewController *commentViewController;
-@property (strong, nonatomic) BranchViewController *commitsViewController;
 
 @property (strong, nonatomic) PullRequest* pullRequest;
-
-- (IBAction)segmentChanged:(id)sender;
 
 -(id)initWithPullRequest:(PullRequest*)aPullRequest;
 
