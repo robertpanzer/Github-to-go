@@ -146,7 +146,7 @@ static int kGestureStateSuccess  = 2;
     }
 }
 
--(void)viewWillAppear:(BOOL)animated {
+-(void)viewDidLoad {
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.contentMode = UIViewContentModeRedraw;
     
@@ -159,9 +159,9 @@ static int kGestureStateSuccess  = 2;
     header.titles = self.titles;
     header.currentTitle = 0;
     [self.view addSubview:header];
+}
 
-    
-    
+-(void)viewWillAppear:(BOOL)animated {
     self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
     self.currentViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
     self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
