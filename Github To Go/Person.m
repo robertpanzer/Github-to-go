@@ -11,7 +11,8 @@
 #import "NSString+ISO8601Parsing.h"
 #import "QuartzCore/QuartzCore.h"
 
-static NSMutableDictionary* url2Image;
+
+static NSCache* url2Image;
 
 static NSMutableDictionary* image2SequenceNumber;
 
@@ -32,7 +33,7 @@ static long sequenceCounter = 0;
 @synthesize avatarId;
 
 + (void)initialize {
-    url2Image = [[NSMutableDictionary alloc] init];
+    url2Image = [[NSCache alloc] init];
     image2SequenceNumber = [[NSMutableDictionary alloc] init];
 }
 
@@ -140,7 +141,7 @@ static long sequenceCounter = 0;
                  } else if ([data isKindOfClass:[NSData class]]) {
                      image = [UIImage imageWithData:data];
                  }
-                 [url2Image setValue:image forKey:self.avatarUrl];
+                 [url2Image setObject:image forKey:self.avatarUrl];
                  NSNumber* sequenceNumber = [image2SequenceNumber objectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                  if ([sequenceNumber longValue] == mySequenceNumber) {
                      dispatch_sync(dispatch_get_main_queue(), ^() {
@@ -151,7 +152,7 @@ static long sequenceCounter = 0;
                      [image2SequenceNumber removeObjectForKey:[NSNumber numberWithUnsignedInteger:imageView.hash]];
                  }
              } else {
-                 [url2Image setValue:[NSNull null] forKey:self.avatarUrl];
+                 [url2Image setObject:[NSNull null] forKey:self.avatarUrl];
      
              }
          }
