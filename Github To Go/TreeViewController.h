@@ -22,11 +22,11 @@
     NSString* absolutePath;
 }
 
-@property(strong) Tree* tree;
-@property(strong, readonly) Commit* commit;
-@property(strong, readonly) Repository* repository;
-@property(strong) NSString* branchName;
-@property(strong) NSString* absolutePath;
+@property(strong,nonatomic) Tree* tree;
+@property(strong, readonly,nonatomic) Commit* commit;
+@property(strong, readonly,nonatomic) Repository* repository;
+@property(strong,nonatomic) NSString* branchName;
+@property(strong,nonatomic) NSString* absolutePath;
 
 -(id)initWithTree:(Tree*)aTree absolutePath:(NSString*)anAbsolutePath commit:(Commit*)aCommit repository:(Repository*)aRepository branchName:(NSString*)aBranchName;
 

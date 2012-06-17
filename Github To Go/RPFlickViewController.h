@@ -10,10 +10,9 @@
 
 @interface RPFlickViewController : UIViewController <UIGestureRecognizerDelegate>
 
-@property(strong, nonatomic) NSArray* titles;
 
 -(id) init;
 
--(void)setChildViewControllers:(NSArray*)childViewControllers;
+-(void)addChildViewController:(UIViewController *)childController title:(NSString*)aTitle;
 
 @end

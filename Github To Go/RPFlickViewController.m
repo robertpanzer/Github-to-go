@@ -109,6 +109,7 @@ static int kGestureStateSuccess  = 2;
 
 @property(strong, nonatomic) RPFlipViewHeaderView *header;
 @property(nonatomic) NSUInteger currentViewIndex;
+@property(strong, nonatomic) NSMutableArray* titles;
 @property(nonatomic) NSUInteger gestureState;
 
 -(void)pan:(UIPanGestureRecognizer*)sender;
@@ -134,16 +135,16 @@ static int kGestureStateSuccess  = 2;
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        titles = [NSMutableArray array];
     }
     return self;
 }
 
-
--(void)setChildViewControllers:(NSArray*)childViewControllers {
-    for (UIViewController* childViewController in childViewControllers) {
-        [self addChildViewController:childViewController];
-        childViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    }
+-(void)addChildViewController:(UIViewController *)childController title:(NSString*)aTitle {
+    [titles addObject:aTitle];
+    [self addChildViewController:childController];
+    childController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
 }
 
 -(void)viewDidLoad {
@@ -212,7 +213,9 @@ static int kGestureStateSuccess  = 2;
                 [UIView beginAnimations:@"swipe" context:nil];
                 self.leftViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
                 self.currentViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
-                [self.rightViewController.view removeFromSuperview];
+                if (titles.count > 2) {
+                    [self.rightViewController.view removeFromSuperview];
+                }
                 self.currentViewIndex --;
                 if (self.currentViewIndex == -1) {
                     self.currentViewIndex =  self.childViewControllers.count - 1;
@@ -224,7 +227,9 @@ static int kGestureStateSuccess  = 2;
                 
             } else if (translation.x < -100.0f) {
                 [UIView beginAnimations:@"swipe" context:nil];
-                [self.leftViewController.view removeFromSuperview];
+                if (self.titles.count > 2) {
+                    [self.leftViewController.view removeFromSuperview];
+                }
                 self.currentViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
                 self.rightViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
                 self.currentViewIndex ++;
@@ -236,9 +241,13 @@ static int kGestureStateSuccess  = 2;
                 [UIView commitAnimations];
             } else {
                 [UIView beginAnimations:@"swipe" context:nil];
-                self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+                if (self.titles.count > 2 || translation.x > 0) {
+                    self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+                }
                 self.currentViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
-                self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+                if (self.titles.count > 2 || translation.x < 0) {
+                    self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+                }
                 [UIView commitAnimations];
                 
             }
@@ -257,9 +266,13 @@ static int kGestureStateSuccess  = 2;
             }
         } 
         if (self.gestureState == kGestureStatePossible || self.gestureState == kGestureStateSuccess) {
-            self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width + translation.x, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            if (self.titles.count > 2 || translation.x > 0) {
+                self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width + translation.x, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            }
             self.currentViewController.view.frame = CGRectMake(translation.x, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
-            self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width + translation.x, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            if (self.titles.count > 2 || translation.x < 0) {
+                self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width + translation.x, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            }
         }
     } else if (sender.state == UIGestureRecognizerStateCancelled || sender.state == UIGestureRecognizerStateFailed) {
         if ([self.currentViewController.view isKindOfClass:[UIScrollView class]]) {

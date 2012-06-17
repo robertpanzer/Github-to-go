@@ -38,7 +38,6 @@
 		944D6664151FC034002208FB /* PersonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 944D6663151FC034002208FB /* PersonViewController.xib */; };
 		945271BB14D5813B00F5610D /* UIRepositoryRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */; };
 		945271C614D74A3100F5610D /* UITreeRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 945271C414D74A3100F5610D /* UITreeRootViewController.m */; };
-		945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 945271C514D74A3100F5610D /* UITreeRootViewController.xib */; };
 		945C25F614E86D6F00479D21 /* HistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 945C25F514E86D6F00479D21 /* HistoryList.m */; };
 		945FE31E14B866F60099FD84 /* StringQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 945FE31D14B866F60099FD84 /* StringQueue.m */; };
 		946045E71512465000C2E44D /* PullRequestCommentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946045E61512465000C2E44D /* PullRequestCommentViewController.xib */; };
@@ -152,7 +151,6 @@
 		945271B914D5813B00F5610D /* UIRepositoryRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIRepositoryRootViewController.m; sourceTree = "<group>"; };
 		945271C314D74A3100F5610D /* UITreeRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UITreeRootViewController.h; sourceTree = "<group>"; };
 		945271C414D74A3100F5610D /* UITreeRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UITreeRootViewController.m; sourceTree = "<group>"; };
-		945271C514D74A3100F5610D /* UITreeRootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UITreeRootViewController.xib; sourceTree = "<group>"; };
 		945C25F414E86D6F00479D21 /* HistoryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryList.h; sourceTree = "<group>"; };
 		945C25F514E86D6F00479D21 /* HistoryList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryList.m; sourceTree = "<group>"; };
 		945FE31C14B866F60099FD84 /* StringQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringQueue.h; sourceTree = "<group>"; };
@@ -347,7 +345,6 @@
 				946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */,
 				945271C314D74A3100F5610D /* UITreeRootViewController.h */,
 				945271C414D74A3100F5610D /* UITreeRootViewController.m */,
-				945271C514D74A3100F5610D /* UITreeRootViewController.xib */,
 			);
 			name = Tree;
 			sourceTree = "<group>";
@@ -626,7 +623,6 @@
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
-				945271C714D74A3100F5610D /* UITreeRootViewController.xib in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
 				941FCF8A150E18A10046F72F /* Icon.png in Resources */,
 				941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */,

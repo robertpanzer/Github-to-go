@@ -274,7 +274,7 @@
 }
 
 -(void)showBlobHistory:(id)sender {    
-    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:self.blob commitSha:self.commitSha repository:repository];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:self.blob absolutePath:self.absolutePath commitSha:self.commitSha repository:repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }

@@ -36,6 +36,11 @@
     return self;
 }
 
+-(void)setTree:(Tree *)aTree {
+    tree = aTree;
+    
+    [self.tableView reloadData];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -183,7 +188,7 @@
 
 -(void)showTreeHistory:(id)sender {
     
-    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree absolutePath:self.absolutePath commitSha:self.commit.sha repository:repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }
@@ -202,7 +207,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex == 0) {
-        BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree commitSha:self.commit.sha repository:repository];
+        BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:tree absolutePath:self.absolutePath commitSha:self.commit.sha repository:repository];
         [self.navigationController pushViewController:branchViewController animated:YES];
     } else if (buttonIndex == 1) {
         UINavigationController* navigationController = self.navigationController;

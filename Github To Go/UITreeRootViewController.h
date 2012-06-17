@@ -12,34 +12,18 @@
 #import "Commit.h"
 #import "TreeViewController.h"
 #import "BranchViewController.h"
+#import "RPFlickViewController.h"
 
-@interface UITreeRootViewController : UIViewController {
-    UIView* headerView;
-    
-    NSString* treeUrl;
-    
-    NSString* absolutePath;
+@interface UITreeRootViewController : RPFlickViewController 
 
-    NSString* branchName;
-    
-    Commit* commit;
-    
-    Repository* repository;
-    
-    TreeViewController* treeViewController;
-    
-    BranchViewController* branchViewController;
-    
-}
-
-@property(strong) NSString* treeUrl;
-@property(strong) NSString* absolutePath;
-@property(strong) NSString* branchName;
-@property(strong) Commit* commit;
-@property(strong) Repository* repository;
+@property(strong,nonatomic) NSString* treeUrl;
+@property(strong,nonatomic) NSString* absolutePath;
+@property(strong,nonatomic) NSString* branchName;
+@property(strong,nonatomic) Commit* commit;
+@property(strong,nonatomic) Repository* repository;
+@property(strong,nonatomic)TreeViewController* treeViewController;
+@property(strong,nonatomic)BranchViewController* branchViewController;
 
 -(id)initWithUrl:(NSString*)aTreeUrl absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName;
-
-- (IBAction)selectedSegmentChanged:(id)sender;
 
 @end

@@ -61,16 +61,16 @@
     return self;
 }
 
--(id)initWithGitObject:(id<GitObject>)gitObject commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
+-(id)initWithGitObject:(id<GitObject>)gitObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString *)aCommitSha repository:(Repository *)aRepository {
     self = [super initWithNibName:@"BranchViewController" bundle:nil];
     if (self) {
         isComplete = NO;
         self.repository = aRepository;
         commitHistoryList = [[CommitHistoryList alloc] init];
-        absolutePath = [gitObject absolutePath];
+        absolutePath = anAbsolutePath;
         commitSha = aCommitSha;
         
-        self.navigationItem.title = [gitObject name];
+        self.navigationItem.title = [[anAbsolutePath componentsSeparatedByString:@"/"] lastObject];
         letUserSelectCells = YES;
         isSearchResult = NO;
     }

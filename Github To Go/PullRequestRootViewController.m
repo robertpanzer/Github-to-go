@@ -27,8 +27,11 @@
         UIViewController* commentViewController = [[PullRequestCommentViewController alloc] initWithPullRequest:self.pullRequest];
         UIViewController* commitsViewController = [[BranchViewController alloc] initWithPullRequest:self.pullRequest];
         
-        self.titles = [NSArray arrayWithObjects:@"Info", @"Review", @"Comments", @"Commits", nil];
-        [self setChildViewControllers:[NSArray arrayWithObjects:infoViewController, reviewTableViewController, commentViewController, commitsViewController, nil]];
+        [self addChildViewController:infoViewController title:@"Info"];
+        [self addChildViewController:reviewTableViewController title:@"Review"];
+        [self addChildViewController:commentViewController title:@"Comments"];
+        [self addChildViewController:commitsViewController title:@"Commits"];
+        
     }
     return self;
 }

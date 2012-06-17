@@ -14,15 +14,31 @@
 @implementation UITreeRootViewController
 
 @synthesize treeUrl, absolutePath, commit, repository, branchName;
+@synthesize treeViewController, branchViewController;
 
 -(id)initWithUrl:(NSString*)aTreeUrl absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName
 {
-    self = [super initWithNibName:@"UITreeRootViewController" bundle:nil];
+    self = [super init];
     if (self) {
         self.treeUrl = aTreeUrl;
         self.absolutePath = anAbsolutePath;
         self.commit = aCommit;
         self.repository = aRepository;
+        
+        treeViewController = [[TreeViewController alloc] initWithTree:nil
+                                                                             absolutePath:self.absolutePath
+                                                                                   commit:commit 
+                                                                               repository:self.repository
+                                                                               branchName:self.branchName];
+        
+        branchViewController = [[BranchViewController alloc] initWithGitObject:nil
+                                                                                        absolutePath:self.absolutePath
+                                                                                           commitSha:self.commit.sha
+                                                                                          repository:repository];
+        
+        [self addChildViewController:treeViewController title:@"Tree"];
+        [self addChildViewController:branchViewController title:@"History"];
+
     }
     return self;
 }
@@ -52,24 +68,7 @@
         if (statusCode == 200) {
             dispatch_async(dispatch_get_main_queue(), ^() {
                 Tree* tree = [[Tree alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commit.sha];
-                
-                treeViewController = [[TreeViewController alloc] initWithTree:tree
-                                                                 absolutePath:self.absolutePath
-                                                                       commit:commit 
-                                                                   repository:self.repository
-                                                                   branchName:self.branchName];
-                
-                [self addChildViewController:treeViewController];
-                
-                [self.view addSubview:treeViewController.view];
-                treeViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height -44.0f);
-                
-                branchViewController = [[BranchViewController alloc] initWithGitObject:tree
-                                                                             commitSha:self.commit.sha
-                                                                            repository:repository];
-                
-                branchViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-                
+                [self.treeViewController setTree:tree];
             });
         }
     }];
@@ -87,29 +86,5 @@
 {
     return YES;
 }
-
--(void)selectedSegmentChanged:(id)sender {
-    UISegmentedControl* segmentedControl = sender;
-    treeViewController.tableView.tableHeaderView = nil;
-    branchViewController.tableView.tableHeaderView = nil;
-    switch (segmentedControl.selectedSegmentIndex) {
-        case 0:
-            [self addChildViewController:treeViewController];
-            [self.view addSubview:treeViewController.view];
-            [branchViewController removeFromParentViewController];
-            [branchViewController.view removeFromSuperview];
-            break;
-        case 1:
-            [treeViewController removeFromParentViewController];
-            [treeViewController.view removeFromSuperview];
-            [self addChildViewController:branchViewController];
-            [self.view addSubview:branchViewController.view];
-            break;
-    }
-    treeViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-    branchViewController.view.frame = CGRectMake(0.0f, 44.0f, self.view.frame.size.width, self.view.frame.size.height - 44.0f);
-
-}
-
 
 @end

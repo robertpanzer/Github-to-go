@@ -35,18 +35,16 @@ static NSArray* actionSheetTitles;
         self.repository = aRepository;
         self.watched = [[RepositoryStorage sharedStorage] repositoryIsWatched:aRepository];
         
-        UIViewController* repositoryViewController = [[RepositoryViewController alloc] initWithRepository:repository];
-        UIViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
-        UIViewController* eventTableViewController = [[EventTableViewController alloc] initWithRepository:repository];
-        UIViewController* pullRequestTableViewController = [[PullRequestListTableViewController alloc] initWithRepository:repository];
-        UIViewController* issueListViewController = [[IssueListViewController alloc] initWithRepository:repository];
-
-        self.titles = [NSArray arrayWithObjects:@"Events", @"Branches", @"Info", @"Pulls", @"Issues", nil];
-        [self addChildViewController:eventTableViewController];
-        [self addChildViewController:branchesBrowserViewController];
-        [self addChildViewController:repositoryViewController];
-        [self addChildViewController:pullRequestTableViewController];
-        [self addChildViewController:issueListViewController];
+        [self addChildViewController:[[EventTableViewController alloc] initWithRepository:repository] 
+                               title:@"Events"];
+        [self addChildViewController:[[BranchesBrowserViewController alloc] initWithRepository:repository] 
+                               title:@"Branches"];
+        [self addChildViewController:[[RepositoryViewController alloc] initWithRepository:repository] 
+                               title:@"Info"];
+        [self addChildViewController:[[PullRequestListTableViewController alloc] initWithRepository:repository] 
+                               title:@"Pulls"];
+        [self addChildViewController:[[IssueListViewController alloc] initWithRepository:repository] 
+                               title:@"Issues"];
         
     }
     return self;
