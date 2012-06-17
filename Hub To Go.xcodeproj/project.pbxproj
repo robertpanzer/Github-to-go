@@ -61,6 +61,7 @@
 		949FB14B14B3327800D3E713 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14A14B3327800D3E713 /* first@2x.png */; };
 		949FB15014B3327800D3E713 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB14F14B3327800D3E713 /* second.png */; };
 		949FB15214B3327800D3E713 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 949FB15114B3327800D3E713 /* second@2x.png */; };
+		949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 949FB50F158E6855009EB750 /* IssueRootViewController.m */; };
 		94A12FD914BB972A00453774 /* CommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A12FD714BB972A00453774 /* CommitViewController.m */; };
 		94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A12FD814BB972A00453774 /* CommitViewController.xib */; };
 		94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AB35B2158A8FFF00FFE1C6 /* IssueViewController.m */; };
@@ -189,6 +190,8 @@
 		949FB14A14B3327800D3E713 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
 		949FB14F14B3327800D3E713 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		949FB15114B3327800D3E713 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
+		949FB50E158E6855009EB750 /* IssueRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IssueRootViewController.h; sourceTree = "<group>"; };
+		949FB50F158E6855009EB750 /* IssueRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IssueRootViewController.m; sourceTree = "<group>"; };
 		94A12FD614BB972A00453774 /* CommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitViewController.h; sourceTree = "<group>"; };
 		94A12FD714BB972A00453774 /* CommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitViewController.m; sourceTree = "<group>"; };
 		94A12FD814BB972A00453774 /* CommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommitViewController.xib; sourceTree = "<group>"; };
@@ -546,6 +549,8 @@
 				94EF407A15440079002FA8B5 /* Issue.m */,
 				94AB35B1158A8FFF00FFE1C6 /* IssueViewController.h */,
 				94AB35B2158A8FFF00FFE1C6 /* IssueViewController.m */,
+				949FB50E158E6855009EB750 /* IssueRootViewController.h */,
+				949FB50F158E6855009EB750 /* IssueRootViewController.m */,
 			);
 			name = Issues;
 			sourceTree = "<group>";
@@ -704,6 +709,7 @@
 				94EF40771543FEAB002FA8B5 /* IssueListViewController.m in Sources */,
 				94EF407B15440079002FA8B5 /* Issue.m in Sources */,
 				94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */,
+				949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

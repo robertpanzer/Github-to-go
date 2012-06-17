@@ -9,6 +9,7 @@
 #import "IssueListViewController.h"
 #import "NetworkProxy.h"
 #import "Issue.h"
+#import "IssueRootViewController.h"
 
 @interface IssueListViewController ()
 
@@ -91,6 +92,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Issue* issue = [self.issues objectAtIndex:indexPath.row];
+    IssueRootViewController* issueViewController = [[IssueRootViewController alloc] initWithIssue:issue];
+    [self.navigationController pushViewController:issueViewController animated:YES];
+    
 }
 
 -(void)reload {

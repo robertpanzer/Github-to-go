@@ -16,6 +16,7 @@
 
 @property(strong) NSArray* myRepos;
 @property(strong) NSArray* watchedRepos;
-//@property(strong) RepoSearchTableViewController* repoSearchTableViewController;
+//// Deprecated
+//@property(strong) id repoSearchTableViewController;
 @property BOOL initialized;
 @end

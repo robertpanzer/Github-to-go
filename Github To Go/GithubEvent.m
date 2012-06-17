@@ -44,6 +44,43 @@
 @synthesize repository;
 @synthesize primaryKey;
 
+-(id)initWithJSONIssue:(NSDictionary *)jsonObject {
+    self = [super init];
+    if (self) {
+        NSString* type = [jsonObject objectForKey:@"event"];
+
+        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
+        self.date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
+        id commitId = [jsonObject objectForKey:@"commit_id"];
+        @try {
+            if ([type isEqualToString:@"closed"]) {
+                if (commitId == nil || commitId == [NSNull null]) {
+                    self.text = [NSString stringWithFormat:@"The issue was closed by %@", self.person.displayname];
+                } else {
+                    self.text = [NSString stringWithFormat:@"The issue was closed by %@ with commit %@", self.person.displayname, commitId];
+                }
+            } else if ([type isEqualToString:@"reopened"]) {
+                self.text = [NSString stringWithFormat:@"The issue was reopened by %@", self.person.displayname];
+            } else if ([type isEqualToString:@"subscribed"]) {
+                self.text = [NSString stringWithFormat:@"%@ subscribed to this issue", self.person.displayname];
+            } else if ([type isEqualToString:@"merged"]) {
+                self.text = [NSString stringWithFormat:@"The issue was merged by %@ with commit %@", self.person.displayname, commitId];
+            } else if ([type isEqualToString:@"referenced"]) {
+                self.text = [NSString stringWithFormat:@"The issue was referenced by %@ in commit %@", self.person.displayname, commitId];
+            } else if ([type isEqualToString:@"mentioned"]) {
+                self.text = [NSString stringWithFormat:@"%@ was mentioned in this issue", self.person.displayname];
+            } else if ([type isEqualToString:@"assigned"]) {
+                self.text = [NSString stringWithFormat:@"The issue was assigned to %@", self.person.displayname];
+            }
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in GithubEvent.initWithJsonIssue: %@\n%@", exception, exception.callStackSymbols);
+            self.text = [NSString stringWithFormat:@"Some %@", type];
+        }
+    }
+    return self;
+}
+
 - (id)initWithJSON:(NSDictionary *)jsonObject {
     self = [super init];
     if (self) {
@@ -322,45 +359,67 @@
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
     NSString* type = [jsonObject objectForKey:@"type"];
-    @try {
-        if ([type isEqualToString:@"PushEvent"]) {
-            return [[PushEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"IssueCommentEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"PullRequestEvent"]) {
-            return [[PullRequestEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"ForkEvent"]) {
-            return [[ForkEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"CommitCommentEvent"]) {
-            return [[CommitCommentEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"WatchEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"CreateEvent"]) {
-            NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
-            if ([@"repository" isEqualToString:refType]) {
-                return [[CreateRepositoryEvent alloc] initWithJSON:jsonObject];
+    if (type != nil) {
+        @try {
+            if ([type isEqualToString:@"PushEvent"]) {
+                return [[PushEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"IssueCommentEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"PullRequestEvent"]) {
+                return [[PullRequestEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"ForkEvent"]) {
+                return [[ForkEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"CommitCommentEvent"]) {
+                return [[CommitCommentEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"WatchEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"CreateEvent"]) {
+                NSString* refType = [jsonObject valueForKeyPath:@"payload.ref_type"];
+                if ([@"repository" isEqualToString:refType]) {
+                    return [[CreateRepositoryEvent alloc] initWithJSON:jsonObject];
+                } else {
+                    return [[GithubEvent alloc] initWithJSON:jsonObject];
+                }
+            } else if ([type isEqualToString:@"DeleteEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"DownloadEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"FollowEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"IssuesEvent"]) {
+                return [[GithubEvent alloc] initWithJSON:jsonObject];
+            } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
+                return [[PullRequestReviewCommentEvent alloc] initWithJSON:jsonObject];
             } else {
                 return [[GithubEvent alloc] initWithJSON:jsonObject];
             }
-        } else if ([type isEqualToString:@"DeleteEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"DownloadEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"FollowEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"IssuesEvent"]) {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
-        } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
-            return [[PullRequestReviewCommentEvent alloc] initWithJSON:jsonObject];
-        } else {
-            return [[GithubEvent alloc] initWithJSON:jsonObject];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in GithubEvent.initWithJson: %@\n%@", exception, exception.callStackSymbols);
+            return nil;
         }
     }
-    @catch (NSException *exception) {
-        NSLog(@"Exception in GithubEvent.initWithJson: %@\n%@", exception, exception.callStackSymbols);
-        return nil;
+    NSString *event = [jsonObject objectForKey:@"event"];
+    if (event != nil) {
+        @try {
+            if ([event isEqualToString:@"closed"]
+                || [event isEqualToString:@"reopened"]
+                || [event isEqualToString:@"subscribed"]
+                || [event isEqualToString:@"merged"]
+                || [event isEqualToString:@"referenced"]
+                || [event isEqualToString:@"mentioned"]
+                || [event isEqualToString:@"assigned"]
+                ) {
+                return [[GithubEvent alloc] initWithJSONIssue:jsonObject];
+
+            }
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception in GithubEvent.initWithJson: %@\n%@", exception, exception.callStackSymbols);
+            return nil;
+        }
     }
-    
+    return nil;
 }
 
 @end
