@@ -196,28 +196,30 @@
         imageView = (UIImageView*)[cell.contentView viewWithTag:1];
         label = (UILabel*)[cell.contentView viewWithTag:2];
     }
-    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
+    NSArray* objectsForDate = [eventHistory objectsForDate:date];
+    if (objectsForDate.count > indexPath.row) {
+        GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row];
 
-    if ([event isKindOfClass:[PushEvent class]]) {
-        [cell bindPushEvent:(PushEvent*)event];
-    } else if ([event isKindOfClass:[PullRequestEvent class]]) {
-        [cell bindPullRequestEvent:(PullRequestEvent*)event];
-    } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
-        [cell bindCommitCommentEvent:(CommitCommentEvent*)event];
-    } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
-        [cell bindGithubEvent:event];
-        if (self.repository == nil) {
+        if ([event isKindOfClass:[PushEvent class]]) {
+            [cell bindPushEvent:(PushEvent*)event];
+        } else if ([event isKindOfClass:[PullRequestEvent class]]) {
+            [cell bindPullRequestEvent:(PullRequestEvent*)event];
+        } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
+            [cell bindCommitCommentEvent:(CommitCommentEvent*)event];
+        } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
+            [cell bindGithubEvent:event];
+            if (self.repository == nil) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        } else if ([event isKindOfClass:[ForkEvent class]]) {
+            [cell bindGithubEvent:event];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
+            [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
+        } else {
+            [cell bindGithubEvent:event];
         }
-    } else if ([event isKindOfClass:[ForkEvent class]]) {
-        [cell bindGithubEvent:event];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
-        [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
-    } else {
-        [cell bindGithubEvent:event];
-    }
-    
+    }    
     CGFloat width = self.tableView.frame.size.width;
 
     CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
