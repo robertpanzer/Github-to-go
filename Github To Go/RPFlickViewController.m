@@ -42,12 +42,13 @@
     // Draw the texts on a layer
     // Create layer
     if (layerRef == nil) {
-        layerRef = CGLayerCreateWithContext(context, self.frame.size, nil);   
+        CGFloat scale = [UIScreen mainScreen].scale;
+        layerRef = CGLayerCreateWithContext(context, CGSizeMake(self.frame.size.width * scale, self.frame.size.height * scale), nil);   
         CGContextRef layerContext = CGLayerGetContext(layerRef);
         // Fill it with the background image but clip it because it will be scaled otherwise
         UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-        CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height));
-        CGContextDrawImage(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width, backgroundImage.size.height),     backgroundImage.CGImage);
+        CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width * scale, self.frame.size.height * scale));
+        CGContextDrawImage(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width *scale, backgroundImage.size.height* scale),     backgroundImage.CGImage);
         
         // Draw the strings using UIKit draw methods
         UIGraphicsPushContext(layerContext);
@@ -59,16 +60,16 @@
             CGContextSetBlendMode(layerContext, kCGBlendModeNormal);
             CGContextSetFillColorWithColor(layerContext, [UIColor darkGrayColor].CGColor);
 
-            [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i + 1.0f, 4.0f, width, 17.0f) 
-                                                   withFont:[UIFont boldSystemFontOfSize:13.0f] 
+            [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i * scale + 1.0f, 4.0f, width * scale, 17.0f) 
+                                                   withFont:[UIFont boldSystemFontOfSize:12.0f * scale + 1.0f] 
                                               lineBreakMode:UILineBreakModeTailTruncation 
                                                   alignment:UITextAlignmentCenter];
 
             CGContextSetBlendMode(layerContext, kCGBlendModeClear);
             CGContextSetFillColorWithColor(layerContext, [UIColor clearColor].CGColor);
             
-            [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i, 3.0f, width, 17.0f) 
-                                                   withFont:[UIFont boldSystemFontOfSize:13.0f] 
+            [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i * scale, 3.0f, width * scale, 17.0f) 
+                                                   withFont:[UIFont boldSystemFontOfSize:12.0f * scale +1.0f] 
                                               lineBreakMode:UILineBreakModeTailTruncation 
                                                   alignment:UITextAlignmentCenter];
         }
@@ -81,7 +82,7 @@
     CGContextSetFillColorWithColor(context, [UIColor yellowColor].CGColor);
     CGContextFillRect(context, CGRectMake(currentTitle*width, 0.0f, width, 20.0f));
     // And draw the texts on top so that the block shines through the text
-    CGContextDrawLayerAtPoint(context, CGPointMake(0.0f, 0.0f), layerRef);
+    CGContextDrawLayerInRect(context, CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height), layerRef);
 }
 
 -(void)setCurrentTitle:(NSInteger)aCurrentTitle {
