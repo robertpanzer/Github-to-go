@@ -47,7 +47,7 @@
         // Fill it with the background image but clip it because it will be scaled otherwise
         UIImage *backgroundImage = [UIImage imageNamed:@"background"];
         CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height));
-        CGContextDrawImage(layerContext, CGRectMake(0.0f, 0.0f, backgroundImage.size.width, backgroundImage.size.height),     backgroundImage.CGImage);
+        CGContextDrawImage(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width, backgroundImage.size.height),     backgroundImage.CGImage);
         
         // Draw the strings using UIKit draw methods
         UIGraphicsPushContext(layerContext);
