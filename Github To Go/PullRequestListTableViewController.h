@@ -8,17 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Repository.h"
+#import "PullToRefreshTableViewController.h"
 
-@interface PullRequestListTableViewController : UITableViewController {
+@interface PullRequestListTableViewController : PullToRefreshTableViewController
 
-    NSMutableArray* pullRequests;
-    
-    Repository* repository;
-}
+@property(strong,nonatomic) NSMutableArray* pullRequests;
 
-@property(strong) NSMutableArray* pullRequests;
-
-@property(strong) Repository* repository;
+@property(strong,nonatomic) Repository* repository;
 
 -initWithRepository:(Repository*)aRepository;
 

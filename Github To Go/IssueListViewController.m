@@ -35,18 +35,11 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated {
     if (issues.count == 0) {
         [self reload];
     }
 }
-
 
 - (void)viewDidUnload
 {

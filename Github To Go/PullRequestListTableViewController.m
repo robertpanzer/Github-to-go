@@ -13,8 +13,6 @@
 
 @interface PullRequestListTableViewController ()
 
--(void)loadPullRequests;
-
 @end
 
 @implementation PullRequestListTableViewController
@@ -33,21 +31,10 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
--(void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     if (pullRequests.count == 0) {
-        [self loadPullRequests];
+        [self reload];
     }
 }
 
@@ -105,7 +92,7 @@
 }
 
 
--(void)loadPullRequests {
+-(void)reload {
     NSString* url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/pulls", repository.fullName];
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
@@ -114,13 +101,16 @@
                 [self.pullRequests addObject:pullRequest];
             } else {
                 NSArray* pullRequestArray = (NSArray*)data;
+                NSMutableArray* newPullRequests = [NSMutableArray arrayWithCapacity:pullRequestArray.count];
                 for (NSDictionary* jsonObject in pullRequestArray) {
                     PullRequest* pullRequest = [[PullRequest alloc] initWithJSONObject:jsonObject repository:self.repository];
-                    [self.pullRequests addObject:pullRequest];
+                    [newPullRequests addObject:pullRequest];
                 }
+                self.pullRequests = newPullRequests;
             }
             dispatch_async(dispatch_get_main_queue(), ^() {
                 [self.tableView reloadData];
+                [self reloadDidFinish];
             });
         }
     }];
