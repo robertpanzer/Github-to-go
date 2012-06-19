@@ -46,9 +46,15 @@
         layerRef = CGLayerCreateWithContext(context, CGSizeMake(self.frame.size.width * scale, self.frame.size.height * scale), nil);   
         CGContextRef layerContext = CGLayerGetContext(layerRef);
         // Fill it with the background image but clip it because it will be scaled otherwise
-        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
         CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width * scale, self.frame.size.height * scale));
-        CGContextDrawImage(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width *scale, backgroundImage.size.height* scale),     backgroundImage.CGImage);
+        
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+        NSArray *colors = [NSArray arrayWithObjects:
+                           (id)[UIColor darkGrayColor].CGColor, (id)[UIColor lightGrayColor].CGColor, nil];
+        CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, 
+                                                            (__bridge CFArrayRef) colors, NULL);
+        CGContextDrawLinearGradient(layerContext, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.frame.size.height * scale), 0);
+        CGGradientRelease(gradient);
         
         // Draw the strings using UIKit draw methods
         UIGraphicsPushContext(layerContext);
