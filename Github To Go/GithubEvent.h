@@ -47,6 +47,11 @@
 @property (strong, nonatomic) NSString* selfUrl;
 @end
 
+@interface IssuesEvent: GithubEvent 
+@property (strong, nonatomic) NSNumber *number;
+@property (strong, nonatomic) NSString* selfUrl;
+@end
+
 @interface CommitCommentEvent: GithubEvent 
 
 @property (strong, nonatomic) NSString *commitSha;

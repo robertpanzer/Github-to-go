@@ -25,8 +25,6 @@
 
 -(void)parseFollowEvent:(NSDictionary*)jsonObject;
 
--(void)parseIssuesEvent:(NSDictionary*)jsonObject;
-
 -(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject;
 
 -(void)parseGistEvent:(NSDictionary*)jsonObject;
@@ -100,8 +98,6 @@
                 [self parseDownloadEvent:jsonObject];
             } else if ([type isEqualToString:@"FollowEvent"]) {
                 [self parseFollowEvent:jsonObject];
-            } else if ([type isEqualToString:@"IssuesEvent"]) {
-                [self parseIssuesEvent:jsonObject];
             } else if ([type isEqualToString:@"GistEvent"]) {
                 [self parseGistEvent:jsonObject];
             } else if ([type isEqualToString:@"GollumEvent"]) {
@@ -172,14 +168,6 @@
     self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ is following %@", @"FollowEvent"),
                  self.person.displayname,
                  followedPerson.displayname ];
-}
-
--(void)parseIssuesEvent:(NSDictionary*)jsonObject {
-    self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ issue %@:\n%@", @"IssueEvent"),
-                 self.person.displayname,
-                 [jsonObject valueForKeyPath:@"payload.action"],
-                 [jsonObject valueForKeyPath:@"payload.issue.number"],
-                 [jsonObject valueForKeyPath:@"payload.issue.title"] ];
 }
 
 -(void)parsePullRequestReviewCommentEvent:(NSDictionary*)jsonObject {
@@ -371,6 +359,30 @@
 
 @end
 
+@implementation IssuesEvent
+
+@synthesize number;
+@synthesize selfUrl;
+
+-(id)initWithJSON:(NSDictionary *)jsonObject {
+    self = [super initWithJSON:jsonObject];
+    if (self != nil) {
+        self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKeyPath:@"repo"]];
+        self.number = [jsonObject valueForKeyPath:@"payload.issue.number"];
+        self.selfUrl = [jsonObject valueForKeyPath:@"payload.issue.url"];
+        self.text = [NSString stringWithFormat:NSLocalizedString(@"%@ %@ issue %@:\n%@", @"IssueEvent"),
+                     self.person.displayname,
+                     [jsonObject valueForKeyPath:@"payload.action"],
+                     [jsonObject valueForKeyPath:@"payload.issue.number"],
+                     [jsonObject valueForKeyPath:@"payload.issue.title"] ];
+    }
+    
+    return self;
+}
+
+@end
+
+
 @implementation EventFactory
     
 +(GithubEvent*) createEventFromJsonObject:(NSDictionary*)jsonObject {
@@ -403,7 +415,7 @@
             } else if ([type isEqualToString:@"FollowEvent"]) {
                 return [[GithubEvent alloc] initWithJSON:jsonObject];
             } else if ([type isEqualToString:@"IssuesEvent"]) {
-                return [[GithubEvent alloc] initWithJSON:jsonObject];
+                return [[IssuesEvent alloc] initWithJSON:jsonObject];
             } else if ([type isEqualToString:@"PullRequestReviewCommentEvent"]) {
                 return [[PullRequestReviewCommentEvent alloc] initWithJSON:jsonObject];
             } else {

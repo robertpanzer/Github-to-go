@@ -23,4 +23,6 @@
 
 -(void)bindIssueCommentEvent:(IssueCommentEvent*)anEvent;
 
+-(void)bindIssuesEvent:(IssuesEvent*)anEvent;
+
 @end

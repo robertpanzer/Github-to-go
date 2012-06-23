@@ -218,6 +218,8 @@
             [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
         } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
             [cell bindIssueCommentEvent:(IssueCommentEvent*)event];
+        } else if ([event isKindOfClass:[IssuesEvent class]]) {
+            [cell bindIssuesEvent:(IssuesEvent*)event];
         } else {
             [cell bindGithubEvent:event];
         }
@@ -280,6 +282,17 @@
         }];
     } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
         [[NetworkProxy sharedInstance] loadStringFromURL:((IssueCommentEvent*)event).selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationController.navigationBarHidden = NO;
+                    Issue *issue = [[Issue alloc] initWithJSONObject:data repository:event.repository];
+                    IssueRootViewController *issueRootViewController = [[IssueRootViewController alloc] initWithIssue:issue];
+                    [self.navigationController pushViewController:issueRootViewController animated:YES];
+                });
+            }
+        }];
+    } else if ([event isKindOfClass:[IssuesEvent class]]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:((IssuesEvent*)event).selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.navigationController.navigationBarHidden = NO;
