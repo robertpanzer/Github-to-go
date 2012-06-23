@@ -16,21 +16,23 @@
 
 @implementation PullRequestCommentViewController
 
-@synthesize pullRequest;
+@synthesize url;
+@synthesize number;
 @synthesize comments;
 @synthesize addCommentCell;
 
-- (id)initWithPullRequest:(PullRequest *)aPullRequest
+- (id)initWithUrl:(NSString *)anUrl number:(NSNumber *)aNumber
 {
     self = [super initWithNibName:@"PullRequestCommentViewController" bundle:nil];
     if (self) {
-        self.pullRequest = aPullRequest;
+        self.url = anUrl;
+        self.number = aNumber;
     }
     return self;
 }
 
 - (IBAction)showAddCommentDialog:(id)sender {
-    PullRequestAddCommentViewController *addCommentViewController = [[PullRequestAddCommentViewController alloc] initWithPullRequest:self.pullRequest];
+    PullRequestAddCommentViewController *addCommentViewController = [[PullRequestAddCommentViewController alloc] initWithUrl:url number:self.number];
     [self presentModalViewController:addCommentViewController animated:YES];
 }
 
@@ -113,7 +115,7 @@
 
 -(void)loadComments {
 
-    [[NetworkProxy sharedInstance] loadStringFromURL:self.pullRequest.issueCommentsUrl 
+    [[NetworkProxy sharedInstance] loadStringFromURL:self.url 
                                                block:^(int statusCode, NSDictionary *aHeaderFields, id data){
                                                    if (statusCode == 200) {
                                                        NSArray *jsonObjects = (NSArray*)data;
@@ -138,14 +140,16 @@
 
 @synthesize textView;
 @synthesize waitScreen;
-@synthesize pullRequest;
+@synthesize url;
+@synthesize number;
 @synthesize navigationItem;
 
-- (id)initWithPullRequest:(PullRequest*)aPullRequest
+- (id)initWithUrl:(NSString*)anUrl number:(NSNumber*)aNumber;
 {
     self = [super initWithNibName:@"PullRequestAddCommentViewController" bundle:nil];
     if (self) {
-        self.pullRequest = aPullRequest;
+        self.url = anUrl;
+        self.number = aNumber;
     }
     return self;
 }
@@ -183,7 +187,7 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    self.navigationItem.title = [self.pullRequest.number stringValue];
+    self.navigationItem.title = [self.number stringValue];
 }
 
 -(void)sendComment:(id)sender {
@@ -191,7 +195,7 @@
     self.textView.editable = NO;
     NSDictionary *comment = [NSDictionary dictionaryWithObject:self.textView.text forKey:@"body"];
     NSString *failedMessage = NSLocalizedString(@"Adding comment failed", @"Alert View title");
-    [[NetworkProxy sharedInstance] sendData:comment ToUrl:self.pullRequest.issueCommentsUrl verb:@"POST" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+    [[NetworkProxy sharedInstance] sendData:comment ToUrl:self.url verb:@"POST" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
         if (statusCode == 201) {
             [(PullRequestCommentViewController*)self.parentViewController loadComments];
             dispatch_async(dispatch_get_main_queue(), ^{

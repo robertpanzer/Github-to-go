@@ -24,7 +24,7 @@
         self.pullRequest = aPullRequest;
         UIViewController* infoViewController = [[PullRequestTableViewController alloc] initWithPullRequest:self.pullRequest];
         UIViewController* reviewTableViewController = [[PullRequestReviewTableViewController alloc] initWithPullRequest:self.pullRequest];
-        UIViewController* commentViewController = [[PullRequestCommentViewController alloc] initWithPullRequest:self.pullRequest];
+        UIViewController* commentViewController = [[PullRequestCommentViewController alloc] initWithUrl:aPullRequest.issueCommentsUrl number:aPullRequest.number];
         UIViewController* commitsViewController = [[BranchViewController alloc] initWithPullRequest:self.pullRequest];
         
         [self addChildViewController:infoViewController title:@"Info"];
