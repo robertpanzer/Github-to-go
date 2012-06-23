@@ -21,4 +21,6 @@
 
 -(void)bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)anEvent;
 
+-(void)bindIssueCommentEvent:(IssueCommentEvent*)anEvent;
+
 @end

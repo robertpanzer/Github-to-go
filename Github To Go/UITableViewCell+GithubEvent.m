@@ -49,4 +49,10 @@
     self.selectionStyle = UITableViewCellSelectionStyleBlue;
 }
 
+-(void)bindIssueCommentEvent:(IssueCommentEvent*)anEvent {
+    [self bindGithubEvent:anEvent];
+    self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    self.selectionStyle = UITableViewCellSelectionStyleBlue;
+}
+
 @end

@@ -14,6 +14,7 @@
 
 @property(strong) NSDate* createdAt;
 @property(strong) NSDate* updatedAt;
+@property(strong) NSDate* closedAt;
 @property(strong) NSString* state;
 @property(strong) Person* creator;
 @property(strong) NSString* title;

@@ -14,6 +14,7 @@
 @synthesize state;
 @synthesize createdAt;
 @synthesize updatedAt;
+@synthesize closedAt;
 @synthesize creator;
 @synthesize title;
 @synthesize body;
@@ -28,8 +29,15 @@
         self.repository = aRepository;
         self.number = [jsonObject valueForKey:@"number"];
         self.state = [jsonObject valueForKey:@"state"];
-        self.createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
-        self.updatedAt = [(NSString*)[jsonObject valueForKey:@"updated_at"] dateForRFC3339DateTimeString];
+        if ([jsonObject valueForKey:@"created_at"] != [NSNull null]) {
+            self.createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
+        }
+        if ([jsonObject valueForKey:@"updated_at"] != [NSNull null]) {
+            self.updatedAt = [(NSString*)[jsonObject valueForKey:@"updated_at"] dateForRFC3339DateTimeString];
+        }
+        if ([jsonObject valueForKey:@"closed_at"] != [NSNull null]) {
+            self.closedAt = [(NSString*)[jsonObject valueForKey:@"closed_at"] dateForRFC3339DateTimeString];
+        }
         self.creator = [[Person alloc] initWithJSONObject:[jsonObject valueForKey:@"user"]];
         self.title = [jsonObject valueForKey:@"title"];
         self.body = [jsonObject valueForKey:@"body"];

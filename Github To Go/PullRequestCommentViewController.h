@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "PullRequest.h"
+#import "Issue.h"
 
 @interface PullRequestCommentViewController : UITableViewController
 
-@property (strong, nonatomic) PullRequest *pullRequest;
+@property (strong, nonatomic) NSString *url;
+@property (strong, nonatomic) NSNumber *number;
 @property (strong, nonatomic) NSArray *comments;
 @property (strong, nonatomic) IBOutlet UITableViewCell *addCommentCell;
 
--(id)initWithPullRequest:(PullRequest*)aPullRequest;
+- (id)initWithUrl:(NSString*)anUrl number:(NSNumber*)aNumber;
+
 - (IBAction)showAddCommentDialog:(id)sender;
 
 -(IBAction)loadComments;
@@ -27,10 +30,13 @@
 @property (strong, nonatomic) IBOutlet UIView *waitScreen;
 @property (strong, nonatomic) IBOutlet UINavigationItem *navigationItem;
 
-@property (strong, nonatomic) PullRequest *pullRequest;
+@property (strong, nonatomic) NSString *url;
+@property (strong, nonatomic) NSNumber *number;
+
 -(IBAction)sendComment:(id)sender;
 
 -(IBAction)cancel:(id)sender;
 
-- (id)initWithPullRequest:(PullRequest*)aPullRequest;
+- (id)initWithUrl:(NSString*)anUrl number:(NSNumber*)aNumber;
+
 @end

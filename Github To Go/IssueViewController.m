@@ -17,6 +17,7 @@ static NSDictionary* titles;
 static NSString* kNumber    = @"number";
 static NSString* kCreatedAt = @"createdAt";
 static NSString* kUpdatedAt = @"updatedAt";
+static NSString* kClosedAt  = @"closedAt";
 static NSString* kTitle     = @"title";
 static NSString* kBody      = @"body";
 static NSString* kState     = @"state";
@@ -29,6 +30,7 @@ static NSString* titleState;
 static NSString* titleCreator;
 static NSString* titleCreateAt;
 static NSString* titleUpdatedAt;
+static NSString* titleClosedAt;
 
 
 @interface IssueViewController ()
@@ -51,9 +53,10 @@ static NSString* titleUpdatedAt;
     titleCreator   = NSLocalizedString(@"Creator", @"Pull Request Creator");
     titleCreateAt  = NSLocalizedString(@"Created at", @"Pull Request Created At");
     titleUpdatedAt = NSLocalizedString(@"Updated at", @"Pull Request Updated At");
+    titleClosedAt  = NSLocalizedString(@"Closed at", @"Pull Request Closed At");
     
     
-    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kCreatedAt, kUpdatedAt, kState, kCreator, nil];
+    keyPaths = [NSArray arrayWithObjects:kNumber, kTitle, kBody, kCreatedAt, kUpdatedAt, kClosedAt, kState, kCreator, nil];
     titles = [NSDictionary dictionaryWithObjectsAndKeys:titleNumber, kNumber,
               titleTitle,kTitle,
               titleBody, kBody,
@@ -61,6 +64,7 @@ static NSString* titleUpdatedAt;
               titleCreator, kCreator,
               titleCreateAt, kCreatedAt,
               titleUpdatedAt, kUpdatedAt,
+              titleClosedAt, kClosedAt,
               nil ];
 }
 
@@ -105,13 +109,9 @@ static NSString* titleUpdatedAt;
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"%d Elements", keyPaths.count);
     return keyPaths.count;
 }
 

@@ -15,4 +15,6 @@
 
 -(void)addChildViewController:(UIViewController *)childController title:(NSString*)aTitle;
 
+-(void)removeAllChildControllers;
+
 @end

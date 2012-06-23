@@ -16,7 +16,7 @@
 #import "UIRepositoryRootViewController.h"
 #import "BranchViewController.h"
 #import "Commit.h"
-
+#import "IssueRootViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface EventTableViewController()
@@ -216,6 +216,8 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
             [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
+        } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
+            [cell bindIssueCommentEvent:(IssueCommentEvent*)event];
         } else {
             [cell bindGithubEvent:event];
         }
@@ -253,15 +255,14 @@
     GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
     if ([event isKindOfClass:[PushEvent class]]) {
         PushEvent* pushEvent = (PushEvent*)event;
+        self.navigationController.navigationBarHidden = NO;
         if (pushEvent.commits.count > 0) {
             if (pushEvent.commits.count == 1) {
                 CommitViewController* commitViewController = [[CommitViewController alloc] initWithCommit:pushEvent.commits.lastCommit repository:pushEvent.repository];
                 [self.navigationController pushViewController:commitViewController animated:YES];
-                self.navigationController.navigationBar.hidden = NO;
             } else {
                 BranchViewController* branchViewController = [[BranchViewController alloc] initWithCommitHistoryList:pushEvent.commits repository:pushEvent.repository branch:nil];
                 [self.navigationController pushViewController:branchViewController animated:YES];
-                self.navigationController.navigationBar.hidden = NO;
             }
         }
     } else if ([event isKindOfClass:[PullRequestEvent class]]) {
@@ -270,9 +271,21 @@
         [[NetworkProxy sharedInstance] loadStringFromURL:pullRequest.selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationController.navigationBarHidden = NO;
                     PullRequest *currentPullRequest = [[PullRequest alloc] initWithJSONObject:data repository:pullRequest.repository];
                     PullRequestRootViewController *pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:currentPullRequest];
                     [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
+                });
+            }
+        }];
+    } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:((IssueCommentEvent*)event).selfUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationController.navigationBarHidden = NO;
+                    Issue *issue = [[Issue alloc] initWithJSONObject:data repository:event.repository];
+                    IssueRootViewController *issueRootViewController = [[IssueRootViewController alloc] initWithIssue:issue];
+                    [self.navigationController pushViewController:issueRootViewController animated:YES];
                 });
             }
         }];
@@ -282,6 +295,7 @@
             if (statusCode == 200) {
                 Commit *commit = [[Commit alloc] initWithJSONObject:data repository:event.repository];
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationController.navigationBarHidden = NO;
                     CommitViewController *commitViewController = [[CommitViewController alloc] initWithCommit:commit repository:event.repository];
                     [self.navigationController pushViewController:commitViewController animated:YES];
                 });
@@ -293,6 +307,7 @@
             if (statusCode == 200) {
                 Commit *commit = [[Commit alloc] initWithJSONObject:data repository:event.repository];
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationController.navigationBarHidden = NO;
                     CommitViewController *commitViewController = [[CommitViewController alloc] initWithCommit:commit repository:event.repository];
                     [self.navigationController pushViewController:commitViewController animated:YES];
                 });
@@ -300,9 +315,9 @@
         }];
     } else if (([event isKindOfClass:[CreateRepositoryEvent class]] && self.repository == nil)
                 || [event isKindOfClass:[ForkEvent class]]) {
+        self.navigationController.navigationBarHidden = NO;
         UIRepositoryRootViewController *repositoryRootViewController = [[UIRepositoryRootViewController alloc] initWithRepository:event.repository];
         [self.navigationController pushViewController:repositoryRootViewController animated:YES];
-        self.navigationController.navigationBar.hidden = NO;
     }
     
     

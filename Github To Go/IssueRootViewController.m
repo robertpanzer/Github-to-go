@@ -31,6 +31,8 @@
         
         PullRequestCommentViewController *commentViewController = [[PullRequestCommentViewController alloc] initWithUrl:[NSString stringWithFormat:@"https://api.github.com/repos/%@/issues/%@/comments", anIssue.repository.fullName, anIssue.number] number:anIssue.number];
         [self addChildViewController:commentViewController title:@"Comments"];
+        
+        self.navigationItem.title = [anIssue.number description];
     }
     return self;
 }
