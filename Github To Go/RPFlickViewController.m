@@ -24,6 +24,7 @@
 @synthesize currentTitle;
 @synthesize layerRef;
 
+
 -(id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -41,9 +42,9 @@
 
     // Draw the texts on a layer
     // Create layer
-    if (layerRef == nil) {
+    if (self.layerRef == nil) {
         CGFloat scale = [UIScreen mainScreen].scale;
-        layerRef = CGLayerCreateWithContext(context, CGSizeMake(self.frame.size.width * scale, self.frame.size.height * scale), nil);   
+        self.layerRef = CGLayerCreateWithContext(context, CGSizeMake(self.frame.size.width * scale, self.frame.size.height * scale), nil);   
         CGContextRef layerContext = CGLayerGetContext(layerRef);
         // Fill it with the background image but clip it because it will be scaled otherwise
         CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width * scale, self.frame.size.height * scale));
@@ -101,6 +102,18 @@
     if (self.layerRef != NULL) {
         CGLayerRelease(self.layerRef);
         self.layerRef = NULL;
+    }
+}
+
+-(void)setTitles:(NSArray *)aTitles {
+    titles = aTitles;
+    CGLayerRelease(self.layerRef);
+    self.layerRef = nil;
+}
+
+-(void)dealloc {
+    if (self.layerRef != NULL) {
+        CGLayerRelease(self.layerRef);
     }
 }
 
@@ -163,22 +176,33 @@ static int kGestureStateSuccess  = 2;
     [self.view addGestureRecognizer:panGesturerecognizer];
     
     self.currentViewIndex = 0;
-    header = [[RPFlipViewHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 20.0f)];
-    header.titles = self.titles;
-    header.currentTitle = 0;
-    [self.view addSubview:header];
+    self.header = [[RPFlipViewHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 20.0f)];
+    [self.view addSubview:self.header];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+    if (self.childViewControllers.count > 1) {
+        self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+        self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+
+        [self.view addSubview:self.leftViewController.view];
+        [self.view addSubview:self.rightViewController.view];
+
+    } else {
+        
+    }
     self.currentViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
-    self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
     
-    [self.view addSubview:self.leftViewController.view];
     [self.view addSubview:self.currentViewController.view];
-    [self.view addSubview:self.rightViewController.view];
     
     self.header.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 20.0f);
+    self.header.titles = self.titles;
+    self.header.currentTitle = self.currentViewIndex;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.header setNeedsDisplay];
 }
 
 - (void)viewDidUnload
@@ -206,6 +230,9 @@ static int kGestureStateSuccess  = 2;
 }
 
 -(void)pan:(UIPanGestureRecognizer*)sender {
+    if (self.childViewControllers.count < 2) {
+        return;
+    }
     CGPoint translation = [sender translationInView:self.view];
 
     if (sender.state == UIGestureRecognizerStateBegan) {
@@ -327,6 +354,15 @@ static int kGestureStateSuccess  = 2;
 -(void)setCurrentViewIndex:(NSUInteger)aCurrentViewIndex {
     currentViewIndex = aCurrentViewIndex;
     self.header.currentTitle = aCurrentViewIndex;
+    [self.header setNeedsDisplay];
+}
+
+-(void)removeAllChildControllers {
+    [self.titles removeAllObjects];
+    for (UIViewController *childViewController in [self childViewControllers]) {
+        [childViewController.view removeFromSuperview];
+        [childViewController removeFromParentViewController];
+    }
     [self.header setNeedsDisplay];
 }
 

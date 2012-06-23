@@ -14,6 +14,8 @@
 #import "EventTableViewController.h"
 #import "SearchTableViewController.h"
 #import "RepositoryStorage.h"
+#import "RPFlickViewController.h"
+#import "EventRootViewController.h"
 
 @implementation AppDelegate
 
@@ -30,8 +32,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    EventTableViewController *eventTableViewController = [[EventTableViewController alloc] initWithAllEvents];
-    UINavigationController *eventsNavigationController = [[UINavigationController alloc] initWithRootViewController:eventTableViewController];
+    EventRootViewController *eventRootViewController = [[EventRootViewController alloc] init];
+    UINavigationController *eventsNavigationController = [[UINavigationController alloc] initWithRootViewController:eventRootViewController];
 
     RepoBrowserTableViewController* repoBrowserController = [[RepoBrowserTableViewController alloc] init];
     UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:repoBrowserController];

@@ -78,6 +78,7 @@
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */; };
 		94CC3C3C1523B31B00F4B25B /* PersonListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */; };
+		94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CCEDF715951AF700D5D810 /* EventRootViewController.m */; };
 		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
@@ -219,6 +220,8 @@
 		94CC3C381523B31B00F4B25B /* PersonListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonListTableViewController.h; sourceTree = "<group>"; };
 		94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonListTableViewController.m; sourceTree = "<group>"; };
 		94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonListTableViewController.xib; sourceTree = "<group>"; };
+		94CCEDF615951AF700D5D810 /* EventRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventRootViewController.h; sourceTree = "<group>"; };
+		94CCEDF715951AF700D5D810 /* EventRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventRootViewController.m; sourceTree = "<group>"; };
 		94D50E0714E472D6000C92E2 /* EventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableViewController.h; sourceTree = "<group>"; };
 		94D50E0814E472D6000C92E2 /* EventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableViewController.m; sourceTree = "<group>"; };
 		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
@@ -535,6 +538,8 @@
 				94D50E0D14E478D7000C92E2 /* GithubEvent.m */,
 				94C6566B15025FAD00E85813 /* UITableViewCell+GithubEvent.h */,
 				94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */,
+				94CCEDF615951AF700D5D810 /* EventRootViewController.h */,
+				94CCEDF715951AF700D5D810 /* EventRootViewController.m */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -710,6 +715,7 @@
 				94EF407B15440079002FA8B5 /* Issue.m in Sources */,
 				94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */,
 				949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */,
+				94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
