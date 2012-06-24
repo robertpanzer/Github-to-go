@@ -136,7 +136,7 @@
             cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
         }
         Blob* blob = [self.tree blobAtIndex:indexPath.row];
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d bytes", blob.size]; 
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld bytes", blob.size]; 
         cell.textLabel.text = blob.name;
         return cell;
     } else {

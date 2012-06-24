@@ -57,7 +57,7 @@ static NSArray* actionSheetTitles;
     [super viewWillAppear:animated];
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = repository.fullName;
-    
+    self.navigationController.navigationBarHidden = NO;
     if ([[RepositoryStorage sharedStorage].ownRepositories objectForKey:self.repository.fullName] == nil) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
     }

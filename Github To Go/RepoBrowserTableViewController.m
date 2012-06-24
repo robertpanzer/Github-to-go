@@ -29,7 +29,7 @@
 
 - (id)init
 {
-    self = [super initWithStyle:UITableViewStyleGrouped];//NibName:@"RepoBrowserTableViewController" bundle:nil];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.title = NSLocalizedString(@"Repositories", @"Repositories");
         self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:2];
