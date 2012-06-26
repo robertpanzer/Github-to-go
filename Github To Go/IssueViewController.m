@@ -111,7 +111,6 @@ static NSString* titleClosedAt;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"%d Elements", keyPaths.count);
     return keyPaths.count;
 }
 
