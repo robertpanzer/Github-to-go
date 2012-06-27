@@ -10,21 +10,28 @@
 #import "RepositoryViewController.h"
 #import "RepositoryStorage.h"
 #import "NetworkProxy.h"
+#import <Twitter/Twitter.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
 
 static NSString* WatchRepo;
 static NSString* StopWatchingRepo;
 
-static NSArray* actionSheetTitles;
+@interface UIRepositoryRootViewController() <MFMailComposeViewControllerDelegate>
+
+@property(strong,nonatomic) NSMutableArray* actionSheetTitles;
+
+@end
 
 @implementation UIRepositoryRootViewController
 
 @synthesize repository;
 @synthesize watched;
+@synthesize actionSheetTitles;
 
 +(void) initialize {
     WatchRepo = NSLocalizedString(@"Watch Repository", @"Action Sheet Watch Repo");
     StopWatchingRepo = NSLocalizedString(@"Stop watching", @"Action Sheet Stop Watching");
-    actionSheetTitles = [NSArray arrayWithObjects:WatchRepo, StopWatchingRepo, nil];
 }
 
 - (id)initWithRepository:(Repository*)aRepository
@@ -58,8 +65,28 @@ static NSArray* actionSheetTitles;
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = repository.fullName;
     self.navigationController.navigationBarHidden = NO;
-    if ([[RepositoryStorage sharedStorage].ownRepositories objectForKey:self.repository.fullName] == nil) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet)];
+    
+    self.actionSheetTitles = [NSMutableArray array];
+    if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
+        if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
+            [self.actionSheetTitles addObject:WatchRepo];
+        } else {
+            [self.actionSheetTitles addObject:StopWatchingRepo];
+        }
+    }
+    
+    if ([TWTweetComposeViewController canSendTweet]) {
+        [self.actionSheetTitles addObject:@"Tweet"];
+    }
+    
+    if ([MFMailComposeViewController canSendMail]) {
+        [self.actionSheetTitles addObject:@"Mail"];
+    }
+    
+    if (self.actionSheetTitles.count > 0) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
+                                                                                               target:self 
+                                                                                               action:@selector(showActionSheet)];
     }
 }
 
@@ -70,13 +97,25 @@ static NSArray* actionSheetTitles;
 
 
 -(void)showActionSheet {
-    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") destructiveButtonTitle:nil otherButtonTitles:nil];
-    if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
-        [actionSheet addButtonWithTitle:WatchRepo];
-    } else {
-        [actionSheet addButtonWithTitle:StopWatchingRepo];
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil 
+                                                             delegate:self 
+                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") 
+                                               destructiveButtonTitle:nil otherButtonTitles:nil];
+    if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
+        if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
+            [actionSheet addButtonWithTitle:WatchRepo];
+        } else {
+            [actionSheet addButtonWithTitle:StopWatchingRepo];
+        }
     }
     
+    if ([TWTweetComposeViewController canSendTweet]) {
+        [actionSheet addButtonWithTitle:@"Tweet"];
+    }
+    
+    if ([MFMailComposeViewController canSendMail]) {
+        [actionSheet addButtonWithTitle:@"Mail"];
+    }
     [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
 }
 
@@ -108,6 +147,21 @@ static NSArray* actionSheetTitles;
                 }
             });
         } ];
+    } else if ([@"Tweet" isEqualToString:titleClicked]) {
+        TWTweetComposeViewController *tweetController = [[TWTweetComposeViewController alloc] init];
+        [tweetController addURL:[NSURL URLWithString:repository.htmlUrl]];
+        [self presentModalViewController:tweetController animated:YES];
+    } else if ([@"Mail" isEqualToString:titleClicked]) {
+        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
+        [mailController setMessageBody:repository.htmlUrl isHTML:NO];
+        mailController.mailComposeDelegate = self;
+        [self presentModalViewController:mailController animated:YES];
     }
 }
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [controller dismissModalViewControllerAnimated:YES];
+}
+
 @end
+

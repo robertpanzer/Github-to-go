@@ -55,6 +55,11 @@ static RepositoryStorage* sharedStorage;
     return ret;
 }
 
+-(BOOL)repositoryIsOwned:(Repository*)repository {
+    BOOL ret = [ownRepositories objectForKey:repository.fullName] != nil;
+    return ret;
+}
+
 -(void)loadFollowed {
     if ([Settings sharedInstance].isUsernameSet) {
         [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/following" block:^(int statusCode, NSDictionary *aHeaderFields, id data) {

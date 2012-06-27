@@ -16,6 +16,7 @@
 @synthesize description;
 @synthesize masterBranch;
 @synthesize url;
+@synthesize htmlUrl;
 @synthesize owner;
 @synthesize branches;
 @synthesize repoId;
@@ -56,6 +57,7 @@
         self.forks = [jsonObject valueForKey:@"forks"];
 
         self.url = [jsonObject valueForKey:@"url"];
+        self.htmlUrl = [jsonObject valueForKey:@"html_url"];
         self.createdAt = [[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
         self.language = [jsonObject valueForKey:@"language"];
         self.openIssues = [jsonObject valueForKey:@"open_issues"];
