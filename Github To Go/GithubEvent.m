@@ -102,6 +102,8 @@
                 [self parseGistEvent:jsonObject];
             } else if ([type isEqualToString:@"GollumEvent"]) {
                 [self parseGollumEvent:jsonObject];
+            } else if ([type isEqualToString:@"CreateEvent"]) {
+                [self parseCreateEvent:jsonObject];
             } else {
                 self.text = type;
             }
