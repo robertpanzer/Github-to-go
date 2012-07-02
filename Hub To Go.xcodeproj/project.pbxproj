@@ -17,6 +17,7 @@
 		9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */; };
 		940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF85E159B7A8A00F8A5EB /* Twitter.framework */; };
 		940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF861159BAD7200F8A5EB /* MessageUI.framework */; };
+		941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C052915A03FF1009B772A /* RPShareUrlController.m */; };
 		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
 		941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF8B150E1A5C0046F72F /* Icon@2x.png */; };
 		941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */; };
@@ -118,6 +119,8 @@
 		9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+PullRequest.m"; sourceTree = "<group>"; };
 		940AF85E159B7A8A00F8A5EB /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		940AF861159BAD7200F8A5EB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		941C052815A03FF1009B772A /* RPShareUrlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPShareUrlController.h; sourceTree = "<group>"; };
+		941C052915A03FF1009B772A /* RPShareUrlController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPShareUrlController.m; sourceTree = "<group>"; };
 		941FCF89150E18A10046F72F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		941FCF8B150E1A5C0046F72F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestRootViewController.h; sourceTree = "<group>"; };
@@ -476,6 +479,8 @@
 				949F506F151E4EF5009D5DC3 /* NSString+ISO8601Parsing.h */,
 				949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */,
 				94C2F9F9158CBE070006640F /* RPFlickViewController.h */,
+				941C052815A03FF1009B772A /* RPShareUrlController.h */,
+				941C052915A03FF1009B772A /* RPShareUrlController.m */,
 				94C2F9FA158CBE070006640F /* RPFlickViewController.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
@@ -724,6 +729,7 @@
 				94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */,
 				949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */,
 				94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */,
+				941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

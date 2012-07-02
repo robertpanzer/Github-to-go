@@ -11,14 +11,18 @@
 #import "IssueViewController.h"
 #import "EventTableViewController.h"
 #import "PullRequestCommentViewController.h"
+#import "RPShareUrlController.h"
 
 @interface IssueRootViewController ()
+
+@property(nonatomic,strong) RPShareUrlController *shareUrlController;
 
 @end
 
 @implementation IssueRootViewController
 
 @synthesize issue;
+@synthesize shareUrlController;
 
 - (id)initWithIssue:(Issue*)anIssue
 {
@@ -33,6 +37,12 @@
         [self addChildViewController:commentViewController title:@"Comments"];
         
         self.navigationItem.title = [anIssue.number description];
+        
+        NSString *shareTitle = [NSString stringWithFormat:@"Issue %@", issue.number];
+        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:issue.htmlUrl 
+                                                                      title:shareTitle
+                                                             viewController:self];
+
     }
     return self;
 }
@@ -40,7 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
 }
 
 - (void)viewDidUnload

@@ -20,6 +20,7 @@
 @property(strong) NSString* body;
 @property(strong) NSNumber* number;
 @property(strong, nonatomic) NSString* selfUrl;
+@property(strong, nonatomic) NSString* htmlUrl;
 @property(strong, nonatomic) NSString *issueCommentsUrl, *reviewCommentsUrl;
 @property(nonatomic) BOOL merged;
 @property(strong, nonatomic) Repository *repository;

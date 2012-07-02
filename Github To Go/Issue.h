@@ -20,6 +20,7 @@
 @property(strong) NSString* title;
 @property(strong) NSString* body;
 @property(strong) NSNumber* number;
+@property(strong) NSString *htmlUrl;
 
 @property(strong, nonatomic) Repository *repository;
 

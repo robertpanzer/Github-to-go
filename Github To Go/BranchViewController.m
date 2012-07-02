@@ -279,9 +279,7 @@
 
 #pragma mark - UISearchBarDelegate methods
 
--(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {
-    NSLog(@"Jetzt suchen? %@", aSearchBar.text);
-    
+-(void)searchBarSearchButtonClicked:(UISearchBar *)aSearchBar {    
     CommitHistoryList* searchResult = [commitHistoryList commitHistoryListFilteredBySearchString:searchBar.text];
     BranchViewController* searchResultController = [[BranchViewController alloc] initWithCommitHistoryList:searchResult repository:repository branch:branch];
     [self.navigationController pushViewController:searchResultController animated:YES];

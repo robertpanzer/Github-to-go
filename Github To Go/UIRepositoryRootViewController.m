@@ -80,7 +80,7 @@ static NSString* StopWatchingRepo;
     }
     
     if ([MFMailComposeViewController canSendMail]) {
-        [self.actionSheetTitles addObject:@"Mail"];
+        [self.actionSheetTitles addObject:@"Share via Mail"];
     }
     
     if (self.actionSheetTitles.count > 0) {
@@ -101,20 +101,8 @@ static NSString* StopWatchingRepo;
                                                              delegate:self 
                                                     cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") 
                                                destructiveButtonTitle:nil otherButtonTitles:nil];
-    if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
-        if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
-            [actionSheet addButtonWithTitle:WatchRepo];
-        } else {
-            [actionSheet addButtonWithTitle:StopWatchingRepo];
-        }
-    }
-    
-    if ([TWTweetComposeViewController canSendTweet]) {
-        [actionSheet addButtonWithTitle:@"Tweet"];
-    }
-    
-    if ([MFMailComposeViewController canSendMail]) {
-        [actionSheet addButtonWithTitle:@"Mail"];
+    for (NSString* actionSheetTitle in actionSheetTitles) {
+        [actionSheet addButtonWithTitle:actionSheetTitle];
     }
     [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
 }
@@ -150,10 +138,12 @@ static NSString* StopWatchingRepo;
     } else if ([@"Tweet" isEqualToString:titleClicked]) {
         TWTweetComposeViewController *tweetController = [[TWTweetComposeViewController alloc] init];
         [tweetController addURL:[NSURL URLWithString:repository.htmlUrl]];
+        [tweetController setInitialText:[NSString stringWithFormat:@"Repository %@", self.repository.fullName]];
         [self presentModalViewController:tweetController animated:YES];
-    } else if ([@"Mail" isEqualToString:titleClicked]) {
+    } else if ([@"Share via Mail" isEqualToString:titleClicked]) {
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
         [mailController setMessageBody:repository.htmlUrl isHTML:NO];
+        [mailController setSubject:[NSString stringWithFormat:@"Repository %@", self.repository.fullName]];
         mailController.mailComposeDelegate = self;
         [self presentModalViewController:mailController animated:YES];
     }

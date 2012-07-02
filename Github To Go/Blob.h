@@ -9,21 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "GitObject.h"
 
-@interface Blob : NSObject <GitObject> {
-    NSString* absolutePath;
-    NSString* url;
-    long size;
-    id content;
-    NSString* commitSha;
-}
+@interface Blob : NSObject <GitObject>
 
-@property(unsafe_unretained, readonly) NSString* name;
-@property(readonly, strong) NSString* absolutePath;
-@property(strong) NSString* url;
-@property(strong) id content;
-@property(strong) NSData *rawContent;
-@property(readonly) long size;
-@property(readonly, strong) NSString* commitSha;
+@property(readonly) NSString* name;
+@property(readonly, strong, nonatomic) NSString* absolutePath;
+@property(strong, nonatomic) NSString* url;
+@property(strong, nonatomic) id content;
+@property(strong, nonatomic) NSData *rawContent;
+@property(readonly, nonatomic) long size;
+@property(readonly, strong, nonatomic) NSString* commitSha;
+@property(readonly, strong) NSString* htmlUrl;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha;
 

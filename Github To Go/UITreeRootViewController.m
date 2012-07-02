@@ -10,31 +10,55 @@
 #import "TreeViewController.h"
 #import "BranchViewController.h"
 #import "NetworkProxy.h"
+#import "RPShareUrlController.h"
+#import <Twitter/Twitter.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+@interface UITreeRootViewController() 
+
+@property(nonatomic,strong) RPShareUrlController *shareUrlController;
+
+@end
 
 @implementation UITreeRootViewController
 
 @synthesize treeUrl, absolutePath, commit, repository, branchName;
 @synthesize treeViewController, branchViewController;
+@synthesize htmlUrl, shareUrlController;
 
 -(id)initWithUrl:(NSString*)aTreeUrl absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName
 {
     self = [super init];
     if (self) {
-        self.treeUrl = aTreeUrl;
-        self.absolutePath = anAbsolutePath;
-        self.commit = aCommit;
-        self.repository = aRepository;
+        treeUrl = aTreeUrl;
+        absolutePath = anAbsolutePath;
+        commit = aCommit;
+        repository = aRepository;
+        branchName = aBranchName;
+        
+        htmlUrl = [NSString stringWithFormat:@"%@/tree/%@", aRepository.htmlUrl, aBranchName];
+        if (anAbsolutePath.length > 0) {
+            self.htmlUrl = [NSString stringWithFormat:@"%@/%@", self.htmlUrl, anAbsolutePath];
+        }
+        
+        
+        
+        NSString *shareTitle = [NSString stringWithFormat:@"%@/%@/%@", repository.fullName, branchName, absolutePath];
+        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:htmlUrl 
+                                                                      title:shareTitle
+                                                             viewController:self];
+
         
         treeViewController = [[TreeViewController alloc] initWithTree:nil
-                                                                             absolutePath:self.absolutePath
-                                                                                   commit:commit 
-                                                                               repository:self.repository
-                                                                               branchName:self.branchName];
+                                                         absolutePath:self.absolutePath
+                                                               commit:commit 
+                                                           repository:self.repository
+                                                           branchName:self.branchName];
         
         branchViewController = [[BranchViewController alloc] initWithGitObject:nil
-                                                                                        absolutePath:self.absolutePath
-                                                                                           commitSha:self.commit.sha
-                                                                                          repository:repository];
+                                                                  absolutePath:self.absolutePath
+                                                                     commitSha:self.commit.sha
+                                                                    repository:repository];
         
         [self addChildViewController:treeViewController title:@"Tree"];
         [self addChildViewController:branchViewController title:@"History"];
@@ -72,7 +96,8 @@
             });
         }
     }];
-
+    
+    self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
 }
 
 - (void)viewDidUnload
