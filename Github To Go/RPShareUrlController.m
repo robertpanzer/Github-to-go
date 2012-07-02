@@ -13,6 +13,7 @@
 
 static NSString* sharePerTweetAction;
 static NSString* sharePerMailAction;
+static NSString* openInSafariAction;
 
 @interface RPShareUrlController() <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 
@@ -30,6 +31,7 @@ static NSString* sharePerMailAction;
 +(void)initialize {
     sharePerTweetAction = NSLocalizedString(@"Tweet", @"Tweet ActionSheet button");
     sharePerMailAction  = NSLocalizedString(@"Share via Mail", @"Mail ActionSheet button");
+    openInSafariAction  = NSLocalizedString(@"Open in Safari", @"Open in Safari ActionSheet button");
 }
 
 -(id) initWithUrl:(NSString*)anUrl title:(NSString*)aTitle viewController:(UIViewController*)aViewController {
@@ -55,6 +57,8 @@ static NSString* sharePerMailAction;
     if ([MFMailComposeViewController canSendMail]) {
         [actionSheet addButtonWithTitle:sharePerMailAction];
     }
+    [actionSheet addButtonWithTitle:openInSafariAction];
+    
     [actionSheet showFromBarButtonItem:self.barButtonItem animated:YES];
 }
 
@@ -76,6 +80,8 @@ static NSString* sharePerMailAction;
         mailController.mailComposeDelegate = self;
         [mailController setSubject:self.title];
         [self.viewController presentModalViewController:mailController animated:YES];
+    } else if ([openInSafariAction isEqualToString:titleClicked]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.url]];
     }
 }
 
