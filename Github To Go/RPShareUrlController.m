@@ -19,6 +19,8 @@ static NSString* openInSafariAction;
 
 @property(weak, nonatomic) UIViewController* viewController;
 
+@property(strong, nonatomic) NSMutableArray* actions;
+@property(strong, nonatomic) NSMutableArray* blocks;
 @end
 
 @implementation RPShareUrlController
@@ -27,6 +29,7 @@ static NSString* openInSafariAction;
 @synthesize barButtonItem;
 @synthesize viewController;
 @synthesize title;
+@synthesize actions, blocks;
 
 +(void)initialize {
     sharePerTweetAction = NSLocalizedString(@"Tweet", @"Tweet ActionSheet button");
@@ -39,9 +42,18 @@ static NSString* openInSafariAction;
         url = anUrl;
         title = aTitle;
         viewController = aViewController;
-        barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+        actions = [NSMutableArray array];
+        blocks = [NSMutableArray array];
+        barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
+                                                                      target:self 
+                                                                      action:@selector(showActionSheet:)];
     }
     return self;
+}
+
+-(void)addAction:(NSString*)anAction block:(void(^)())aBlock {
+    [actions addObject:anAction];
+    [blocks addObject:aBlock];
 }
 
 -(void)showActionSheet:(id)sender {
@@ -58,6 +70,10 @@ static NSString* openInSafariAction;
         [actionSheet addButtonWithTitle:sharePerMailAction];
     }
     [actionSheet addButtonWithTitle:openInSafariAction];
+    
+    for (NSString* action in self.actions) {
+        [actionSheet addButtonWithTitle:action];
+    }
     
     [actionSheet showFromBarButtonItem:self.barButtonItem animated:YES];
 }
@@ -82,6 +98,14 @@ static NSString* openInSafariAction;
         [self.viewController presentModalViewController:mailController animated:YES];
     } else if ([openInSafariAction isEqualToString:titleClicked]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.url]];
+    } else {
+        for (int i = 0; i < actions.count; i++) {
+            if ([[actions objectAtIndex:i] isEqualToString:titleClicked]) {
+                void (^block)() = [blocks objectAtIndex:i];
+                block();
+                
+            }
+        }
     }
 }
 

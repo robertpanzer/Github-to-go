@@ -16,4 +16,6 @@
 
 -(id) initWithUrl:(NSString*)anUrl title:(NSString*)aTitle viewController:(UIViewController*)aViewController;
 
+-(void)addAction:(NSString*)anAction block:(void(^)())aBlock;
+
 @end

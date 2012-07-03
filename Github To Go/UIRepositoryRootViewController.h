@@ -16,14 +16,12 @@
 #import "IssueListViewController.h"
 #import "RPFlickViewController.h"
 
-@interface UIRepositoryRootViewController : RPFlickViewController<UIActionSheetDelegate> 
+@interface UIRepositoryRootViewController : RPFlickViewController
 
 @property(strong) Repository* repository;
 @property BOOL watched;
 
 
 - (id)initWithRepository:(Repository*)aRepository;
-
-- (void)showActionSheet;
 
 @end

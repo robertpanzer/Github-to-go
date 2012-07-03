@@ -10,16 +10,15 @@
 #import "RepositoryViewController.h"
 #import "RepositoryStorage.h"
 #import "NetworkProxy.h"
-#import <Twitter/Twitter.h>
-#import <MessageUI/MFMailComposeViewController.h>
-
+#import "RPShareUrlController.h"
 
 static NSString* WatchRepo;
 static NSString* StopWatchingRepo;
 
-@interface UIRepositoryRootViewController() <MFMailComposeViewControllerDelegate>
+@interface UIRepositoryRootViewController()
 
 @property(strong,nonatomic) NSMutableArray* actionSheetTitles;
+@property(nonatomic,strong) RPShareUrlController *shareUrlController;
 
 @end
 
@@ -28,6 +27,7 @@ static NSString* StopWatchingRepo;
 @synthesize repository;
 @synthesize watched;
 @synthesize actionSheetTitles;
+@synthesize shareUrlController;
 
 +(void) initialize {
     WatchRepo = NSLocalizedString(@"Watch Repository", @"Action Sheet Watch Repo");
@@ -53,8 +53,54 @@ static NSString* StopWatchingRepo;
         [self addChildViewController:[[IssueListViewController alloc] initWithRepository:repository] 
                                title:@"Issues"];
         
+        shareUrlController = [[RPShareUrlController alloc] initWithUrl:[NSString stringWithFormat:@"http://github.com/%@", repository.fullName] 
+                                                                 title:repository.fullName 
+                                                        viewController:self];
+        
+        if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
+            if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
+                [shareUrlController addAction:WatchRepo 
+                                        block:^() {
+                                            NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
+                                            [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    if (status == 204) {
+                                                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                        [alertView show];
+                                                    } else {
+                                                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                        [alertView show];
+                                                    }
+                                                });
+                                            } ];
+                                        }];
+            } else {
+                [shareUrlController addAction:StopWatchingRepo 
+                                        block:^() {
+                                            NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
+                                            [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
+                                                dispatch_async(dispatch_get_main_queue(), ^{
+                                                    if (status == 204) {
+                                                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                        [alertView show];
+                                                    } else {
+                                                        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                        [alertView show];
+                                                    }
+                                                });
+                                            }];
+                                        }];
+            }
+        }
+
     }
     return self;
+}
+
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
+
 }
 
 #pragma mark - View lifecycle
@@ -65,92 +111,11 @@ static NSString* StopWatchingRepo;
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.title = repository.fullName;
     self.navigationController.navigationBarHidden = NO;
-    
-    self.actionSheetTitles = [NSMutableArray array];
-    if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
-        if (![[RepositoryStorage sharedStorage] repositoryIsWatched:repository]){
-            [self.actionSheetTitles addObject:WatchRepo];
-        } else {
-            [self.actionSheetTitles addObject:StopWatchingRepo];
-        }
-    }
-    
-    if ([TWTweetComposeViewController canSendTweet]) {
-        [self.actionSheetTitles addObject:@"Tweet"];
-    }
-    
-    if ([MFMailComposeViewController canSendMail]) {
-        [self.actionSheetTitles addObject:@"Share via Mail"];
-    }
-    
-    if (self.actionSheetTitles.count > 0) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
-                                                                                               target:self 
-                                                                                               action:@selector(showActionSheet)];
-    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
-}
-
-
--(void)showActionSheet {
-    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil 
-                                                             delegate:self 
-                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") 
-                                               destructiveButtonTitle:nil otherButtonTitles:nil];
-    for (NSString* actionSheetTitle in actionSheetTitles) {
-        [actionSheet addButtonWithTitle:actionSheetTitle];
-    }
-    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-
-    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
-    NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repository.fullName];
-    if ([WatchRepo isEqualToString:titleClicked]) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                }
-            });
-        } ];
-    } else if ([StopWatchingRepo isEqualToString:titleClicked]) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                }
-            });
-        } ];
-    } else if ([@"Tweet" isEqualToString:titleClicked]) {
-        TWTweetComposeViewController *tweetController = [[TWTweetComposeViewController alloc] init];
-        [tweetController addURL:[NSURL URLWithString:repository.htmlUrl]];
-        [tweetController setInitialText:[NSString stringWithFormat:@"Repository %@", self.repository.fullName]];
-        [self presentModalViewController:tweetController animated:YES];
-    } else if ([@"Share via Mail" isEqualToString:titleClicked]) {
-        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
-        [mailController setMessageBody:repository.htmlUrl isHTML:NO];
-        [mailController setSubject:[NSString stringWithFormat:@"Repository %@", self.repository.fullName]];
-        mailController.mailComposeDelegate = self;
-        [self presentModalViewController:mailController animated:YES];
-    }
-}
-
--(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-    [controller dismissModalViewControllerAnimated:YES];
 }
 
 @end
