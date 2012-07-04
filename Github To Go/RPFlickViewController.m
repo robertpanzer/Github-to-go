@@ -282,9 +282,22 @@ static int kGestureStateSuccess  = 2;
                 if (self.titles.count > 2 || translation.x < 0) {
                     self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
                 }
+                [UIView setAnimationDelegate:self];
+                [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
                 [UIView commitAnimations];
-                
             }
+        } else {
+            [UIView beginAnimations:@"swipe" context:nil];
+            if (self.titles.count > 2 || translation.x > 0) {
+                self.leftViewController.view.frame = CGRectMake(-self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            }
+            self.currentViewController.view.frame = CGRectMake(0.0f, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            if (self.titles.count > 2 || translation.x < 0) {
+                self.rightViewController.view.frame = CGRectMake(self.view.frame.size.width, 20.0f, self.view.frame.size.width, self.view.frame.size.height - 20.0f);
+            }
+            [UIView setAnimationDelegate:self];
+            [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
+            [UIView commitAnimations];
         }
     } else if (sender.state == UIGestureRecognizerStateChanged) {
         if (self.gestureState == kGestureStatePossible) {
