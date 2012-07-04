@@ -193,7 +193,6 @@ static NSArray *kTitles;
     [[NetworkProxy sharedInstance] loadStringFromURL:searchRepoUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         NSMutableArray* newRepos = [[NSMutableArray alloc] init];
         if (statusCode == 200) {
-            NSLog(@"Data:\n%@", data);
             NSArray* foundRepositories = [data valueForKey:@"repositories"];
             for (NSDictionary* jsonRepo in foundRepositories) {
                 Repository* repo = [[Repository alloc] initFromJSONObject:jsonRepo];
