@@ -159,24 +159,59 @@ static NSSet *isBool;
         return cell;
     } else {
         static NSString* InfoCellIdentifier = @"InfoCell";
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier];
-            cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
-        cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
-        
-        return cell;    
+        static NSString* DescriptionCellIdentifier = @"DescriptionCell";
+        if ([kDescription isEqualToString:[keys objectAtIndex:indexPath.row]]) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DescriptionCellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 
+                                              reuseIdentifier:DescriptionCellIdentifier];
+                cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+                cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
+                cell.detailTextLabel.numberOfLines = 0;
+                cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
+                cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+            }
+            cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
+            cell.detailTextLabel.text = [value description];
+            return cell;
+            
+        } else {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:InfoCellIdentifier];
+                cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
+                cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
+            cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
+            return cell;    
+        }        
     }
 }
 
 
 #pragma mark - Table view delegate
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        UIFont* font = [UIFont systemFontOfSize:14.0f];
+        NSString* keyPath = [keys objectAtIndex:indexPath.row];
+        if ([keyPath isEqualToString:kDescription]) {
+            NSString* value = [repository valueForKeyPath:keyPath];
+            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 118.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+            
+            CGFloat height = size.height + 14.0f;
+            
+            return height > tableView.rowHeight ? height : tableView.rowHeight;
+        } else {
+            return self.tableView.rowHeight;
+        }
+    }
+    return -1.0f;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -193,11 +228,6 @@ static NSSet *isBool;
             }
         }];
     }
-    
-//    if (indexPath.section == 1 && indexPath.row == 0) {
-//        BranchesBrowserViewController* branchesBrowserViewController = [[BranchesBrowserViewController alloc] initWithRepository:repository];
-//        [self.navigationController pushViewController:branchesBrowserViewController animated:YES]; 
-//    }
 }
 
 
