@@ -21,23 +21,25 @@
 @synthesize selfUrl, issueCommentsUrl, reviewCommentsUrl;
 @synthesize merged;
 @synthesize repository;
+@synthesize htmlUrl;
 
 - (id)initWithJSONObject:(NSDictionary*)jsonObject repository:(Repository*)aRepository;
 {
     self = [super init];
     if (self) {
-        self.repository = aRepository;
-        self.number = [jsonObject valueForKey:@"number"];
-        self.state = [jsonObject valueForKey:@"state"];
-        self.createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
-        self.updatedAt = [(NSString*)[jsonObject valueForKey:@"updated_at"] dateForRFC3339DateTimeString];
-        self.creator = [[Person alloc] initWithJSONObject:[jsonObject valueForKey:@"user"]];
-        self.title = [jsonObject valueForKey:@"title"];
-        self.body = [jsonObject valueForKey:@"body"];
-        self.selfUrl = [jsonObject valueForKeyPath:@"_links.self.href"];
-        self.issueCommentsUrl = [jsonObject valueForKeyPath:@"_links.comments.href"];
-        self.reviewCommentsUrl = [jsonObject valueForKeyPath:@"_links.review_comments.href"];
-        self.merged = [[jsonObject valueForKey:@"merged"] boolValue];
+        repository = aRepository;
+        number = [jsonObject valueForKey:@"number"];
+        state = [jsonObject valueForKey:@"state"];
+        createdAt = [(NSString*)[jsonObject valueForKey:@"created_at"] dateForRFC3339DateTimeString];
+        updatedAt = [(NSString*)[jsonObject valueForKey:@"updated_at"] dateForRFC3339DateTimeString];
+        creator = [[Person alloc] initWithJSONObject:[jsonObject valueForKey:@"user"]];
+        title = [jsonObject valueForKey:@"title"];
+        body = [jsonObject valueForKey:@"body"];
+        selfUrl = [jsonObject valueForKeyPath:@"_links.self.href"];
+        issueCommentsUrl = [jsonObject valueForKeyPath:@"_links.comments.href"];
+        reviewCommentsUrl = [jsonObject valueForKeyPath:@"_links.review_comments.href"];
+        merged = [[jsonObject valueForKey:@"merged"] boolValue];
+        htmlUrl = [jsonObject valueForKey:@"html_url"];
     }
     return self;
 }

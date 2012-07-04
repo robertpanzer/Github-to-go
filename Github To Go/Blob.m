@@ -16,13 +16,14 @@
 @synthesize size;
 @synthesize rawContent, content;
 @synthesize commitSha;
+@synthesize htmlUrl;
 
 -(id)initWithJSONObject:(NSDictionary*)jsonObject absolutePath:(NSString *)anAbsolutePath commitSha:(NSString *)aCommitSha {
     self = [super init];
     if (self) {
         absolutePath = anAbsolutePath;
         commitSha = aCommitSha;
-        self.url = [jsonObject objectForKey:@"url"];
+        url = [jsonObject objectForKey:@"url"];
         size = [(NSNumber*)[jsonObject objectForKey:@"size"] longValue]; 
         
         NSString* aContent = [jsonObject objectForKey:@"content"];

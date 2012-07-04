@@ -14,15 +14,16 @@
 #import "BranchViewController.h"
 #import "RPFlickViewController.h"
 
-@interface UITreeRootViewController : RPFlickViewController 
+@interface UITreeRootViewController : RPFlickViewController
 
 @property(strong,nonatomic) NSString* treeUrl;
 @property(strong,nonatomic) NSString* absolutePath;
 @property(strong,nonatomic) NSString* branchName;
 @property(strong,nonatomic) Commit* commit;
 @property(strong,nonatomic) Repository* repository;
-@property(strong,nonatomic)TreeViewController* treeViewController;
-@property(strong,nonatomic)BranchViewController* branchViewController;
+@property(strong,nonatomic) TreeViewController* treeViewController;
+@property(strong,nonatomic) BranchViewController* branchViewController;
+@property(strong,nonatomic) NSString *htmlUrl;
 
 -(id)initWithUrl:(NSString*)aTreeUrl absolutePath:(NSString*)anAbsolutePath commit:(Commit *)aCommit repository:(Repository *)aRepository branchName:(NSString*)aBranchName;
 

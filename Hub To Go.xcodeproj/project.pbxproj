@@ -15,6 +15,9 @@
 		940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9403399E1528C8D5004ABDDD /* RepositoryListViewController.xib */; };
 		9404B4FC150CB38E0077BA8E /* UITableViewCell+CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */; };
 		9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */; };
+		940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF85E159B7A8A00F8A5EB /* Twitter.framework */; };
+		940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF861159BAD7200F8A5EB /* MessageUI.framework */; };
+		941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C052915A03FF1009B772A /* RPShareUrlController.m */; };
 		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
 		941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF8B150E1A5C0046F72F /* Icon@2x.png */; };
 		941FCF94150EAD1A0046F72F /* PullRequestRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941FCF92150EAD1A0046F72F /* PullRequestRootViewController.m */; };
@@ -114,6 +117,10 @@
 		9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+CommitFile.m"; sourceTree = "<group>"; };
 		9404B4FE150CE6F70077BA8E /* UITableViewCell+PullRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+PullRequest.h"; sourceTree = "<group>"; };
 		9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+PullRequest.m"; sourceTree = "<group>"; };
+		940AF85E159B7A8A00F8A5EB /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		940AF861159BAD7200F8A5EB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		941C052815A03FF1009B772A /* RPShareUrlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPShareUrlController.h; sourceTree = "<group>"; };
+		941C052915A03FF1009B772A /* RPShareUrlController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPShareUrlController.m; sourceTree = "<group>"; };
 		941FCF89150E18A10046F72F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		941FCF8B150E1A5C0046F72F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		941FCF91150EAD1A0046F72F /* PullRequestRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestRootViewController.h; sourceTree = "<group>"; };
@@ -254,6 +261,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */,
+				940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */,
 				94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */,
 				949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */,
 				949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */,
@@ -410,6 +419,8 @@
 		949FB12414B3327700D3E713 = {
 			isa = PBXGroup;
 			children = (
+				940AF861159BAD7200F8A5EB /* MessageUI.framework */,
+				940AF85E159B7A8A00F8A5EB /* Twitter.framework */,
 				94C2F9FB158CBEDF0006640F /* QuartzCore.framework */,
 				949FB13914B3327800D3E713 /* Github To Go */,
 				949FB13214B3327800D3E713 /* Frameworks */,
@@ -469,6 +480,8 @@
 				949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */,
 				94C2F9F9158CBE070006640F /* RPFlickViewController.h */,
 				94C2F9FA158CBE070006640F /* RPFlickViewController.m */,
+				941C052815A03FF1009B772A /* RPShareUrlController.h */,
+				941C052915A03FF1009B772A /* RPShareUrlController.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
 				949FB14814B3327800D3E713 /* first.png */,
@@ -716,6 +729,7 @@
 				94AB35B3158A8FFF00FFE1C6 /* IssueViewController.m in Sources */,
 				949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */,
 				94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */,
+				941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

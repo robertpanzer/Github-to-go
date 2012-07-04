@@ -18,6 +18,7 @@
 @property(strong, nonatomic) Blob* blob;
 @property(strong, nonatomic) NSString* absolutePath;
 @property(strong, nonatomic) NSString* url;
+@property(strong, nonatomic, readonly) NSString* htmlUrl;
 @property(strong, nonatomic) NSString* commitSha;
 @property(strong, nonatomic) Repository* repository;
 @property(strong, nonatomic) CommitFile* commitFile;

@@ -14,6 +14,7 @@
 @property(strong, nonatomic) NSString *name;
 @property(strong, nonatomic) NSString *description;
 @property(strong, nonatomic) NSString *url;
+@property(strong, nonatomic) NSString *htmlUrl;
 @property(strong, nonatomic) NSNumber *repoId;
 @property(strong, nonatomic) NSNumber *watchers;
 @property BOOL private;

@@ -10,6 +10,8 @@
 #import "NetworkProxy.h"
 #import "BranchViewController.h"
 #import "CommitComment.h"
+#import <Twitter/Twitter.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 
 @implementation NSString (RPFiltering)
@@ -69,11 +71,12 @@
 
 @end
 
-@interface BlobViewController()
+@interface BlobViewController() <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 
 -(NSArray*)commentsForOldLine:(NSNumber*)lineNumber;
 -(NSArray*)commentsForNewLine:(NSNumber*)lineNumber;
 -(NSString*)wrapComments:(NSArray*)aComments;
+-(void)showActionSheet:(id)sender;
 
 @end
 
@@ -82,6 +85,7 @@
 @synthesize webView;
 @synthesize blob;
 @synthesize url;
+@synthesize htmlUrl;
 @synthesize absolutePath;
 @synthesize commitSha;
 @synthesize repository;
@@ -93,12 +97,13 @@
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
-        self.url = [NSString stringWithFormat:@"https://github.com/%@/raw/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
-        self.repository = aRepository;
+        url = [NSString stringWithFormat:@"https://github.com/%@/raw/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
+        htmlUrl = [NSString stringWithFormat:@"http://github.com/%@/blob/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
+        repository = aRepository;
         
-        self.absolutePath = anAbsolutePath;
-        self.commitSha = aCommitSha;
-        self.showDiffs = NO;
+        absolutePath = anAbsolutePath;
+        commitSha = aCommitSha;
+        showDiffs = NO;
         self.navigationItem.title = [absolutePath pathComponents].lastObject;
     }
     return self;
@@ -108,14 +113,15 @@
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
-        self.url = aCommitFile.rawUrl;
-        self.commitFile = aCommitFile;
-        self.comments = aComments;
-        self.repository = aCommitFile.commit.repository;
+        url = aCommitFile.rawUrl;
+        htmlUrl = aCommitFile.blobUrl;
+        commitFile = aCommitFile;
+        comments = aComments;
+        repository = aCommitFile.commit.repository;
         
-        self.absolutePath = aCommitFile.fileName;
-        self.commitSha = aCommitFile.commit.sha;
-        self.showDiffs = YES;
+        absolutePath = aCommitFile.fileName;
+        commitSha = aCommitFile.commit.sha;
+        showDiffs = YES;
         self.navigationItem.title = [absolutePath pathComponents].lastObject;
         
     }
@@ -137,7 +143,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showBlobHistory:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
 
     // Do any additional setup after loading the view from its nib.
     [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
@@ -273,17 +279,51 @@
     return YES;
 }
 
--(void)showBlobHistory:(id)sender {    
+-(void)showActionSheet:(id)sender {
+    
+    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil 
+                                                             delegate:self 
+                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") 
+                                               destructiveButtonTitle:nil otherButtonTitles:nil];
+    [actionSheet addButtonWithTitle:@"Show history"];
+    [actionSheet addButtonWithTitle:@"Tweet"];
+    [actionSheet addButtonWithTitle:@"Share via Mail"];
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+
+    
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if ([@"Show history" isEqualToString:titleClicked]) {
+        [self showBlobHistory];
+    } else if ([@"Tweet" isEqualToString:titleClicked]) {
+        TWTweetComposeViewController *tweetController = [[TWTweetComposeViewController alloc] init];
+        [tweetController addURL:[NSURL URLWithString:self.htmlUrl]];
+        [tweetController setInitialText:self.blob.name];
+        [self presentModalViewController:tweetController animated:YES];
+    } else if ([@"Share via Mail" isEqualToString:titleClicked]) {
+        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
+        [mailController setMessageBody:self.htmlUrl isHTML:NO];
+        [mailController setSubject:self.blob.name];
+        mailController.mailComposeDelegate = self;
+        [self presentModalViewController:mailController animated:YES];
+    }
+}
+
+-(void)showBlobHistory {    
     BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:self.blob absolutePath:self.absolutePath commitSha:self.commitSha repository:repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }
 
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    [controller dismissModalViewControllerAnimated:YES];
+}
+
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if ([request.URL.path isEqualToString:@"/open"]) {
-//        NSRange range = [request.URL.description rangeOfString:@"line="];
-//        NSString* lineno = [request.URL.description substringFromIndex:range.location + range.length ];
     }
     return YES;
 }

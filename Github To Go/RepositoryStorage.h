@@ -25,6 +25,8 @@
 
 -(BOOL)repositoryIsWatched:(Repository*)repository;
 
+-(BOOL)repositoryIsOwned:(Repository*)repository;
+
 -(void)loadFollowed;
 
 @end
