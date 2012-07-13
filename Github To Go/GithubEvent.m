@@ -49,7 +49,9 @@
 
         self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
         self.date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
+        self.primaryKey = [jsonObject valueForKey:@"id"];
         id commitId = [jsonObject objectForKey:@"commit_id"];
+
         @try {
             if ([type isEqualToString:@"closed"]) {
                 if (commitId == nil || commitId == [NSNull null]) {
