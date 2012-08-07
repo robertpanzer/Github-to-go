@@ -178,6 +178,13 @@
     
     UIImageView* imageView = nil;
     UILabel* label = nil;
+    UILabel* repositoryLabel = nil;
+    
+    NSArray* objectsForDate = [eventHistory objectsForDate:date];
+    GithubEvent* event = nil;
+    if (objectsForDate.count > indexPath.row) {
+        event = [objectsForDate objectAtIndex:indexPath.row];
+    }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -189,45 +196,64 @@
         label.lineBreakMode = UILineBreakModeWordWrap;
         imageView.tag = 1;
         label.tag = 2;
+
+        repositoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 200.0f, 18.0f)];
+        repositoryLabel.font = [UIFont systemFontOfSize:14.0f];
+        repositoryLabel.textColor = [UIColor grayColor];
+        repositoryLabel.numberOfLines = 1;
+        repositoryLabel.tag = 3;
         
         [cell.contentView addSubview:imageView];
         [cell.contentView addSubview:label];
+        [cell.contentView addSubview:repositoryLabel];
     } else {
         imageView = (UIImageView*)[cell.contentView viewWithTag:1];
         label = (UILabel*)[cell.contentView viewWithTag:2];
+        repositoryLabel = (UILabel*)[cell.contentView viewWithTag:3];
     }
-    NSArray* objectsForDate = [eventHistory objectsForDate:date];
-    if (objectsForDate.count > indexPath.row) {
-        GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row];
 
-        if ([event isKindOfClass:[PushEvent class]]) {
-            [cell bindPushEvent:(PushEvent*)event];
-        } else if ([event isKindOfClass:[PullRequestEvent class]]) {
-            [cell bindPullRequestEvent:(PullRequestEvent*)event];
-        } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
-            [cell bindCommitCommentEvent:(CommitCommentEvent*)event];
-        } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
-            [cell bindGithubEvent:event];
-            if (self.repository == nil) {
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            }
-        } else if ([event isKindOfClass:[ForkEvent class]]) {
-            [cell bindGithubEvent:event];
+    if ([event isKindOfClass:[PushEvent class]]) {
+        [cell bindPushEvent:(PushEvent*)event];
+    } else if ([event isKindOfClass:[PullRequestEvent class]]) {
+        [cell bindPullRequestEvent:(PullRequestEvent*)event];
+    } else if ([event isKindOfClass:[CommitCommentEvent class]]) {
+        [cell bindCommitCommentEvent:(CommitCommentEvent*)event];
+    } else if ([event isKindOfClass:[CreateRepositoryEvent class]]) {
+        [cell bindGithubEvent:event];
+        if (self.repository == nil) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
-            [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
-        } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
-            [cell bindIssueCommentEvent:(IssueCommentEvent*)event];
-        } else if ([event isKindOfClass:[IssuesEvent class]]) {
-            [cell bindIssuesEvent:(IssuesEvent*)event];
-        } else {
-            [cell bindGithubEvent:event];
         }
-    }    
+    } else if ([event isKindOfClass:[ForkEvent class]]) {
+        [cell bindGithubEvent:event];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if ([event isKindOfClass:[PullRequestReviewCommentEvent class]]) {
+        [cell bindPullRequestReviewCommentEvent:(PullRequestReviewCommentEvent*)event];
+    } else if ([event isKindOfClass:[IssueCommentEvent class]]) {
+        [cell bindIssueCommentEvent:(IssueCommentEvent*)event];
+    } else if ([event isKindOfClass:[IssuesEvent class]]) {
+        [cell bindIssuesEvent:(IssuesEvent*)event];
+    } else if (event != nil) {
+        [cell bindGithubEvent:event];
+    }
+    
+    if (self.repository == nil) {
+        repositoryLabel.hidden = NO;
+        repositoryLabel.text = event.repository.fullName;
+    } else {
+        repositoryLabel.hidden = YES;
+        repositoryLabel.text = nil;
+    }
+
     CGFloat width = self.tableView.frame.size.width;
 
+    repositoryLabel.frame = CGRectMake(55.0f, 2.0f, width - 97.0f , 18.0f);
+
     CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    label.frame = CGRectMake(55.0f, 2.0f, width - 97.0f, size.height);
+    if (self.repository == nil) {
+        label.frame = CGRectMake(55.0f, 20.0f, width - 97.0f, size.height);
+    } else {
+        label.frame = CGRectMake(55.0f, 2.0f, width - 97.0f, size.height);
+    }
     
     return cell;
 }
@@ -248,7 +274,11 @@
     GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row] ;
     CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
-    return labelHeight > 55.0f ? labelHeight : 55.0f;
+    labelHeight = labelHeight > 55.0f ? labelHeight : 55.0f;
+    if (self.repository == nil) {
+        labelHeight += 18.0f;
+    }
+    return labelHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
