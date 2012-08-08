@@ -608,7 +608,7 @@
 		949FB12614B3327700D3E713 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = 949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Hub To Go" */;
 			compatibilityVersion = "Xcode 3.2";
