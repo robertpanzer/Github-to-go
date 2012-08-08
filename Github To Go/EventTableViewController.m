@@ -179,6 +179,7 @@
     UIImageView* imageView = nil;
     UILabel* label = nil;
     UILabel* repositoryLabel = nil;
+    UILabel* timeLabel = nil;
     
     NSArray* objectsForDate = [eventHistory objectsForDate:date];
     GithubEvent* event = nil;
@@ -202,14 +203,22 @@
         repositoryLabel.textColor = [UIColor grayColor];
         repositoryLabel.numberOfLines = 1;
         repositoryLabel.tag = 3;
-        
+
+        timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.tableView.bounds.size.width - 60.0f, 2.0f, 50.0f, 18.0f)];
+        timeLabel.font = [UIFont systemFontOfSize:11.0f];
+        timeLabel.textColor = [UIColor grayColor];
+        timeLabel.numberOfLines = 1;
+        timeLabel.tag = 4;
+
         [cell.contentView addSubview:imageView];
         [cell.contentView addSubview:label];
         [cell.contentView addSubview:repositoryLabel];
+        [cell.contentView addSubview:timeLabel];
     } else {
         imageView = (UIImageView*)[cell.contentView viewWithTag:1];
         label = (UILabel*)[cell.contentView viewWithTag:2];
         repositoryLabel = (UILabel*)[cell.contentView viewWithTag:3];
+        timeLabel = (UILabel*)[cell.contentView viewWithTag:4];
     }
 
     if ([event isKindOfClass:[PushEvent class]]) {
@@ -236,6 +245,10 @@
         [cell bindGithubEvent:event];
     }
     
+    timeLabel.text =
+        [NSDateFormatter localizedStringFromDate:event.date
+                                       dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+    
     if (self.repository == nil) {
         repositoryLabel.hidden = NO;
         repositoryLabel.text = event.repository.fullName;
@@ -244,16 +257,13 @@
         repositoryLabel.text = nil;
     }
 
-    CGFloat width = self.tableView.frame.size.width;
+    CGFloat width = self.tableView.bounds.size.width;
 
-    repositoryLabel.frame = CGRectMake(55.0f, 2.0f, width - 97.0f , 18.0f);
+    repositoryLabel.frame = CGRectMake(55.0f, 2.0f, width - 117.0f , 18.0f);
+    timeLabel.frame = CGRectMake(self.tableView.bounds.size.width - 60.0f, 2.0f, 50.0f, 18.0f);
 
     CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    if (self.repository == nil) {
-        label.frame = CGRectMake(55.0f, 20.0f, width - 97.0f, size.height);
-    } else {
-        label.frame = CGRectMake(55.0f, 2.0f, width - 97.0f, size.height);
-    }
+    label.frame = CGRectMake(55.0f, 20.0f, width - 97.0f, size.height);
     
     return cell;
 }
@@ -275,9 +285,7 @@
     CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
     labelHeight = labelHeight > 55.0f ? labelHeight : 55.0f;
-    if (self.repository == nil) {
-        labelHeight += 18.0f;
-    }
+    labelHeight += 18.0f;
     return labelHeight;
 }
 
