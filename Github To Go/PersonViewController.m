@@ -37,9 +37,9 @@ static NSArray *keys;
 
 static NSDictionary *titles;
 
-static NSSet* isBool;
+static NSArray* isBool;
 
-static NSSet* showDisclosure;
+static NSArray* showDisclosure;
 
 static NSString *follow, *unfollow;
 
@@ -62,29 +62,28 @@ static NSString *follow, *unfollow;
 @synthesize letUserSelectCells;
 
 +(void)initialize {
-    keys = [NSArray arrayWithObjects:
-            [NSArray arrayWithObjects:kName, kLogin, kEmail, kCreatedAt, kLocation, kBio, kHireable, nil],
-            [NSArray arrayWithObjects:kPublicRepos, kPublicGists, nil],
-            [NSArray arrayWithObjects:kFollowers, kFollowing, nil],
-            [NSArray arrayWithObjects:kEvents, nil],
-            nil];
-    titles = [NSDictionary dictionaryWithObjectsAndKeys:
-              NSLocalizedString(@"Name", @"Name"), kName,
-              NSLocalizedString(@"Login", @"Login"), kLogin,
-              NSLocalizedString(@"eMail", @"eMail"), kEmail,
-              NSLocalizedString(@"Created at", @"Created at"), kCreatedAt,
-              NSLocalizedString(@"Location", @"Location"), kLocation,
-              NSLocalizedString(@"Biography", @"Biography"), kBio,
-              NSLocalizedString(@"Hireable", @"Hireable"), kHireable,
-              NSLocalizedString(@"Public repos", @"Public repos"), kPublicRepos,
-              NSLocalizedString(@"Public gists", @"Public gists"), kPublicGists, 
-              NSLocalizedString(@"Followers", @"Followers"), kFollowers,
-              NSLocalizedString(@"Following", @"Following"), kFollowing,
-              NSLocalizedString(@"Events", @"Events"), kEvents,
-              nil
-              ];
-    isBool = [[NSSet alloc] initWithObjects:kHireable, nil];
-    showDisclosure = [NSSet setWithObjects:kFollowers, kFollowing, kPublicRepos, kEvents, nil];
+    keys = @[
+        @[kName, kLogin, kEmail, kCreatedAt, kLocation, kBio, kHireable],
+        @[kPublicRepos, kPublicGists],
+        @[kFollowers, kFollowing],
+        @[kEvents]
+    ];
+    titles = @{
+                kName: NSLocalizedString(@"Name", @"Name"),
+                kLogin: NSLocalizedString(@"Login", @"Login"),
+                kEmail: NSLocalizedString(@"eMail", @"eMail"),
+                kCreatedAt: NSLocalizedString(@"Created at", @"Created at"),
+                kLocation: NSLocalizedString(@"Location", @"Location"),
+                kBio: NSLocalizedString(@"Biography", @"Biography"),
+                kHireable: NSLocalizedString(@"Hireable", @"Hireable"),
+                kPublicRepos: NSLocalizedString(@"Public repos", @"Public repos"),
+                kPublicGists: NSLocalizedString(@"Public gists", @"Public gists"),
+                kFollowers: NSLocalizedString(@"Followers", @"Followers"),
+                kFollowing: NSLocalizedString(@"Following", @"Following"),
+                kEvents: NSLocalizedString(@"Events", @"Events")
+    };
+    isBool = @[kHireable];
+    showDisclosure = @[kFollowers, kFollowing, kPublicRepos, kEvents];
     
     follow = NSLocalizedString(@"Follow", @"Follow Action");
     unfollow = NSLocalizedString(@"Unfollow", @"Unfollow Action");
