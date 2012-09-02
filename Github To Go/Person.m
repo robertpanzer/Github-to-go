@@ -169,12 +169,13 @@ static long sequenceCounter = 0;
 }
 
 -(NSString*)displayname {
-    if (self.name && self.name.length > 0) {
-        return self.name;
-    } else if (self.login && self.login.length > 0) {
-        return self.login;
-    } else if (self.username && self.username.length > 0) {
-        return self.username;
+    
+    if (self.name) {
+        return [self.name description];
+    } else if (self.login) {
+        return [self.login description];
+    } else if (self.username) {
+        return [self.username description];
     }
     return nil;
 }
