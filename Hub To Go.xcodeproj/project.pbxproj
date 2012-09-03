@@ -75,6 +75,7 @@
 		94BCF2D0150A7050005EA1BD /* PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2CF150A7050005EA1BD /* PullRequest.m */; };
 		94BCF2D4150A7375005EA1BD /* PullRequestListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */; };
 		94BCF2E1150B5430005EA1BD /* PullRequestTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */; };
+		94BE828F15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BE828E15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m */; };
 		94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C2F9FB158CBEDF0006640F /* QuartzCore.framework */; };
 		94C2F9FD158CBFE40006640F /* RPFlickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C2F9FA158CBE070006640F /* RPFlickViewController.m */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
@@ -216,6 +217,8 @@
 		94BCF2D2150A7375005EA1BD /* PullRequestListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestListTableViewController.m; sourceTree = "<group>"; };
 		94BCF2DE150B5430005EA1BD /* PullRequestTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRequestTableViewController.h; sourceTree = "<group>"; };
 		94BCF2DF150B5430005EA1BD /* PullRequestTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRequestTableViewController.m; sourceTree = "<group>"; };
+		94BE828D15F543B50017346E /* NSDictionary+RPJSONObjectAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+RPJSONObjectAccess.h"; sourceTree = "<group>"; };
+		94BE828E15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+RPJSONObjectAccess.m"; sourceTree = "<group>"; };
 		94C0602614CE174600E28C5F /* GitObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitObject.h; sourceTree = "<group>"; };
 		94C2F9F9158CBE070006640F /* RPFlickViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPFlickViewController.h; sourceTree = "<group>"; };
 		94C2F9FA158CBE070006640F /* RPFlickViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPFlickViewController.m; sourceTree = "<group>"; };
@@ -334,6 +337,8 @@
 				945FE31D14B866F60099FD84 /* StringQueue.m */,
 				945C25F414E86D6F00479D21 /* HistoryList.h */,
 				945C25F514E86D6F00479D21 /* HistoryList.m */,
+				94BE828D15F543B50017346E /* NSDictionary+RPJSONObjectAccess.h */,
+				94BE828E15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m */,
 			);
 			name = "General Data Structures";
 			sourceTree = "<group>";
@@ -730,6 +735,7 @@
 				949FB510158E6855009EB750 /* IssueRootViewController.m in Sources */,
 				94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */,
 				941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */,
+				94BE828F15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

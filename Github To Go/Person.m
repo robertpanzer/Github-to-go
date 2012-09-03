@@ -11,6 +11,7 @@
 #import "NSString+ISO8601Parsing.h"
 #import "QuartzCore/QuartzCore.h"
 
+#import "NSDictionary+RPJSONObjectAccess.h"
 
 static NSCache* url2Image;
 
@@ -42,21 +43,21 @@ static long sequenceCounter = 0;
     self = [super init];
     if (self) {
         if (dictionary != nil && ![dictionary isEqual:[NSNull null]]) {
-            self.login = [dictionary objectForKey:@"login"];
-            self.name = [dictionary objectForKey:@"name"];
-            self.username = [dictionary objectForKey:@"username"];
-            self.email = [dictionary objectForKey:@"email"];
-            self.publicRepos = [dictionary objectForKey:@"public_repos"];
-            self.blog = [dictionary objectForKey:@"blog"];
-            self.location = [dictionary objectForKey:@"location"];
-            self.publicGists = [dictionary objectForKey:@"public_gists"];
-            self.createdAt = [[dictionary objectForKey:@"created_at"] dateForRFC3339DateTimeString];
-            self.hireable = [[dictionary objectForKey:@"hireable"] boolValue];
-            self.followers = [dictionary objectForKey:@"followers"];
-            self.following = [dictionary objectForKey:@"following"];
-            self.bio = [dictionary objectForKey:@"bio"];
-            self.avatarId = [dictionary objectForKey:@"gravatar_id"];
-            self.url = [dictionary objectForKey:@"url"];
+            self.login = [dictionary jsonObjectForKey:@"login"];
+            self.name = [dictionary jsonObjectForKey:@"name"];
+            self.username = [dictionary jsonObjectForKey:@"username"];
+            self.email = [dictionary jsonObjectForKey:@"email"];
+            self.publicRepos = [dictionary jsonObjectForKey:@"public_repos"];
+            self.blog = [dictionary jsonObjectForKey:@"blog"];
+            self.location = [dictionary jsonObjectForKey:@"location"];
+            self.publicGists = [dictionary jsonObjectForKey:@"public_gists"];
+            self.createdAt = [[dictionary jsonObjectForKey:@"created_at"] dateForRFC3339DateTimeString];
+            self.hireable = [[dictionary jsonObjectForKey:@"hireable"] boolValue];
+            self.followers = [dictionary jsonObjectForKey:@"followers"];
+            self.following = [dictionary jsonObjectForKey:@"following"];
+            self.bio = [dictionary jsonObjectForKey:@"bio"];
+            self.avatarId = [dictionary jsonObjectForKey:@"gravatar_id"];
+            self.url = [dictionary jsonObjectForKey:@"url"];
             if ((self.url == nil || self.url.length == 0) && self.login.length > 0) {
                 self.url = [NSString stringWithFormat:@"https://api.github.com/users/%@", self.login];
             }
@@ -73,27 +74,27 @@ static long sequenceCounter = 0;
     self = [super init];
     if (self) {
         if (dictionary != nil && ![dictionary isEqual:[NSNull null]]) {
-            self.login = [dictionary objectForKey:@"login"];
-            self.name = [dictionary objectForKey:@"name"];
-            self.email = [dictionary objectForKey:@"email"];
-            self.avatarUrl = [dictionary objectForKey:@"avatar_url"];
-            self.avatarId = [dictionary objectForKey:@"gravatar_id"];
+            self.login = [dictionary jsonObjectForKey:@"login"];
+            self.name = [dictionary jsonObjectForKey:@"name"];
+            self.email = [dictionary jsonObjectForKey:@"email"];
+            self.avatarUrl = [dictionary jsonObjectForKey:@"avatar_url"];
+            self.avatarId = [dictionary jsonObjectForKey:@"gravatar_id"];
         }
         if (![secondDictionary isEqual:[NSNull null]]) {
             if (self.login == nil) {
-                self.login = [secondDictionary objectForKey:@"login"];
+                self.login = [secondDictionary jsonObjectForKey:@"login"];
             }
             if (self.name == nil) {
-                self.name = [secondDictionary objectForKey:@"name"];
+                self.name = [secondDictionary jsonObjectForKey:@"name"];
             }
             if (self.email == nil) {
-                self.email = [secondDictionary objectForKey:@"email"];
+                self.email = [secondDictionary jsonObjectForKey:@"email"];
             }
             if (self.avatarUrl == nil) {
-                self.avatarUrl = [secondDictionary objectForKey:@"avatar_url"];
+                self.avatarUrl = [secondDictionary jsonObjectForKey:@"avatar_url"];
             }
             if (self.avatarId == nil) {
-                self.avatarId = [secondDictionary objectForKey:@"garavatr_id"];
+                self.avatarId = [secondDictionary jsonObjectForKey:@"garavatr_id"];
             }
         }
         if ((self.url == nil || self.url.length == 0) && self.login.length > 0) {
