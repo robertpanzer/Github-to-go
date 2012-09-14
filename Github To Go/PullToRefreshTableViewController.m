@@ -7,7 +7,7 @@
 //
 
 #import "PullToRefreshTableViewController.h"
-
+#import <CoreText/CoreText.h>
 
 
 @implementation ReloadLabel
@@ -65,6 +65,7 @@
 
 @interface PullToRefreshTableViewController ()
 
+@property(nonatomic) BOOL useRefreshControl;
 @end
 
 @implementation PullToRefreshTableViewController
@@ -73,18 +74,43 @@
 @synthesize reloadPossible;
 @synthesize isReloading;
 
--(void)viewWillAppear:(BOOL)animated {
-    if (self.reloadLabel == nil) {
+@class UIRefreshControl;
+
+-(void) viewDidLoad {
+    [super viewDidLoad];
+    Class refreshControlClass = NSClassFromString(@"UIRefreshControl");
+    
+    if (refreshControlClass != NULL) {
+        self.useRefreshControl = YES;
+        // New iOS 6 Refresh Control
+        id refreshControl = [[refreshControlClass alloc] init];
+        //TODO: Remove id cast once iOS6 is minimum requirement
+        [self setRefreshControl:refreshControl];
+        NSDictionary *dict =[NSDictionary dictionaryWithObjectsAndKeys:
+                             [UIColor blackColor], kCTForegroundColorAttributeName,
+                             nil];
+        
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"Pull to refresh" attributes:dict];
+        
+        [refreshControl setAttributedTitle:title];
+        [refreshControl addTarget:self action:@selector(reload:) forControlEvents:UIControlEventValueChanged];
+    } else {
         self.reloadLabel = [[ReloadLabel alloc] initWithFrame:CGRectMake(0.0f, -40.0f, self.tableView.frame.size.width, 40.0f)];
         [self.tableView addSubview:self.reloadLabel];
-    
     }
-    [self.tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    if (!self.useRefreshControl) {
+        [self.tableView.panGestureRecognizer addTarget:self action:@selector(swiped:)];
+    }
 
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-    [self.tableView.panGestureRecognizer removeTarget:self action:@selector(swiped:)];
+    if (!self.useRefreshControl){
+        [self.tableView.panGestureRecognizer removeTarget:self action:@selector(swiped:)];
+    }
 }
 
 -(void) swiped:(UIPanGestureRecognizer*)recognizer {
@@ -120,6 +146,10 @@
     }
 }
 
+-(void)reload:(id)sender {
+    [self reload];
+}
+
 -(void)reload {}
 
 -(void)willReload {
@@ -128,11 +158,15 @@
 }
 
 -(void)reloadDidFinish {
-    if (self.isReloading) {
-        [self.tableView setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES]; 
+    if (self.useRefreshControl) {
+        [self.refreshControl endRefreshing];
+    } else {
+        if (self.isReloading) {
+            [self.tableView setContentOffset:CGPointMake(0.0f, 0.0f) animated:YES];
+        }
+        self.isReloading = NO;
+        [self.reloadLabel stopActivity];
     }
-    self.isReloading = NO;
-    [self.reloadLabel stopActivity];
 }
 
 @end

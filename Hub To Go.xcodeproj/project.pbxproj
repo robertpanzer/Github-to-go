@@ -81,6 +81,7 @@
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94C8AE73160385900026FD9E /* Default-568h@2x.png */; };
+		94C8AE7616038C540026FD9E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C8AE7516038C540026FD9E /* CoreText.framework */; };
 		94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */; };
 		94CC3C3C1523B31B00F4B25B /* PersonListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */; };
 		94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CCEDF715951AF700D5D810 /* EventRootViewController.m */; };
@@ -229,6 +230,7 @@
 		94C6566F1503727D00E85813 /* UITableViewCell+Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Person.h"; sourceTree = "<group>"; };
 		94C656701503727D00E85813 /* UITableViewCell+Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Person.m"; sourceTree = "<group>"; };
 		94C8AE73160385900026FD9E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		94C8AE7516038C540026FD9E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		94CC3C381523B31B00F4B25B /* PersonListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonListTableViewController.h; sourceTree = "<group>"; };
 		94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonListTableViewController.m; sourceTree = "<group>"; };
 		94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonListTableViewController.xib; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94C8AE7616038C540026FD9E /* CoreText.framework in Frameworks */,
 				940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */,
 				940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */,
 				94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */,
@@ -426,6 +429,7 @@
 		949FB12414B3327700D3E713 = {
 			isa = PBXGroup;
 			children = (
+				94C8AE7516038C540026FD9E /* CoreText.framework */,
 				940AF861159BAD7200F8A5EB /* MessageUI.framework */,
 				940AF85E159B7A8A00F8A5EB /* Twitter.framework */,
 				94C2F9FB158CBEDF0006640F /* QuartzCore.framework */,
