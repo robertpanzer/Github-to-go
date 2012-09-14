@@ -80,6 +80,7 @@
 		94C2F9FD158CBFE40006640F /* RPFlickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C2F9FA158CBE070006640F /* RPFlickViewController.m */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
+		94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94C8AE73160385900026FD9E /* Default-568h@2x.png */; };
 		94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */; };
 		94CC3C3C1523B31B00F4B25B /* PersonListTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */; };
 		94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94CCEDF715951AF700D5D810 /* EventRootViewController.m */; };
@@ -227,6 +228,7 @@
 		94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+GithubEvent.m"; sourceTree = "<group>"; };
 		94C6566F1503727D00E85813 /* UITableViewCell+Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Person.h"; sourceTree = "<group>"; };
 		94C656701503727D00E85813 /* UITableViewCell+Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Person.m"; sourceTree = "<group>"; };
+		94C8AE73160385900026FD9E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		94CC3C381523B31B00F4B25B /* PersonListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonListTableViewController.h; sourceTree = "<group>"; };
 		94CC3C391523B31B00F4B25B /* PersonListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonListTableViewController.m; sourceTree = "<group>"; };
 		94CC3C3A1523B31B00F4B25B /* PersonListTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonListTableViewController.xib; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 		94AB82261534CC51008E0FE7 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				94C8AE73160385900026FD9E /* Default-568h@2x.png */,
 				94AB822C1534CE8A008E0FE7 /* default.png */,
 				94AB82281534CC66008E0FE7 /* default@2x.png */,
 			);
@@ -613,7 +616,7 @@
 		949FB12614B3327700D3E713 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 949FB12914B3327700D3E713 /* Build configuration list for PBXProject "Hub To Go" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -671,6 +674,7 @@
 				94AB82291534CC66008E0FE7 /* default@2x.png in Resources */,
 				94AB822D1534CE8A008E0FE7 /* default.png in Resources */,
 				94EF40781543FEAB002FA8B5 /* IssueListViewController.xib in Resources */,
+				94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
