@@ -55,6 +55,7 @@
         self.isLoading = NO;
         self.complete = NO;
         self.pagesLoaded = 0;
+        self.cachedHeights = [[NSCache alloc] init];
         
         [[Settings sharedInstance] addObserver:self forKeyPath:@"username" options:NSKeyValueObservingOptionOld  context:nil];
     }
@@ -71,6 +72,7 @@
         self.complete = NO;
         self.pagesLoaded = 0;
         self.allEvents = NO;
+        self.cachedHeights = [[NSCache alloc] init];
     }
     return self;
 }
@@ -84,6 +86,7 @@
         self.complete = NO;
         self.pagesLoaded = 0;
         self.allEvents = NO;
+        self.cachedHeights = [[NSCache alloc] init];
     }
     return self;
 }
@@ -143,6 +146,7 @@
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.cachedHeights removeAllObjects];
     [self.tableView reloadData];
 }
 
@@ -244,7 +248,6 @@
     } else if (event != nil) {
         [cell bindGithubEvent:event];
     }
-    
     timeLabel.text =
         [NSDateFormatter localizedStringFromDate:event.date
                                        dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
@@ -262,8 +265,19 @@
     repositoryLabel.frame = CGRectMake(55.0f, 2.0f, width - 117.0f , 18.0f);
     timeLabel.frame = CGRectMake(self.tableView.bounds.size.width - 60.0f, 2.0f, 50.0f, 18.0f);
 
-    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
-    label.frame = CGRectMake(55.0f, 20.0f, width - 97.0f, size.height);
+    NSString *key = event.text;
+    NSNumber *height = [self.cachedHeights objectForKey:key];
+    if (height == nil) {
+        CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+        height = [NSNumber numberWithFloat:size.height];
+        @try {
+            [self.cachedHeights setValue:height forKey:key];
+        } @catch (NSException *e) {
+            // Simply ignore it
+            NSLog(@"Got NSException!");
+        }
+    }
+    label.frame = CGRectMake(55.0f, 20.0f, width - 97.0f, [height floatValue]);
     
     return cell;
 }
@@ -282,10 +296,19 @@
         return 55.0f;
     }
     GithubEvent* event = [objectsForDate objectAtIndex:indexPath.row] ;
+    NSString *key = event.text;
+    NSNumber *height = [self.cachedHeights objectForKey:key];
+    if (height) {
+        CGFloat cachedHeight = [height floatValue];
+        cachedHeight += 18.0f;
+        cachedHeight = cachedHeight > 55.0f ? cachedHeight : 55.0f;
+        return cachedHeight;
+    }
     CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
     CGFloat labelHeight = size.height + 4;
-    labelHeight = labelHeight > 55.0f ? labelHeight : 55.0f;
+    [self.cachedHeights setObject:[NSNumber numberWithFloat:labelHeight] forKey:key];
     labelHeight += 18.0f;
+    labelHeight = labelHeight > 55.0f ? labelHeight : 55.0f;
     return labelHeight;
 }
 

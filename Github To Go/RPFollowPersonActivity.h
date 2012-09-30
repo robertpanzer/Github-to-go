@@ -1,0 +1,13 @@
+//
+//  RPFollowPersonActivity.h
+//  Hub To Go
+//
+//  Created by Robert Panzer on 30.09.12.
+//
+//
+
+#import <UIKit/UIKit.h>
+
+@interface RPFollowPersonActivity : UIActivity
+
+@end

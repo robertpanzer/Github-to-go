@@ -19,6 +19,7 @@
 @property BOOL isLoading;
 @property BOOL complete;
 @property BOOL allEvents;
+@property (strong, nonatomic) NSCache *cachedHeights;
 @property(strong, nonatomic) IBOutlet UITableViewCell* loadNextTableViewCell;
 
 -(id)initWithRepository:(Repository*)aRepository;
