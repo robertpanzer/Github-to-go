@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Person.h"
 @interface RPFollowPersonActivity : UIActivity
+
+@property Person *person;
+
+-(id)initWithPerson:(Person*)person;
 
 @end

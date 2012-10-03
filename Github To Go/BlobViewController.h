@@ -11,6 +11,7 @@
 #import "Blob.h"
 #import "Repository.h"
 #import "CommitFile.h"
+#import "RPShareUrlController.h"
 
 @interface BlobViewController : UIViewController <UIWebViewDelegate> 
 
@@ -23,6 +24,7 @@
 @property(strong, nonatomic) Repository* repository;
 @property(strong, nonatomic) CommitFile* commitFile;
 @property(strong, nonatomic) NSArray *comments;
+@property(strong, nonatomic) RPShareUrlController *shareUrlController;
 @property BOOL showDiffs;
 
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;

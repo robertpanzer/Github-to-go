@@ -18,4 +18,5 @@
 
 -(void)addAction:(NSString*)anAction block:(void(^)())aBlock;
 
+-(void)addActivity:(UIActivity*)activity;
 @end

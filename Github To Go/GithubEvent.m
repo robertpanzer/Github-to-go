@@ -99,6 +99,7 @@
             } else if ([type isEqualToString:@"DownloadEvent"]) {
                 [self parseDownloadEvent:jsonObject];
             } else if ([type isEqualToString:@"FollowEvent"]) {
+                self.repository = nil;
                 [self parseFollowEvent:jsonObject];
             } else if ([type isEqualToString:@"GistEvent"]) {
                 [self parseGistEvent:jsonObject];

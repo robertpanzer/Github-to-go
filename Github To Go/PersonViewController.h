@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Person.h"
+#import "RPShareUrlController.h"
 
 @interface PersonViewController : UITableViewController <UIActionSheetDelegate>
 
@@ -16,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UIView *tableHeader;
 @property (nonatomic) BOOL letUserSelectCells;
+
+@property (strong, nonatomic) RPShareUrlController *shareUrlController;
 
 -(id)initWithPerson:(Person*)aPerson;
 

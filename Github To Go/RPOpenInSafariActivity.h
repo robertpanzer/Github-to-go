@@ -10,4 +10,6 @@
 
 @interface RPOpenInSafariActivity : UIActivity
 
+@property(strong, nonatomic) NSString* url;
+
 @end

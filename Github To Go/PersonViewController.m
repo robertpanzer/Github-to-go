@@ -15,6 +15,7 @@
 #import "GithubEvent.h"
 #import "HistoryList.h"
 #import "RepositoryStorage.h"
+#import "RPFollowPersonActivity.h"
 
 
 static NSString *kName = @"name";
@@ -55,12 +56,6 @@ static NSString *follow, *unfollow;
 
 @implementation PersonViewController
 
-@synthesize person;
-@synthesize imageView;
-@synthesize nameLabel;
-@synthesize tableHeader;
-@synthesize letUserSelectCells;
-
 +(void)initialize {
     keys = @[
         @[kName, kLogin, kEmail, kCreatedAt, kLocation, kBio, kHireable],
@@ -94,7 +89,8 @@ static NSString *follow, *unfollow;
 {
     self = [super initWithNibName:@"PersonViewController" bundle:nil];
     if (self) {
-        self.person = aPerson;
+        _person = aPerson;
+
     }
     return self;
 }
@@ -110,11 +106,23 @@ static NSString *follow, *unfollow;
     self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     
     self.nameLabel.font = [UIFont boldSystemFontOfSize:17.0f];
-    self.navigationItem.title = person.displayname;
+    self.navigationItem.title = self.person.displayname;
     
     UIImage *backgroundImage = [UIImage imageNamed:@"background"];
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
     self.tableView.backgroundView = backgroundImageView;
+
+    if (NSClassFromString(@"UIActivityViewController") != NULL) {
+        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:[NSString stringWithFormat:@"http://github.com/%@", _person.login]
+                                                                  title:_person.displayname
+                                                         viewController:self];
+        [self.shareUrlController addActivity:[[RPFollowPersonActivity alloc] initWithPerson:self.person]];
+        self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
+        
+    } else {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showPersonActions)];
+    }
+
 }
 
 
@@ -124,7 +132,7 @@ static NSString *follow, *unfollow;
     self.nameLabel.text = self.person.displayname;
     self.letUserSelectCells = YES;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showPersonActions)];
+
 }
 
 - (void)viewDidUnload
@@ -190,14 +198,14 @@ static NSString *follow, *unfollow;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!letUserSelectCells) {
+    if (!self.letUserSelectCells) {
         return;
     }
     NSString *key = [[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     NSString *title = [titles objectForKey:key];
     if ([key isEqualToString:kFollowers]) {
-        letUserSelectCells = NO;
-        NSString *url = [NSString stringWithFormat:@"%@/followers", person.url];
+        self.letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/followers", self.person.url];
         [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 NSMutableArray *persons = [NSMutableArray array];
@@ -212,8 +220,8 @@ static NSString *follow, *unfollow;
             }
         }];
     } else if ([key isEqualToString:kFollowing]) {
-        letUserSelectCells = NO;
-        NSString *url = [NSString stringWithFormat:@"%@/following", person.url];
+        self.letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/following", self.person.url];
         [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 NSMutableArray *persons = [NSMutableArray array];
@@ -228,8 +236,8 @@ static NSString *follow, *unfollow;
             }
         }];
     } else if ([key isEqualToString:kPublicRepos]) {
-        letUserSelectCells = NO;
-        NSString *url = [NSString stringWithFormat:@"%@/repos", person.url];
+        self.letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/repos", self.person.url];
         [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
                 NSMutableArray *repos = [NSMutableArray array];
@@ -243,8 +251,8 @@ static NSString *follow, *unfollow;
             }
         }];
     } else if ([key isEqualToString:kEvents]) {
-        letUserSelectCells = NO;
-        NSString *url = [NSString stringWithFormat:@"%@/events/public", person.url];
+        self.letUserSelectCells = NO;
+        NSString *url = [NSString stringWithFormat:@"%@/events/public", self.person.url];
         EventTableViewController *eventListTableViewController = [[EventTableViewController alloc] initWithUrl:url];
         [self.navigationController pushViewController:eventListTableViewController animated:YES];
 
@@ -270,7 +278,7 @@ static NSString *follow, *unfollow;
 
 -(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath {
     NSString *key = [[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-    id value = [person valueForKeyPath:key];
+    id value = [self.person valueForKeyPath:key];
     
     if (value == [NSNull null]) {
         return nil;
@@ -304,7 +312,7 @@ static NSString *follow, *unfollow;
     
     NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
     NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/following/%@", self.person.login];
-    if ([follow isEqualToString:titleClicked]) {
+    if ([[RepositoryStorage sharedStorage].followedPersons objectForKey:self.person.login] == nil) {
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (status == 204) {

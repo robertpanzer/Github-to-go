@@ -10,6 +10,7 @@
 #import "NetworkProxy.h"
 #import "BranchViewController.h"
 #import "CommitComment.h"
+#import "RPShowObjectHistoryActivity.h"
 #import <Twitter/Twitter.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -82,29 +83,18 @@
 
 @implementation BlobViewController
 
-@synthesize webView;
-@synthesize blob;
-@synthesize url;
-@synthesize htmlUrl;
-@synthesize absolutePath;
-@synthesize commitSha;
-@synthesize repository;
-@synthesize commitFile;
-@synthesize showDiffs;
-@synthesize comments;
-
 - (id)initWithUrl:(NSString*)anUrl absolutePath:(NSString *)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
-        url = [NSString stringWithFormat:@"https://github.com/%@/raw/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
-        htmlUrl = [NSString stringWithFormat:@"http://github.com/%@/blob/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
-        repository = aRepository;
+        _url = [NSString stringWithFormat:@"https://github.com/%@/raw/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
+        _htmlUrl = [NSString stringWithFormat:@"http://github.com/%@/blob/%@/%@", aRepository.fullName, aCommitSha, anAbsolutePath];
+        _repository = aRepository;
         
-        absolutePath = anAbsolutePath;
-        commitSha = aCommitSha;
-        showDiffs = NO;
-        self.navigationItem.title = [absolutePath pathComponents].lastObject;
+        _absolutePath = anAbsolutePath;
+        _commitSha = aCommitSha;
+        _showDiffs = NO;
+        self.navigationItem.title = [_absolutePath pathComponents].lastObject;
     }
     return self;
 }
@@ -113,16 +103,16 @@
 {
     self = [super initWithNibName:@"BlobViewController" bundle:nil];
     if (self) {
-        url = aCommitFile.rawUrl;
-        htmlUrl = aCommitFile.blobUrl;
-        commitFile = aCommitFile;
-        comments = aComments;
-        repository = aCommitFile.commit.repository;
+        _url = aCommitFile.rawUrl;
+        _htmlUrl = aCommitFile.blobUrl;
+        _commitFile = aCommitFile;
+        _comments = aComments;
+        _repository = aCommitFile.commit.repository;
         
-        absolutePath = aCommitFile.fileName;
-        commitSha = aCommitFile.commit.sha;
-        showDiffs = YES;
-        self.navigationItem.title = [absolutePath pathComponents].lastObject;
+        _absolutePath = aCommitFile.fileName;
+        _commitSha = aCommitFile.commit.sha;
+        _showDiffs = YES;
+        self.navigationItem.title = [_absolutePath pathComponents].lastObject;
         
     }
     return self;
@@ -143,18 +133,28 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showActionSheet:)];
+    if (NSClassFromString(@"UIActivityViewController") != NULL) {
+        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:self.htmlUrl
+                                                                      title:self.blob.name
+                                                             viewController:self];
+        [self.shareUrlController addActivity:[[RPShowObjectHistoryActivity alloc] initWithCommitSha:self.commitSha repository:self.repository absolutePath:self.absolutePath owningViewController:self]];
+        self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
+    } else {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                               target:self
+                                                                                               action:@selector(showActionSheet:)];
+    }
 
     // Do any additional setup after loading the view from its nib.
     [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             NSString *contentType = [headerFields objectForKey:@"Content-Type"];
             if ([data isKindOfClass:[NSString class]]) {
-                self.blob = [[Blob alloc] initWithRawData:data absolutePath:absolutePath commitSha:commitSha];
+                self.blob = [[Blob alloc] initWithRawData:data absolutePath:self.absolutePath commitSha:self.commitSha];
             } else if ([data isKindOfClass:[NSDictionary class]]) {
-                self.blob = [[Blob alloc] initWithJSONObject:data absolutePath:absolutePath commitSha:commitSha];
+                self.blob = [[Blob alloc] initWithJSONObject:data absolutePath:self.absolutePath commitSha:self.commitSha];
             } else {
-                self.blob = [[Blob alloc] initWithData:data absolutePath:self.absolutePath commitSha:commitSha];
+                self.blob = [[Blob alloc] initWithData:data absolutePath:self.absolutePath commitSha:self.commitSha];
             }
             if ([contentType hasPrefix:@"text/"]) {
                 NSMutableString* html = [[NSMutableString alloc] initWithCapacity:((NSString*)self.blob.content).length + 1000];
@@ -209,7 +209,7 @@
                         }
                     }
                 } else {
-                    int maxLineNo = MAX( lines.count, MAX(commitFile.largestOldLineNo, commitFile.largestNewLineNo) );
+                    int maxLineNo = MAX( lines.count, MAX(self.commitFile.largestOldLineNo, self.commitFile.largestNewLineNo) );
                     int oldLineCounter = 1;
                     for (int i = 1; i <= maxLineNo; i++) {
                         NSString* oldLine = [self.commitFile.linesOfOldFile objectForKey:[NSNumber numberWithInt:oldLineCounter]];
@@ -312,12 +312,16 @@
 }
 
 -(void)showBlobHistory {    
-    BranchViewController* branchViewController = [[BranchViewController alloc] initWithGitObject:self.blob absolutePath:self.absolutePath commitSha:self.commitSha repository:repository];
+    BranchViewController* branchViewController = [[BranchViewController alloc] initWithAbsolutePath:self.absolutePath
+                                                                                          commitSha:self.commitSha
+                                                                                         repository:self.repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
 }
 
--(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+-(void)mailComposeController:(MFMailComposeViewController *)controller
+         didFinishWithResult:(MFMailComposeResult)result
+                       error:(NSError *)error {
     [controller dismissModalViewControllerAnimated:YES];
 }
 

@@ -48,7 +48,7 @@
 
 -(id)initWithRepository:(Repository*)aRepository andBranch:(Branch*)aBranch;
 
--(id)initWithGitObject:(id<GitObject>)gitObject absolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
+-(id)initWithAbsolutePath:(NSString*)anAbsolutePath commitSha:(NSString*)aCommitSha repository:(Repository*)aRepository;
 
 -(id)initWithCommitHistoryList:(CommitHistoryList*)aCommitHistoryList repository:(Repository*)aRepository branch:(Branch*)aBranch;
 

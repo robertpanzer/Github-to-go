@@ -51,6 +51,17 @@
 		946CB2AB14B4796000BBFDAD /* Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AA14B4796000BBFDAD /* Commit.m */; };
 		946CB2AF14B48E6000BBFDAD /* TreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 946CB2AD14B48E6000BBFDAD /* TreeViewController.m */; };
 		946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */; };
+		947B76C11618523500E9A9A3 /* RPOpenInSafariActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B76C01618523500E9A9A3 /* RPOpenInSafariActivity.m */; };
+		947B76CB16187CAB00E9A9A3 /* RPFollowPersonActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B76CA16187CAB00E9A9A3 /* RPFollowPersonActivity.m */; };
+		947B76D7161C6E7300E9A9A3 /* follow.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76D5161C6E7300E9A9A3 /* follow.png */; };
+		947B76D8161C6E7300E9A9A3 /* follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76D6161C6E7300E9A9A3 /* follow@2x.png */; };
+		947B76DC161C6FA000E9A9A3 /* unfollow.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76DA161C6FA000E9A9A3 /* unfollow.png */; };
+		947B76DD161C6FA000E9A9A3 /* unfollow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76DB161C6FA000E9A9A3 /* unfollow@2x.png */; };
+		947B76E4161C731200E9A9A3 /* openinsafari.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76E2161C731200E9A9A3 /* openinsafari.png */; };
+		947B76E5161C731200E9A9A3 /* openinsafari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76E3161C731200E9A9A3 /* openinsafari@2x.png */; };
+		947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */; };
+		947B76EC161C846100E9A9A3 /* history.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76EA161C846100E9A9A3 /* history.png */; };
+		947B76ED161C846100E9A9A3 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76EB161C846100E9A9A3 /* history@2x.png */; };
 		9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */; };
 		949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 949DB8CF14F1522D000BE743 /* RepositoryStorage.m */; };
 		949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */; };
@@ -180,6 +191,20 @@
 		946CB2AC14B48E6000BBFDAD /* TreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeViewController.h; sourceTree = "<group>"; };
 		946CB2AD14B48E6000BBFDAD /* TreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TreeViewController.m; sourceTree = "<group>"; };
 		946CB2AE14B48E6000BBFDAD /* TreeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TreeViewController.xib; sourceTree = "<group>"; };
+		947B76BF1618523500E9A9A3 /* RPOpenInSafariActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPOpenInSafariActivity.h; sourceTree = "<group>"; };
+		947B76C01618523500E9A9A3 /* RPOpenInSafariActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPOpenInSafariActivity.m; sourceTree = "<group>"; };
+		947B76C916187CAB00E9A9A3 /* RPFollowPersonActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPFollowPersonActivity.h; sourceTree = "<group>"; };
+		947B76CA16187CAB00E9A9A3 /* RPFollowPersonActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPFollowPersonActivity.m; sourceTree = "<group>"; };
+		947B76D5161C6E7300E9A9A3 /* follow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow.png; sourceTree = "<group>"; };
+		947B76D6161C6E7300E9A9A3 /* follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "follow@2x.png"; sourceTree = "<group>"; };
+		947B76DA161C6FA000E9A9A3 /* unfollow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfollow.png; sourceTree = "<group>"; };
+		947B76DB161C6FA000E9A9A3 /* unfollow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unfollow@2x.png"; sourceTree = "<group>"; };
+		947B76E2161C731200E9A9A3 /* openinsafari.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = openinsafari.png; sourceTree = "<group>"; };
+		947B76E3161C731200E9A9A3 /* openinsafari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openinsafari@2x.png"; sourceTree = "<group>"; };
+		947B76E7161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPShowObjectHistoryActivity.h; sourceTree = "<group>"; };
+		947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPShowObjectHistoryActivity.m; sourceTree = "<group>"; };
+		947B76EA161C846100E9A9A3 /* history.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = history.png; sourceTree = "<group>"; };
+		947B76EB161C846100E9A9A3 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
 		9491EE3C151658550050C424 /* PullToRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshTableViewController.h; sourceTree = "<group>"; };
 		9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
@@ -426,6 +451,19 @@
 			name = Commit;
 			sourceTree = "<group>";
 		};
+		947B76BD1618518E00E9A9A3 /* Activities */ = {
+			isa = PBXGroup;
+			children = (
+				947B76BF1618523500E9A9A3 /* RPOpenInSafariActivity.h */,
+				947B76C01618523500E9A9A3 /* RPOpenInSafariActivity.m */,
+				947B76C916187CAB00E9A9A3 /* RPFollowPersonActivity.h */,
+				947B76CA16187CAB00E9A9A3 /* RPFollowPersonActivity.m */,
+				947B76E7161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.h */,
+				947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */,
+			);
+			name = Activities;
+			sourceTree = "<group>";
+		};
 		949FB12414B3327700D3E713 = {
 			isa = PBXGroup;
 			children = (
@@ -460,6 +498,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				947B76BD1618518E00E9A9A3 /* Activities */,
 				94FAB65815337F8200C89D7C /* en.lproj */,
 				94FAB6461531A2A400C89D7C /* background.png */,
 				94FAB6481531A2FA00C89D7C /* background@2x.png */,
@@ -523,6 +562,14 @@
 		94AB82261534CC51008E0FE7 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				947B76EA161C846100E9A9A3 /* history.png */,
+				947B76EB161C846100E9A9A3 /* history@2x.png */,
+				947B76E2161C731200E9A9A3 /* openinsafari.png */,
+				947B76E3161C731200E9A9A3 /* openinsafari@2x.png */,
+				947B76DA161C6FA000E9A9A3 /* unfollow.png */,
+				947B76DB161C6FA000E9A9A3 /* unfollow@2x.png */,
+				947B76D5161C6E7300E9A9A3 /* follow.png */,
+				947B76D6161C6E7300E9A9A3 /* follow@2x.png */,
 				94C8AE73160385900026FD9E /* Default-568h@2x.png */,
 				94AB822C1534CE8A008E0FE7 /* default.png */,
 				94AB82281534CC66008E0FE7 /* default@2x.png */,
@@ -679,6 +726,14 @@
 				94AB822D1534CE8A008E0FE7 /* default.png in Resources */,
 				94EF40781543FEAB002FA8B5 /* IssueListViewController.xib in Resources */,
 				94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */,
+				947B76D7161C6E7300E9A9A3 /* follow.png in Resources */,
+				947B76D8161C6E7300E9A9A3 /* follow@2x.png in Resources */,
+				947B76DC161C6FA000E9A9A3 /* unfollow.png in Resources */,
+				947B76DD161C6FA000E9A9A3 /* unfollow@2x.png in Resources */,
+				947B76E4161C731200E9A9A3 /* openinsafari.png in Resources */,
+				947B76E5161C731200E9A9A3 /* openinsafari@2x.png in Resources */,
+				947B76EC161C846100E9A9A3 /* history.png in Resources */,
+				947B76ED161C846100E9A9A3 /* history@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,6 +799,9 @@
 				94CCEDF815951AF700D5D810 /* EventRootViewController.m in Sources */,
 				941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */,
 				94BE828F15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m in Sources */,
+				947B76C11618523500E9A9A3 /* RPOpenInSafariActivity.m in Sources */,
+				947B76CB16187CAB00E9A9A3 /* RPFollowPersonActivity.m in Sources */,
+				947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,6 +11,7 @@
 #import "BranchViewController.h"
 #import "NetworkProxy.h"
 #import "RPShareUrlController.h"
+#import "RPShowObjectHistoryActivity.h"
 #import <Twitter/Twitter.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
@@ -48,6 +49,12 @@
                                                                       title:shareTitle
                                                              viewController:self];
 
+        if (NSClassFromString(@"UIActivityViewController") != NULL) {
+            [self.shareUrlController addActivity:[[RPShowObjectHistoryActivity alloc] initWithCommitSha:self.commit.sha
+                                                                                             repository:self.repository
+                                                                                           absolutePath:self.absolutePath
+                                                                                   owningViewController:self]];
+        }
         
         treeViewController = [[TreeViewController alloc] initWithTree:nil
                                                          absolutePath:self.absolutePath
@@ -55,8 +62,7 @@
                                                            repository:self.repository
                                                            branchName:self.branchName];
         
-        branchViewController = [[BranchViewController alloc] initWithGitObject:nil
-                                                                  absolutePath:self.absolutePath
+        branchViewController = [[BranchViewController alloc] initWithAbsolutePath:self.absolutePath
                                                                      commitSha:self.commit.sha
                                                                     repository:repository];
         
