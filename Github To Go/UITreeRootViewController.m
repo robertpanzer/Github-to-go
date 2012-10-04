@@ -48,13 +48,6 @@
         self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:htmlUrl 
                                                                       title:shareTitle
                                                              viewController:self];
-
-        if (NSClassFromString(@"UIActivityViewController") != NULL) {
-            [self.shareUrlController addActivity:[[RPShowObjectHistoryActivity alloc] initWithCommitSha:self.commit.sha
-                                                                                             repository:self.repository
-                                                                                           absolutePath:self.absolutePath
-                                                                                   owningViewController:self]];
-        }
         
         treeViewController = [[TreeViewController alloc] initWithTree:nil
                                                          absolutePath:self.absolutePath
