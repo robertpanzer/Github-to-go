@@ -62,6 +62,7 @@
 		947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */; };
 		947B76EC161C846100E9A9A3 /* history.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76EA161C846100E9A9A3 /* history.png */; };
 		947B76ED161C846100E9A9A3 /* history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 947B76EB161C846100E9A9A3 /* history@2x.png */; };
+		948E3EE9162B1537006F4DB7 /* RPWatchRepoActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 948E3EE8162B1537006F4DB7 /* RPWatchRepoActivity.m */; };
 		9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */; };
 		949DB8D014F1522D000BE743 /* RepositoryStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 949DB8CF14F1522D000BE743 /* RepositoryStorage.m */; };
 		949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 949F5070151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m */; };
@@ -205,6 +206,8 @@
 		947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPShowObjectHistoryActivity.m; sourceTree = "<group>"; };
 		947B76EA161C846100E9A9A3 /* history.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = history.png; sourceTree = "<group>"; };
 		947B76EB161C846100E9A9A3 /* history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "history@2x.png"; sourceTree = "<group>"; };
+		948E3EE7162B1537006F4DB7 /* RPWatchRepoActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPWatchRepoActivity.h; sourceTree = "<group>"; };
+		948E3EE8162B1537006F4DB7 /* RPWatchRepoActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPWatchRepoActivity.m; sourceTree = "<group>"; };
 		9491EE3C151658550050C424 /* PullToRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullToRefreshTableViewController.h; sourceTree = "<group>"; };
 		9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullToRefreshTableViewController.m; sourceTree = "<group>"; };
 		949DB8CE14F1522D000BE743 /* RepositoryStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepositoryStorage.h; sourceTree = "<group>"; };
@@ -460,6 +463,8 @@
 				947B76CA16187CAB00E9A9A3 /* RPFollowPersonActivity.m */,
 				947B76E7161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.h */,
 				947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */,
+				948E3EE7162B1537006F4DB7 /* RPWatchRepoActivity.h */,
+				948E3EE8162B1537006F4DB7 /* RPWatchRepoActivity.m */,
 			);
 			name = Activities;
 			sourceTree = "<group>";
@@ -802,6 +807,7 @@
 				947B76C11618523500E9A9A3 /* RPOpenInSafariActivity.m in Sources */,
 				947B76CB16187CAB00E9A9A3 /* RPFollowPersonActivity.m in Sources */,
 				947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */,
+				948E3EE9162B1537006F4DB7 /* RPWatchRepoActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
