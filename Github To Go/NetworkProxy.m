@@ -167,13 +167,9 @@ static NetworkProxy* networkProxyInstance;
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     [self decreaseConnectionCount];
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
     
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
     NSMutableData* receivedData = connectionData.receivedData;
-//    SBJsonParser* parser = [[SBJsonParser alloc] init];
-//    id object = [parser objectWithData:receivedData];
 
     void(^block)(int, NSDictionary*, id) = connectionData.block;
     
@@ -194,12 +190,12 @@ static NetworkProxy* networkProxyInstance;
         } else {
             object = receivedData;
         }
-        if ([@"api.github.com" isEqualToString:connection.originalRequest.URL.host]) {
+        if ([connection.originalRequest.URL.host hasSuffix:@"github.com"]) {
             if ([Settings sharedInstance].isUsernameSet) {
                 if ([connectionData.statusCode intValue]< 400) {
-                    [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:YES];
+                    [Settings sharedInstance].passwordValidated = @YES;
                 } else {
-                    [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
+                    [Settings sharedInstance].passwordValidated = @NO;
                 }
             }
         }
@@ -214,9 +210,6 @@ static NetworkProxy* networkProxyInstance;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    //    NSString* dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    //    NSLog(@"Data:\n%@", dataString);
-    //    [dataString release];
     // Append the new data to receivedData.
     // receivedData is an instance variable declared elsewhere.
     ConnectionData* connectionData = [self connectionDataForConnection:connection];
@@ -254,14 +247,23 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
     if ([challenge previousFailureCount] == 0) {
         NSURLCredentialStorage* credentialStorage = [NSURLCredentialStorage sharedCredentialStorage];
         NSURLCredential* credential = [credentialStorage defaultCredentialForProtectionSpace:[challenge protectionSpace]];
+        if ([challenge.protectionSpace.host hasSuffix:@"github.com"] && credential == nil) {
+            NSURLProtectionSpace *orgProtectionSpace = challenge.protectionSpace;
+            NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"api.github.com"
+                                                                                         port:orgProtectionSpace.port
+                                                                                     protocol:orgProtectionSpace.protocol
+                                                                                        realm:orgProtectionSpace.realm
+                                                                         authenticationMethod:orgProtectionSpace.authenticationMethod];
+            credential = [credentialStorage defaultCredentialForProtectionSpace:protectionSpace];
+        }
         if (credential != nil) {
             [[challenge sender] useCredential:credential
                    forAuthenticationChallenge:challenge];
             return;
         }
     }
-    if ([@"api.github.com" isEqualToString:connection.originalRequest.URL.host]) {
-        [Settings sharedInstance].passwordValidated = [NSNumber numberWithBool:NO];
+    if ([connection.originalRequest.URL.host hasSuffix:@"github.com"]) {
+        [Settings sharedInstance].passwordValidated = @NO;
     }
     [[challenge sender] cancelAuthenticationChallenge:challenge];
 }
@@ -276,7 +278,7 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 }
         
 -(void)addBasicAuthenticationHeaderToRequest:(NSMutableURLRequest*)request {
-    if ([@"api.github.com" isEqualToString:request.URL.host] 
+    if ([request.URL.host hasSuffix:@"github.com"]
         && [Settings sharedInstance].username != nil && [[Settings sharedInstance].username length] > 0) {
         NSData *passwordData = [[NSString stringWithFormat:@"%@:%@", [Settings sharedInstance].username, [Settings sharedInstance].password] dataUsingEncoding:NSASCIIStringEncoding];
         NSString *pwd = [NSString stringWithFormat:@"Basic %@", [passwordData base64EncodingWithLineLength:1024]];
