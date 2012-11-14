@@ -78,6 +78,7 @@
 -(NSArray*)commentsForNewLine:(NSNumber*)lineNumber;
 -(NSString*)wrapComments:(NSArray*)aComments;
 -(void)showActionSheet:(id)sender;
+-(void)hideProgressView;
 
 @end
 
@@ -133,6 +134,9 @@
 {
     [super viewDidLoad];
     
+    self.progressLabel.text = @"Loading data";
+    self.progressView.progress = 0.0f;
+
     if (NSClassFromString(@"UIActivityViewController") != NULL) {
         self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:self.htmlUrl
                                                                       title:self.blob.name
@@ -147,7 +151,25 @@
 
     // Do any additional setup after loading the view from its nib.
     [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
-        if (statusCode == 200) {
+        if (statusCode != 200) {
+            [self hideProgressView];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Unexpected response status %d", @"Unexpected response status"), statusCode]
+                                                                message:nil
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                [alertView show];
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+            
+        } else {
+
+            dispatch_async(dispatch_get_main_queue(), ^() {
+                self.progressView.progress = 0.5f;
+                self.progressLabel.text = @"Processing data";
+            });
+
             NSString *contentType = [headerFields objectForKey:@"Content-Type"];
             if ([data isKindOfClass:[NSString class]]) {
                 self.blob = [[Blob alloc] initWithRawData:data absolutePath:self.absolutePath commitSha:self.commitSha];
@@ -156,7 +178,13 @@
             } else {
                 self.blob = [[Blob alloc] initWithData:data absolutePath:self.absolutePath commitSha:self.commitSha];
             }
+
+
             if ([contentType hasPrefix:@"text/"]) {
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    self.progressView.progress = 0.6f;
+                    self.progressLabel.text = @"Converting data";
+                });
                 NSMutableString* html = [[NSMutableString alloc] initWithCapacity:((NSString*)self.blob.content).length + 1000];
                 
                 [html appendString:@"<!DOCTYPE html>\n"];
@@ -244,11 +272,17 @@
                 [html appendString:@"</table>\n"];
                 [html appendString:@"</body>\n"];
                 [html appendString:@"</html>\n"];
+                dispatch_async(dispatch_get_main_queue(), ^() {
+                    self.progressView.progress = 0.5f;
+                    self.progressLabel.text = @"Presenting data";
+                });
+
 //                 NSLog(@"HTML:\n%@", html);
                 dispatch_async(dispatch_get_main_queue(), ^() {
                     self.webView.delegate = self;
                     [self.webView setScalesPageToFit:YES];
                     [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
+                    [self hideProgressView];
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^() {
@@ -256,7 +290,9 @@
                     [self.webView setScalesPageToFit:YES];
                     if ([data isKindOfClass:[NSData class]]) {
                         [self.webView loadData:data MIMEType:contentType textEncodingName:nil baseURL:nil];
+                        [self hideProgressView];
                     } else {
+                        [self hideProgressView];
                         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Unexpected content type %@", @"Unexpected content type"), contentType] message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [alertView show];
                     }
@@ -317,6 +353,12 @@
                                                                                          repository:self.repository];
     [self.navigationController pushViewController:branchViewController animated:YES];
     
+}
+
+-(void)hideProgressView {
+    self.progressView.hidden = YES;
+    self.progressLabel.hidden = YES;
+    self.backgroundView.hidden = YES;
 }
 
 -(void)mailComposeController:(MFMailComposeViewController *)controller

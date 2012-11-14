@@ -15,6 +15,9 @@
 
 @interface BlobViewController : UIViewController <UIWebViewDelegate> 
 
+@property(strong, nonatomic) IBOutlet UIView *backgroundView;
+@property(strong, nonatomic) IBOutlet UIProgressView *progressView;
+@property(strong, nonatomic) IBOutlet UILabel *progressLabel;
 @property(strong, nonatomic) IBOutlet UIWebView* webView;
 @property(strong, nonatomic) Blob* blob;
 @property(strong, nonatomic) NSString* absolutePath;
