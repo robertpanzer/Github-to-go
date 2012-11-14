@@ -180,7 +180,7 @@
             }
 
 
-            if ([contentType hasPrefix:@"text/"]) {
+            if ([contentType contentTypeIsText]) {
                 dispatch_async(dispatch_get_main_queue(), ^() {
                     self.progressView.progress = 0.6f;
                     self.progressLabel.text = @"Converting data";

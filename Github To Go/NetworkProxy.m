@@ -13,16 +13,8 @@
 
 static NetworkProxy* networkProxyInstance;
 
-@interface ConnectionData : NSObject {
-@private
-    NSNumber* statusCode;
-    NSURLConnection* connection;
-    NSMutableData* receivedData;
-    NSString* url;
-    NSDictionary* headerFields;
-    void (^block)(int, NSDictionary*, id);
-    void (^errorBlock)(NSError*);
-}
+@interface ConnectionData : NSObject
+
 @property(strong) NSNumber* statusCode;
 @property(strong) NSURLConnection* connection;
 @property(strong) NSMutableData* receivedData;
@@ -35,13 +27,13 @@ static NetworkProxy* networkProxyInstance;
 
 @implementation ConnectionData 
 
-@synthesize statusCode;
-@synthesize connection;
-@synthesize receivedData;
-@synthesize url;
-@synthesize headerFields;
-@synthesize block;
-@synthesize errorBlock;
+//@synthesize statusCode;
+//@synthesize connection;
+//@synthesize receivedData;
+//@synthesize url;
+//@synthesize headerFields;
+//@synthesize block;
+//@synthesize errorBlock;
 
 
 - (id)initWithUrl:(NSString*)anUrl {
@@ -179,7 +171,7 @@ static NetworkProxy* networkProxyInstance;
         id object = nil;
         if ([contentType rangeOfString:@"application/json"].location != NSNotFound) {
             object = [NSJSONSerialization JSONObjectWithData:receivedData options:0 error:&error];
-        } else if ([contentType rangeOfString:@"text/"].location != NSNotFound) {
+        } else if ([contentType contentTypeIsText]) {
             object = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
             if (object == nil) {
                 dispatch_async(dispatch_get_main_queue(), ^(){
@@ -298,6 +290,15 @@ didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
     if (self.openConnections <= 0) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }
+}
+
+@end
+
+@implementation NSString (RPContentType)
+
+-(BOOL)contentTypeIsText {
+    return [self rangeOfString:@"text/"].location != NSNotFound
+        || [self rangeOfString:@"application/x-msdos-program"].location != NSNotFound;
 }
 
 @end
