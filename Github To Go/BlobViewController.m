@@ -282,7 +282,6 @@
                     self.webView.delegate = self;
                     [self.webView setScalesPageToFit:YES];
                     [self.webView loadData:[html dataUsingEncoding:NSUTF8StringEncoding] MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
-                    [self hideProgressView];
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^() {
@@ -374,6 +373,13 @@
     return YES;
 }
 
+-(void)webViewDidFinishLoad:(UIWebView *)webView {
+    [self hideProgressView];
+}
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+    [self hideProgressView];
+}
 
 
 -(NSArray*)commentsForOldLine:(NSNumber*)lineNumber
