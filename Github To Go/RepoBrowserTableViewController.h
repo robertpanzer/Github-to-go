@@ -10,13 +10,19 @@
 #import "Repository.h"
 #import "PullToRefreshTableViewController.h"
 
-@interface RepoBrowserTableViewController : PullToRefreshTableViewController 
+@interface RepoBrowserTableViewController: UITableViewController <UISearchBarDelegate>
 
-- (IBAction)onFetchRepos;
 
 @property(strong) NSArray* myRepos;
 @property(strong) NSArray* watchedRepos;
-//// Deprecated
-//@property(strong) id repoSearchTableViewController;
+@property(strong) NSArray* starredRepos;
+
+@property(strong) NSArray* matchingMyRepos;
+@property(strong) NSArray* matchingWatchedRepos;
+@property(strong) NSArray* matchingStarredRepos;
+
 @property BOOL initialized;
+
+- (void)onFetchRepos:(NSNotification*)notification;
+
 @end

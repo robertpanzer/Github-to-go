@@ -36,4 +36,6 @@
 
 -(NSString*) urlOfMasterBranch;
 
+-(BOOL)matchesSearchString:(NSString*)searchString;
+
 @end

@@ -68,6 +68,7 @@ static NSString* StopWatchingRepo;
                 if (status == 204) {
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
+                    [[RepositoryStorage sharedStorage] addWatchedRepository:self.repository];
                     [self activityDidFinish:YES];
                 } else {
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
@@ -82,6 +83,7 @@ static NSString* StopWatchingRepo;
                 if (status == 204) {
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
+                    [[RepositoryStorage sharedStorage] removeWatchedRepository:self.repository];
                     [self activityDidFinish:YES];
                 } else {
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];

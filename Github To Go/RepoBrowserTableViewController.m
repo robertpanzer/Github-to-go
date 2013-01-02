@@ -22,10 +22,6 @@
 
 @implementation RepoBrowserTableViewController
 
-@synthesize myRepos;
-@synthesize watchedRepos;
-@synthesize initialized;
-
 
 - (id)init
 {
@@ -52,12 +48,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 20.0f, 20.0f)];
-    self.tableView.backgroundView.backgroundColor = [UIColor lightGrayColor];
-
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
+    self.tableView.tableHeaderView = self.searchDisplayController.searchBar;
+    self.navigationController.navigationBarHidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onFetchRepos:) name:LOADED_REPOS_NOTIFICATION object:nil];
+    [self onFetchRepos:nil];
 }
 
 - (void)viewDidUnload
@@ -70,7 +65,6 @@
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBar.hidden = YES;
-    [self onFetchRepos];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -98,50 +92,79 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return NSLocalizedString(@"My Repositories", @"My Repositories section header");
+        case 1:
+            return NSLocalizedString(@"Watched Repositories", @"Watched Repositories section header");
+        case 2:
+            return NSLocalizedString(@"Starred Repositories", @"Starred Repositories section header");
+        default:
+            return nil;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return self.myRepos.count + 1;
-    } else if (section == 1) {
-        return self.watchedRepos.count + 1;
-    } else if (section == 2) {
-        return 1;
+    if (tableView == self.tableView) {
+        
+        if (section == 0) {
+            return self.myRepos.count;
+        } else if (section == 1) {
+            return self.watchedRepos.count;
+        } else if (section == 2) {
+            return self.starredRepos.count;
+        } else {
+            return -1;
+        }
     } else {
-        return -1;
+        // That's the search display view
+        if (section == 0) {
+            return self.matchingMyRepos.count;
+        } else if (section == 1) {
+            return self.matchingWatchedRepos.count;
+        } else if (section == 2) {
+            return self.matchingStarredRepos.count;
+        } else {
+            return -1;
+        }
+        return 0;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    
-    if (indexPath.row == 0) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-        cell.detailTextLabel.text = nil;
-        if (indexPath.section == 0) {
-            cell.textLabel.text = NSLocalizedString(@"My Repositories", @"Section My Repos");
-        } else {
-            cell.textLabel.text = NSLocalizedString(@"Watched Repositories", @"Section Watched Repos");
-        }
-        return cell;
-    } 
-
     UITableViewCell *cell = [UITableViewCell createRepositoryCellForTableView:self.tableView];
     // Configure the cell...
     Repository* repo = nil;
-    if (indexPath.section == 0) {
-        repo = (Repository*)[myRepos objectAtIndex:indexPath.row - 1];
-    } else if (indexPath.section == 1) {
-        repo = (Repository*)[watchedRepos objectAtIndex:indexPath.row - 1];
+    if (tableView == self.tableView) {
+        switch (indexPath.section) {
+            case 0:
+                repo = (Repository*)[self.myRepos objectAtIndex:indexPath.row];
+                break;
+            case 1:
+                repo = (Repository*)[self.watchedRepos objectAtIndex:indexPath.row];
+                break;
+            case 2:
+                repo = (Repository*)[self.starredRepos objectAtIndex:indexPath.row];
+                break;
+        }
+    } else {
+        switch (indexPath.section) {
+            case 0:
+                repo = (Repository*)[self.matchingMyRepos objectAtIndex:indexPath.row];
+                break;
+            case 1:
+                repo = (Repository*)[self.matchingWatchedRepos objectAtIndex:indexPath.row];
+                break;
+            case 2:
+                repo = (Repository*)[self.matchingStarredRepos objectAtIndex:indexPath.row];
+                break;
+        }
     }
     [cell bindRepository:repo tableView:self.tableView];
     return cell;
@@ -149,26 +172,37 @@
 
 #pragma mark - Table view delegate
 
--(NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ((indexPath.section == 0 || indexPath.section == 1) && indexPath.row == 0) {
-        return 0;
-    }
-    if (indexPath.section == 2) {
-        return 0;
-    }
-    return 1;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Repository* repo = nil;
-    if (indexPath.section == 0 && indexPath.row > 0) {
-        repo = [self.myRepos objectAtIndex:indexPath.row - 1];
-    } else if (indexPath.section == 1 && indexPath.row > 0) {
-        repo = [self.watchedRepos objectAtIndex:indexPath.row - 1];
+    if (tableView == self.tableView) {
+        switch (indexPath.section) {
+            case 0:
+                repo = (Repository*)[self.myRepos objectAtIndex:indexPath.row];
+                break;
+            case 1:
+                repo = (Repository*)[self.watchedRepos objectAtIndex:indexPath.row];
+                break;
+            case 2:
+                repo = (Repository*)[self.starredRepos objectAtIndex:indexPath.row];
+                break;
+        }
     } else {
+        switch (indexPath.section) {
+            case 0:
+                repo = (Repository*)[self.matchingMyRepos objectAtIndex:indexPath.row];
+                break;
+            case 1:
+                repo = (Repository*)[self.matchingWatchedRepos objectAtIndex:indexPath.row];
+                break;
+            case 2:
+                repo = (Repository*)[self.matchingStarredRepos objectAtIndex:indexPath.row];
+                break;
+        }
+    }
+
+    if (repo == nil) {
         return;
     }
-    
     UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
     [self.navigationController pushViewController:repoViewController animated:YES];
 }
@@ -176,101 +210,64 @@
 
 #pragma mark - fetch data
 
-- (IBAction)onFetchRepos {
-    if ([Settings sharedInstance].isUsernameSet) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
-            NSMutableArray* newRepos = [[NSMutableArray alloc] init];
-            for (NSDictionary* repoObject in data) {
-                Repository *repo = [[Repository alloc] initFromJSONObject:repoObject];
-                [[RepositoryStorage sharedStorage] addOwnRepository:repo];
-                [newRepos addObject:repo];
-            }
+- (void)onFetchRepos:(NSNotification*)notification {
 
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                [self reloadDidFinish];
-                if (self.myRepos.count == newRepos.count) {
-                    self.myRepos = newRepos;
-                    [self.tableView reloadData];
-                } else {
-                    [self.tableView beginUpdates];
-                    
-                    NSMutableArray *oldIndexPaths = [NSMutableArray array];
-                    for (int i = 1; i < self.myRepos.count + 1; i++) {
-                        [oldIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-                    }
-                    self.myRepos = nil;
-                    
-                    [self.tableView deleteRowsAtIndexPaths:oldIndexPaths withRowAnimation:YES];
-                    
-                    self.myRepos = newRepos;
-                    
-                    NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
-                    for (int i = 1; i < self.myRepos.count + 1; i++) {
-                        [newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-                    }
-                    
-                    [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
-                    [self.tableView endUpdates];
-                }
-            });
-        }];
-        
-        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/watched" block:^(int statusCode, NSDictionary* headerFields, id data) {
-            NSMutableArray* newRepos = [[NSMutableArray alloc] init];
-
-            for (NSDictionary* repoObject in data) {
-                Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
-                [[RepositoryStorage sharedStorage] addWatchedRepository:repo];
-                if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
-                    [newRepos addObject:repo];
-                }
-            }
-
-            dispatch_async(dispatch_get_main_queue(), ^() {
-                [self reloadDidFinish];
-                if (self.watchedRepos.count == newRepos.count) {
-                    self.watchedRepos = newRepos;
-                    [self.tableView reloadData];
-                } else {
-                    NSMutableArray *oldIndexPaths = [NSMutableArray array];
-                    for (int i = 1; i < self.watchedRepos.count + 1; i++) {
-                        [oldIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
-                    }
-                    
-                    self.watchedRepos = nil;
-                    
-                    [self.tableView deleteRowsAtIndexPaths:oldIndexPaths withRowAnimation:YES];
-                    
-                    self.watchedRepos = newRepos;
-                    
-                    NSMutableArray* newIndexPaths = [[NSMutableArray alloc] init];
-                    for (int i = 1; i < self.watchedRepos.count + 1; i++) {
-                        [newIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
-                    }
-                    if (newIndexPaths.count > 0) {
-                        [self.tableView insertRowsAtIndexPaths:newIndexPaths withRowAnimation:YES];
-                    }
-                    [self.tableView endUpdates];
-                }
-            });
-        }];
-    } else {
-        NSMutableArray *oldIndexPaths = [NSMutableArray array];
-        for (int i = 1; i < self.myRepos.count + 1; i++) {
-            [oldIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        NSDictionary *ownRepos = [RepositoryStorage sharedStorage].ownRepositories;
+        NSMutableArray *newRepos = [NSMutableArray array];
+        for (Repository *repository in ownRepos.objectEnumerator) {
+            [newRepos addObject:repository];
         }
-        for (int i = 1; i < self.watchedRepos.count + 1; i++) {
-            [oldIndexPaths addObject:[NSIndexPath indexPathForRow:i inSection:1]];
-        }
-        self.myRepos = nil;
-        self.watchedRepos = nil;
-        [self.tableView deleteRowsAtIndexPaths:oldIndexPaths withRowAnimation:YES];
+        self.myRepos = newRepos;
 
-    }
+        NSDictionary *watchedRepos = [RepositoryStorage sharedStorage].watchedRepositories;
+        NSMutableArray *newWatchedRepos = [NSMutableArray array];
+        for (Repository *repository in watchedRepos.objectEnumerator) {
+            [newWatchedRepos addObject:repository];
+        }
+        self.watchedRepos = newWatchedRepos;
+
+        NSDictionary *starredRepos = [RepositoryStorage sharedStorage].starredRepositories;
+        NSMutableArray *newStarredRepos = [NSMutableArray array];
+        for (Repository *repository in starredRepos.objectEnumerator) {
+            [newStarredRepos addObject:repository];
+        }
+        self.starredRepos = newStarredRepos;
+
+        [self.tableView reloadData];
+    });
 }
 
--(void)reload {
-    [self onFetchRepos];
+
+#pragma mark - search bar delegate methods
+
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    NSMutableArray *newRepos = [NSMutableArray array];
+    for (Repository *repo in self.myRepos) {
+        if ([repo matchesSearchString:searchText]) {
+            [newRepos addObject:repo];
+        }
+    }
+    self.matchingMyRepos = newRepos;
+
+    newRepos = [NSMutableArray array];
+    for (Repository *repo in self.watchedRepos) {
+        if ([repo matchesSearchString:searchText]) {
+            [newRepos addObject:repo];
+        }
+    }
+    self.matchingWatchedRepos = newRepos;
+
+    newRepos = [NSMutableArray array];
+    for (Repository *repo in self.starredRepos) {
+        if ([repo matchesSearchString:searchText]) {
+            [newRepos addObject:repo];
+        }
+    }
+    self.matchingStarredRepos = newRepos;
+
+    [self.searchDisplayController.searchResultsTableView reloadData];
 }
 
 @end

@@ -92,4 +92,14 @@
         return [NSString stringWithFormat:@"%@/%@", self.owner.login, self.name];
     }
 }
+
+-(BOOL)matchesSearchString:(NSString *)searchString {
+    if ([self.name rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    if ([self.owner.login rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound) {
+        return YES;
+    }
+    return NO;
+}
 @end

@@ -19,11 +19,6 @@ static RepositoryStorage* sharedStorage;
 
 @implementation RepositoryStorage
 
-@synthesize ownRepositories;
-@synthesize watchedRepositories;
-@synthesize followedPersons;
-
-
 +(void)initialize {
     sharedStorage = [[RepositoryStorage alloc] init];
 }
@@ -34,6 +29,10 @@ static RepositoryStorage* sharedStorage;
     if (self) {
         self.ownRepositories = [NSMutableDictionary dictionary];
         self.watchedRepositories = [NSMutableDictionary dictionary];
+        self.starredRepositories = [NSMutableDictionary dictionary];
+        [self loadOwnRepos];
+        [self loadFollowedRepos];
+        [self loadStarredRepos];
     }
     return self;
 }
@@ -43,20 +42,41 @@ static RepositoryStorage* sharedStorage;
 }
 
 -(void)addOwnRepository:(Repository*)repository {
-    [ownRepositories setObject:repository forKey:repository.fullName];
+    [self.ownRepositories setObject:repository forKey:repository.fullName];
 }
 
 -(void)addWatchedRepository:(Repository*)repository {
-    [watchedRepositories setObject:repository forKey:repository.fullName];
+    [self.watchedRepositories setObject:repository forKey:repository.fullName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+}
+
+-(void)addStarredRepository:(Repository*)repository {
+    [self.starredRepositories setObject:repository forKey:repository.fullName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+}
+
+-(void)removeWatchedRepository:(Repository*)repository {
+    [self.watchedRepositories removeObjectForKey:repository.fullName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+}
+
+-(void)removeStarredRepository:(Repository*)repository {
+    [self.starredRepositories removeObjectForKey:repository.fullName];
+    [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+}
+
+-(BOOL)repositoryIsStarred:(Repository*)repository {
+    BOOL ret = [self.starredRepositories objectForKey:repository.fullName] != nil;
+    return ret;
 }
 
 -(BOOL)repositoryIsWatched:(Repository*)repository {
-    BOOL ret = [watchedRepositories objectForKey:repository.fullName] != nil;
+    BOOL ret = [self.watchedRepositories objectForKey:repository.fullName] != nil;
     return ret;
 }
 
 -(BOOL)repositoryIsOwned:(Repository*)repository {
-    BOOL ret = [ownRepositories objectForKey:repository.fullName] != nil;
+    BOOL ret = [self.ownRepositories objectForKey:repository.fullName] != nil;
     return ret;
 }
 
@@ -78,5 +98,55 @@ static RepositoryStorage* sharedStorage;
         }];
     }
 }
+
+- (void)loadOwnRepos {
+    if ([Settings sharedInstance].isUsernameSet) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/repos" block:^(int statusCode, NSDictionary* headerFields, id data) {
+            NSMutableDictionary* newRepos = [NSMutableDictionary dictionary];
+            for (NSDictionary* repoObject in data) {
+                Repository *repo = [[Repository alloc] initFromJSONObject:repoObject];
+                [[RepositoryStorage sharedStorage] addOwnRepository:repo];
+                newRepos[repo.fullName] = repo;
+            }
+            self.ownRepositories = newRepos;
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+        }];
+    }
+}
+
+-(void)loadFollowedRepos {
+    if ([Settings sharedInstance].isUsernameSet) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/subscriptions" block:^(int statusCode, NSDictionary* headerFields, id data) {
+            NSMutableDictionary* newRepos = [NSMutableDictionary dictionary];
+            
+            for (NSDictionary* repoObject in data) {
+                Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
+                if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
+                    newRepos[repo.fullName] = repo;
+                }
+            }
+            self.watchedRepositories = newRepos;
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+        }];
+    }
+}
+
+-(void)loadStarredRepos {
+    if ([Settings sharedInstance].isUsernameSet) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:@"https://api.github.com/user/starred" block:^(int statusCode, NSDictionary* headerFields, id data) {
+            NSMutableDictionary* newRepos = [NSMutableDictionary dictionary];
+            
+            for (NSDictionary* repoObject in data) {
+                Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
+                if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
+                    newRepos[repo.fullName] = repo;
+                }
+            }
+            self.starredRepositories = newRepos;
+            [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
+        }];
+    }
+}
+
 
 @end
