@@ -90,6 +90,7 @@
 		94BE828F15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 94BE828E15F543B50017346E /* NSDictionary+RPJSONObjectAccess.m */; };
 		94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94C2F9FB158CBEDF0006640F /* QuartzCore.framework */; };
 		94C2F9FD158CBFE40006640F /* RPFlickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C2F9FA158CBE070006640F /* RPFlickViewController.m */; };
+		94C590E4169499FD00F70314 /* RPStarRepositoryActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C590E3169499FD00F70314 /* RPStarRepositoryActivity.m */; };
 		94C6566D15025FAD00E85813 /* UITableViewCell+GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */; };
 		94C656711503727D00E85813 /* UITableViewCell+Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C656701503727D00E85813 /* UITableViewCell+Person.m */; };
 		94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94C8AE73160385900026FD9E /* Default-568h@2x.png */; };
@@ -100,6 +101,10 @@
 		94D50E0A14E472D6000C92E2 /* EventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0814E472D6000C92E2 /* EventTableViewController.m */; };
 		94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94D50E0914E472D6000C92E2 /* EventTableViewController.xib */; };
 		94D50E0E14E478D7000C92E2 /* GithubEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 94D50E0D14E478D7000C92E2 /* GithubEvent.m */; };
+		94E7A1581694A0BB00AB6B56 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E7A1561694A0BB00AB6B56 /* star.png */; };
+		94E7A1591694A0BB00AB6B56 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E7A1571694A0BB00AB6B56 /* star@2x.png */; };
+		94E7A15D1694A1B500AB6B56 /* unstar.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E7A15B1694A1B500AB6B56 /* unstar.png */; };
+		94E7A15E1694A1B500AB6B56 /* unstar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 94E7A15C1694A1B500AB6B56 /* unstar@2x.png */; };
 		94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */ = {isa = PBXBuildFile; fileRef = 94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */; };
 		94EF40771543FEAB002FA8B5 /* IssueListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94EF40751543FEAB002FA8B5 /* IssueListViewController.m */; };
 		94EF40781543FEAB002FA8B5 /* IssueListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94EF40761543FEAB002FA8B5 /* IssueListViewController.xib */; };
@@ -253,6 +258,8 @@
 		94C2F9F9158CBE070006640F /* RPFlickViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RPFlickViewController.h; sourceTree = "<group>"; };
 		94C2F9FA158CBE070006640F /* RPFlickViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RPFlickViewController.m; sourceTree = "<group>"; };
 		94C2F9FB158CBEDF0006640F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		94C590E2169499FD00F70314 /* RPStarRepositoryActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RPStarRepositoryActivity.h; sourceTree = "<group>"; };
+		94C590E3169499FD00F70314 /* RPStarRepositoryActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RPStarRepositoryActivity.m; sourceTree = "<group>"; };
 		94C6566B15025FAD00E85813 /* UITableViewCell+GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+GithubEvent.h"; sourceTree = "<group>"; };
 		94C6566C15025FAD00E85813 /* UITableViewCell+GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+GithubEvent.m"; sourceTree = "<group>"; };
 		94C6566F1503727D00E85813 /* UITableViewCell+Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Person.h"; sourceTree = "<group>"; };
@@ -269,6 +276,10 @@
 		94D50E0914E472D6000C92E2 /* EventTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewController.xib; sourceTree = "<group>"; };
 		94D50E0C14E478D7000C92E2 /* GithubEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubEvent.h; sourceTree = "<group>"; };
 		94D50E0D14E478D7000C92E2 /* GithubEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubEvent.m; sourceTree = "<group>"; };
+		94E7A1561694A0BB00AB6B56 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		94E7A1571694A0BB00AB6B56 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
+		94E7A15B1694A1B500AB6B56 /* unstar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unstar.png; sourceTree = "<group>"; };
+		94E7A15C1694A1B500AB6B56 /* unstar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unstar@2x.png"; sourceTree = "<group>"; };
 		94E9F5EE151E747100AF5DD2 /* UITableViewCell+Commit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+Commit.h"; sourceTree = "<group>"; };
 		94E9F5EF151E747100AF5DD2 /* UITableViewCell+Commit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+Commit.m"; sourceTree = "<group>"; };
 		94EF40741543FEAB002FA8B5 /* IssueListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IssueListViewController.h; sourceTree = "<group>"; };
@@ -465,6 +476,8 @@
 				947B76E8161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m */,
 				948E3EE7162B1537006F4DB7 /* RPWatchRepoActivity.h */,
 				948E3EE8162B1537006F4DB7 /* RPWatchRepoActivity.m */,
+				94C590E2169499FD00F70314 /* RPStarRepositoryActivity.h */,
+				94C590E3169499FD00F70314 /* RPStarRepositoryActivity.m */,
 			);
 			name = Activities;
 			sourceTree = "<group>";
@@ -567,6 +580,10 @@
 		94AB82261534CC51008E0FE7 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				94E7A15B1694A1B500AB6B56 /* unstar.png */,
+				94E7A15C1694A1B500AB6B56 /* unstar@2x.png */,
+				94E7A1561694A0BB00AB6B56 /* star.png */,
+				94E7A1571694A0BB00AB6B56 /* star@2x.png */,
 				947B76EA161C846100E9A9A3 /* history.png */,
 				947B76EB161C846100E9A9A3 /* history@2x.png */,
 				947B76E2161C731200E9A9A3 /* openinsafari.png */,
@@ -739,6 +756,10 @@
 				947B76E5161C731200E9A9A3 /* openinsafari@2x.png in Resources */,
 				947B76EC161C846100E9A9A3 /* history.png in Resources */,
 				947B76ED161C846100E9A9A3 /* history@2x.png in Resources */,
+				94E7A1581694A0BB00AB6B56 /* star.png in Resources */,
+				94E7A1591694A0BB00AB6B56 /* star@2x.png in Resources */,
+				94E7A15D1694A1B500AB6B56 /* unstar.png in Resources */,
+				94E7A15E1694A1B500AB6B56 /* unstar@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,6 +829,7 @@
 				947B76CB16187CAB00E9A9A3 /* RPFollowPersonActivity.m in Sources */,
 				947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */,
 				948E3EE9162B1537006F4DB7 /* RPWatchRepoActivity.m in Sources */,
+				94C590E4169499FD00F70314 /* RPStarRepositoryActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

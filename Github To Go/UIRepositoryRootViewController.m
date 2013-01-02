@@ -12,6 +12,7 @@
 #import "NetworkProxy.h"
 #import "RPShareUrlController.h"
 #import "RPWatchRepoActivity.h"
+#import "RPStarRepositoryActivity.h"
 
 static NSString* WatchRepo;
 static NSString* StopWatchingRepo;
@@ -56,6 +57,8 @@ static NSString* StopWatchingRepo;
                                                                           title:_repository.fullName
                                                                  viewController:self];
             [_shareUrlController addActivity:[[RPWatchRepoActivity alloc] initWithRepository:_repository]];
+            [_shareUrlController addActivity:[[RPStarRepositoryActivity alloc] initWithRepository:_repository]];
+
             self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
             
         } else {
@@ -65,7 +68,7 @@ static NSString* StopWatchingRepo;
                                                              viewController:self];
         
             if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
-                if (![[RepositoryStorage sharedStorage] repositoryIsWatched:_repository]){
+                if (![[RepositoryStorage sharedStorage] repositoryIsWatched:_repository]) {
                     [_shareUrlController addAction:WatchRepo
                                              block:^() {
                                                  NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
@@ -98,7 +101,7 @@ static NSString* StopWatchingRepo;
                                                 }];
                                             }];
                 }
-                }
+            }
         }
 
     }
