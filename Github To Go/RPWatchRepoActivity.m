@@ -61,22 +61,28 @@ static NSString* StopWatchingRepo;
 }
 
 -(void)performActivity {
-    NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
+    NSString* url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/subscription", self.repository.fullName];
     if (![[RepositoryStorage sharedStorage] repositoryIsWatched:self.repository]) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
+        [[NetworkProxy sharedInstance] sendData:@{@"subscribed": @YES} ToUrl:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == 204) {
+                if (status == 200) {
                     UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                     [[RepositoryStorage sharedStorage] addWatchedRepository:self.repository];
                     [self activityDidFinish:YES];
                 } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                    NSString *errMsg = nil;
+                    if ([data isKindOfClass:[NSDictionary class]]) {
+                        errMsg = data[@"message"];
+                    }
+                    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"Starting to watch repository failed %d: %@", @"Alert view"), status, errMsg];
+                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
                     [alertView show];
                     [self activityDidFinish:NO];
                 }
             });
-        } ];
+        }
+                                     errorBlock: nil];
     } else {
         [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
             dispatch_async(dispatch_get_main_queue(), ^{
