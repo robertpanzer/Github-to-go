@@ -87,18 +87,31 @@ static NetworkProxy* networkProxyInstance;
     [self loadStringFromURL:urlString verb:@"GET" block:block];
 }
 
--(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
-    [self loadStringFromURL:urlString verb:aVerb block:block errorBlock:^(NSError* error) {
+-(void)loadStringFromURL:(NSString*)urlString headerFields:(NSDictionary*)headerFields block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+    [self loadStringFromURL:urlString verb:@"GET" block:block];
+}
+
+-(void)loadStringFromURL:(NSString*)url verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+    [self loadStringFromURL:url verb:aVerb headerFields: nil block:block];
+}
+
+
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
+    [self loadStringFromURL:urlString verb:aVerb headerFields:nil block:block errorBlock:errorBlock];
+}
+
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb headerFields:(NSDictionary*)headerFields block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block {
+    [self loadStringFromURL:urlString verb:aVerb headerFields:headerFields block:block errorBlock:^(NSError* error) {
         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Network access failed!" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
         [alertView show];
     }];
 }
 
 -(void)loadStringFromURL:(NSString*)urlString block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
-    [self loadStringFromURL:urlString verb:@"GET" block:block errorBlock:errorBlock];
+    [self loadStringFromURL:urlString verb:@"GET" headerFields:nil block:block errorBlock:errorBlock];
 }
 
--(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb headerFields:(NSDictionary*) headerFields block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock {
         
     [self increaseConnectionCount];
     
@@ -108,6 +121,7 @@ static NetworkProxy* networkProxyInstance;
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
     request.timeoutInterval = 30;
     request.HTTPMethod = aVerb;
+    request.allHTTPHeaderFields = headerFields;
     [self addBasicAuthenticationHeaderToRequest:request];
 
     

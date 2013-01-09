@@ -25,6 +25,8 @@
 
 -(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock;
 
+-(void)loadStringFromURL:(NSString*)urlString verb:(NSString*)aVerb headerFields:(NSDictionary*)headerFields block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock;
+
 -(void)sendData:(id)date ToUrl:(NSString*)urlString verb:(NSString*)aVerb block:(void(^)(int statusCode, NSDictionary* aHeaderFields, id data) ) block errorBlock:(void(^)(NSError*))errorBlock;
 
 @end
