@@ -222,6 +222,12 @@ static NetworkProxy* networkProxyInstance;
     connectionData.statusCode = [NSNumber numberWithInteger:httpResponse.statusCode];
     connectionData.headerFields = httpResponse.allHeaderFields;
     [connectionData.receivedData setLength:0];
+    
+    
+    id rateLimit = httpResponse.allHeaderFields[@"X-RateLimit-Remaining"];
+    if ([rateLimit isKindOfClass:[NSString class]]) {
+        self.rateLimit = [rateLimit integerValue];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {

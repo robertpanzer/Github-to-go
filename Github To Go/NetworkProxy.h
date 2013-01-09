@@ -13,6 +13,7 @@
 @property(strong) NSMutableSet* connectionDataSet;
 @property(strong) NSOperationQueue* operationQueue;
 @property NSUInteger openConnections;
+@property NSInteger rateLimit;
 
 +(NetworkProxy*) sharedInstance;
 

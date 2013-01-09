@@ -88,6 +88,7 @@
     if ([Settings sharedInstance].passwordValidated != nil) {
         [self showAuthenticationSuccess:[[Settings sharedInstance].passwordValidated boolValue]];
     }
+    [[self tableView] reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -107,7 +108,6 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
     return YES;
 }
 
@@ -116,13 +116,16 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return 3;
+    if (section == 0) {
+        return 3;
+    } else {
+        return 1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,6 +139,17 @@
         } else if (indexPath.row == 2) {
             self.passwordTextfield.text = [Settings sharedInstance].password;
             return self.passwordCell;
+        }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            static NSString* CellIdentifier = @"CellIdentifier";
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+            }
+            cell.textLabel.text = NSLocalizedString(@"Rate limit", @"Rate limit label");
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", [[NetworkProxy sharedInstance] rateLimit]];
+            return cell;
         }
     }
     
