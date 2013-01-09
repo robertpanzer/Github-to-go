@@ -24,7 +24,7 @@
 -(void) loadEvents;
 
 @property(strong, nonatomic) NSString *baseUrl;
-
+@property(strong, nonatomic) NSString *etag;
 @end
 
 @implementation EventTableViewController;
@@ -402,7 +402,12 @@
     if (!isLoading && !complete) {
         NSString* url = [NSString stringWithFormat:@"%@?page=%d", self.baseUrl, pagesLoaded + 1];
         isLoading = YES;
-        [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
+        NSMutableDictionary* headerFields = [NSMutableDictionary dictionary];
+        if (self.etag != nil) {
+            headerFields[@"ETag"] = self.etag;
+        }
+        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"GET" headerFields:headerFields block:^(int statusCode, NSDictionary* headerFields, id data) {
+            self.etag = headerFields[@"ETag"];
             [self reloadDidFinish];
             if (statusCode == 200) {
                 NSArray* eventArray = (NSArray*)data;
@@ -420,6 +425,8 @@
                 dispatch_async(dispatch_get_main_queue(), ^() {
                     [self.tableView reloadData];
                 });
+            } else {
+                NSLog(@"Status code %d", statusCode);
             }
             isLoading = NO;
         }
