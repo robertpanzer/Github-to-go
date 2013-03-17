@@ -66,12 +66,12 @@ static NSString* StopWatchingRepo;
             _shareUrlController = [[RPShareUrlController alloc] initWithUrl:[NSString stringWithFormat:@"http://github.com/%@", _repository.fullName]
                                                                       title:_repository.fullName
                                                              viewController:self];
-        
+            NSString *repoName = self.repository.fullName;
             if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
                 if (![[RepositoryStorage sharedStorage] repositoryIsWatched:_repository]) {
                     [_shareUrlController addAction:WatchRepo
                                              block:^() {
-                                                 NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
+                                                 NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
                                                  [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
                                                      dispatch_async(dispatch_get_main_queue(), ^{
                                                          if (status == 204) {
@@ -87,7 +87,7 @@ static NSString* StopWatchingRepo;
                 } else {
                     [_shareUrlController addAction:StopWatchingRepo
                                             block:^() {
-                                                NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", self.repository.fullName];
+                                                NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
                                                 [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
                                                     dispatch_async(dispatch_get_main_queue(), ^{
                                                         if (status == 204) {
