@@ -29,15 +29,6 @@
 
 @implementation EventTableViewController;
 
-@synthesize repository;
-@synthesize eventHistory;
-@synthesize complete;
-@synthesize loadNextTableViewCell;
-@synthesize isLoading;
-@synthesize pagesLoaded;
-@synthesize baseUrl;
-@synthesize allEvents;
-
 -(id) initWithAllEvents {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
@@ -45,17 +36,17 @@
         if ([Settings sharedInstance].isUsernameSet) {
             NSString *newBaseUrl = [NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", [Settings sharedInstance].username];
             if (![newBaseUrl isEqualToString:self.baseUrl]) {
-                self.baseUrl = newBaseUrl;
+                _baseUrl = newBaseUrl;
             }
         } else {
-            self.baseUrl = @"https://api.github.com/events";
+            _baseUrl = @"https://api.github.com/events";
         }
-        self.allEvents = YES;
-        self.eventHistory = [[HistoryList alloc] init];
-        self.isLoading = NO;
-        self.complete = NO;
-        self.pagesLoaded = 0;
-        self.cachedHeights = [[NSCache alloc] init];
+        _allEvents = YES;
+        _eventHistory = [[HistoryList alloc] init];
+        _isLoading = NO;
+        _complete = NO;
+        _pagesLoaded = 0;
+        _cachedHeights = [[NSCache alloc] init];
         
         [[Settings sharedInstance] addObserver:self forKeyPath:@"username" options:NSKeyValueObservingOptionOld  context:nil];
     }
@@ -65,14 +56,14 @@
 - (id)initWithRepository:(Repository *)aRepository {
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
-        self.repository = aRepository;
-        self.baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", self.repository.fullName];
-        self.eventHistory = [[HistoryList alloc] init];
-        self.isLoading = NO;
-        self.complete = NO;
-        self.pagesLoaded = 0;
-        self.allEvents = NO;
-        self.cachedHeights = [[NSCache alloc] init];
+        _repository = aRepository;
+        _baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", self.repository.fullName];
+        _eventHistory = [[HistoryList alloc] init];
+        _isLoading = NO;
+        _complete = NO;
+        _pagesLoaded = 0;
+        _allEvents = NO;
+        _cachedHeights = [[NSCache alloc] init];
     }
     return self;
 }
@@ -127,7 +118,7 @@
 
     self.navigationController.navigationBar.hidden = self.allEvents;
     
-    if (pagesLoaded == 0) {
+    if (self.pagesLoaded == 0) {
         [self loadEvents];
     }
         
@@ -154,15 +145,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return eventHistory.dates.count;
+    return self.eventHistory.dates.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString* date = [eventHistory.dates objectAtIndex:section];
+    NSString* date = [self.eventHistory.dates objectAtIndex:section];
     
-    int entriesCount = [eventHistory objectsForDate:date].count;
-    if (section == eventHistory.dates.count - 1 && !self.complete) {
+    int entriesCount = [self.eventHistory objectsForDate:date].count;
+    if (section == self.eventHistory.dates.count - 1 && !self.complete) {
         return entriesCount + 1;
     } else {
         return entriesCount;
@@ -171,9 +162,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
+    NSString* date = [self.eventHistory.dates objectAtIndex:indexPath.section];
 
-    if (indexPath.section == eventHistory.dates.count - 1 && indexPath.row == [eventHistory objectsForDate:date].count) {
+    if (indexPath.section == self.eventHistory.dates.count - 1 && indexPath.row == [self.eventHistory objectsForDate:date].count) {
         [self loadEvents];
         return self.loadNextTableViewCell;
     }
@@ -185,7 +176,7 @@
     UILabel* repositoryLabel = nil;
     UILabel* timeLabel = nil;
     
-    NSArray* objectsForDate = [eventHistory objectsForDate:date];
+    NSArray* objectsForDate = [self.eventHistory objectsForDate:date];
     GithubEvent* event = nil;
     if (objectsForDate.count > indexPath.row) {
         event = [objectsForDate objectAtIndex:indexPath.row];
@@ -250,7 +241,8 @@
     }
     timeLabel.text =
         [NSDateFormatter localizedStringFromDate:event.date
-                                       dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+                                       dateStyle:NSDateFormatterNoStyle
+                                       timeStyle:NSDateFormatterShortStyle];
     
     if (self.repository == nil) {
         repositoryLabel.hidden = NO;
@@ -271,7 +263,7 @@
         CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
         height = [NSNumber numberWithFloat:size.height];
         @try {
-            [self.cachedHeights setValue:height forKey:key];
+            [self.cachedHeights setObject:height forKey:key];
         } @catch (NSException *e) {
             // Simply ignore it
             NSLog(@"Got NSException!");
@@ -283,15 +275,15 @@
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString* date = [eventHistory stringFromInternalDate:[eventHistory.dates objectAtIndex:section]];
+    NSString* date = [self.eventHistory stringFromInternalDate:[self.eventHistory.dates objectAtIndex:section]];
     return date;
 }
 
 
 #pragma mark - Table view delegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
-    NSArray* objectsForDate = [eventHistory objectsForDate:date];
+    NSString* date = [self.eventHistory.dates objectAtIndex:indexPath.section];
+    NSArray* objectsForDate = [self.eventHistory objectsForDate:date];
     if (indexPath.row == objectsForDate.count) {
         return 55.0f;
     }
@@ -314,8 +306,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString* date = [eventHistory.dates objectAtIndex:indexPath.section];
-    GithubEvent* event = [[eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
+    NSString* date = [self.eventHistory.dates objectAtIndex:indexPath.section];
+    GithubEvent* event = [[self.eventHistory objectsForDate:date] objectAtIndex:indexPath.row];
     if ([event isKindOfClass:[PushEvent class]]) {
         PushEvent* pushEvent = (PushEvent*)event;
         self.navigationController.navigationBarHidden = NO;
@@ -399,9 +391,9 @@
 
 
 -(void)loadEvents {
-    if (!isLoading && !complete) {
-        NSString* url = [NSString stringWithFormat:@"%@?page=%d", self.baseUrl, pagesLoaded + 1];
-        isLoading = YES;
+    if (!self.isLoading && !self.complete) {
+        NSString* url = [NSString stringWithFormat:@"%@?page=%d", self.baseUrl, self.pagesLoaded + 1];
+        self.isLoading = YES;
         NSMutableDictionary* headerFields = [NSMutableDictionary dictionary];
         if (self.etag != nil) {
             headerFields[@"ETag"] = self.etag;
@@ -417,10 +409,10 @@
                     for (NSDictionary* event in eventArray) {
                         GithubEvent* eventObject = [EventFactory createEventFromJsonObject:event];
                         if (eventObject != nil) {
-                            [eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];                        
+                            [self.eventHistory addObject:eventObject date:eventObject.date primaryKey:eventObject.primaryKey];
                         }
                     }
-                    pagesLoaded++;
+                    self.pagesLoaded++;
                 }
                 dispatch_async(dispatch_get_main_queue(), ^() {
                     [self.tableView reloadData];
@@ -428,7 +420,7 @@
             } else {
                 NSLog(@"Status code %d", statusCode);
             }
-            isLoading = NO;
+            self.isLoading = NO;
         }
          errorBlock:^(NSError *error) {
              self.isLoading = NO;
@@ -436,7 +428,9 @@
              UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network access failed!", @"Error message alert view") message:[error localizedDescription] delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") otherButtonTitles:nil];
              [alertView show];
          }];
-    }    
+    } else {
+        [self reloadDidFinish];
+    }
 }
 
 -(void)reload {
