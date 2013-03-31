@@ -36,20 +36,15 @@
 
 @implementation GithubEvent 
 
-@synthesize text = text_;
-@synthesize person = person_;
-@synthesize date = date_;
-@synthesize repository;
-@synthesize primaryKey;
 
 -(id)initWithJSONIssue:(NSDictionary *)jsonObject {
     self = [super init];
     if (self) {
         NSString* type = [jsonObject objectForKey:@"event"];
 
-        self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
-        self.date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
-        self.primaryKey = [jsonObject valueForKey:@"id"];
+        _person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
+        _date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
+        _primaryKey = [jsonObject valueForKey:@"id"];
         id commitId = [jsonObject objectForKey:@"commit_id"];
 
         @try {
@@ -87,10 +82,10 @@
         NSString* type = [jsonObject objectForKey:@"type"];
         
         @try {
-            self.person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
-            self.date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
-            self.repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKey:@"repo"]];
-            self.primaryKey = [jsonObject valueForKey:@"id"];
+            _person = [[Person alloc] initWithJSONObject:[jsonObject valueForKeyPath:@"actor"]];
+            _date = [[jsonObject objectForKey:@"created_at"] dateForRFC3339DateTimeString];
+            _repository = [[Repository alloc] initFromJSONObject:[jsonObject valueForKey:@"repo"]];
+            _primaryKey = [jsonObject valueForKey:@"id"];
             
             if ([type isEqualToString:@"WatchEvent"]) {
                 [self parseWatchEvent:jsonObject];

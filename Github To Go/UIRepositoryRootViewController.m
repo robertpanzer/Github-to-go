@@ -13,6 +13,7 @@
 #import "RPShareUrlController.h"
 #import "RPWatchRepoActivity.h"
 #import "RPStarRepositoryActivity.h"
+#import "GithubNotificationTableViewController.h"
 
 static NSString* WatchRepo;
 static NSString* StopWatchingRepo;
@@ -39,7 +40,12 @@ static NSString* StopWatchingRepo;
         // Custom initialization
         _repository = aRepository;
         _watched = [[RepositoryStorage sharedStorage] repositoryIsWatched:aRepository];
-        
+
+        [self addChildViewController:[[GithubNotificationTableViewController alloc] initWithNotificationsForRepository:aRepository
+                                                                                                                   all:YES
+                                                                                                         participating:NO]
+                               title:@"Notifications"];
+
         [self addChildViewController:[[EventTableViewController alloc] initWithRepository:_repository]
                                title:@"Events"];
         [self addChildViewController:[[BranchesBrowserViewController alloc] initWithRepository:_repository]

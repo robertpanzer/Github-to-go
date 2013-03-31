@@ -29,6 +29,9 @@
 		9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5014B9D97300B6538E /* SettingsViewController.m */; };
 		9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9424DE5114B9D97300B6538E /* SettingsViewController.xib */; };
 		9424DE5614B9FEDF00B6538E /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5514B9FEDF00B6538E /* Settings.m */; };
+		9426E7BF16C7B74800715788 /* GithubNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9426E7BE16C7B74800715788 /* GithubNotification.m */; };
+		9426E7C316C7BEC900715788 /* GithubNotificationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9426E7C116C7BEC900715788 /* GithubNotificationTableViewController.m */; };
+		9426E7C416C7BEC900715788 /* GithubNotificationTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9426E7C216C7BEC900715788 /* GithubNotificationTableViewController.xib */; };
 		942CBD6014B5A1B80047F712 /* Tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD5F14B5A1B80047F712 /* Tree.m */; };
 		942CBD6414B607990047F712 /* Blob.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6314B607990047F712 /* Blob.m */; };
 		942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6614B6116A0047F712 /* BlobViewController.m */; };
@@ -159,6 +162,11 @@
 		9424DE5114B9D97300B6538E /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		9424DE5414B9FEDF00B6538E /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		9424DE5514B9FEDF00B6538E /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		9426E7BD16C7B74800715788 /* GithubNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubNotification.h; sourceTree = "<group>"; };
+		9426E7BE16C7B74800715788 /* GithubNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubNotification.m; sourceTree = "<group>"; };
+		9426E7C016C7BEC900715788 /* GithubNotificationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GithubNotificationTableViewController.h; sourceTree = "<group>"; };
+		9426E7C116C7BEC900715788 /* GithubNotificationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GithubNotificationTableViewController.m; sourceTree = "<group>"; };
+		9426E7C216C7BEC900715788 /* GithubNotificationTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GithubNotificationTableViewController.xib; sourceTree = "<group>"; };
 		942CBD5E14B5A1B80047F712 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
 		942CBD5F14B5A1B80047F712 /* Tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tree.m; sourceTree = "<group>"; };
 		942CBD6214B607990047F712 /* Blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Blob.h; sourceTree = "<group>"; };
@@ -357,6 +365,18 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
+		9426E7BC16C7B71C00715788 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				9426E7BD16C7B74800715788 /* GithubNotification.h */,
+				9426E7BE16C7B74800715788 /* GithubNotification.m */,
+				9426E7C016C7BEC900715788 /* GithubNotificationTableViewController.h */,
+				9426E7C116C7BEC900715788 /* GithubNotificationTableViewController.m */,
+				9426E7C216C7BEC900715788 /* GithubNotificationTableViewController.xib */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
 		944D665E151FBEAC002208FB /* Person */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +536,7 @@
 		949FB13914B3327800D3E713 /* Github To Go */ = {
 			isa = PBXGroup;
 			children = (
+				9426E7BC16C7B71C00715788 /* Notifications */,
 				947B76BD1618518E00E9A9A3 /* Activities */,
 				94FAB65815337F8200C89D7C /* en.lproj */,
 				94FAB6461531A2A400C89D7C /* background.png */,
@@ -760,6 +781,7 @@
 				94E7A1591694A0BB00AB6B56 /* star@2x.png in Resources */,
 				94E7A15D1694A1B500AB6B56 /* unstar.png in Resources */,
 				94E7A15E1694A1B500AB6B56 /* unstar@2x.png in Resources */,
+				9426E7C416C7BEC900715788 /* GithubNotificationTableViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,6 +852,8 @@
 				947B76E9161C7AB300E9A9A3 /* RPShowObjectHistoryActivity.m in Sources */,
 				948E3EE9162B1537006F4DB7 /* RPWatchRepoActivity.m in Sources */,
 				94C590E4169499FD00F70314 /* RPStarRepositoryActivity.m in Sources */,
+				9426E7BF16C7B74800715788 /* GithubNotification.m in Sources */,
+				9426E7C316C7BEC900715788 /* GithubNotificationTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

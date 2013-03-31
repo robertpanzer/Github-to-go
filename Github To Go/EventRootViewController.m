@@ -8,6 +8,7 @@
 
 #import "EventRootViewController.h"
 #import "EventTableViewController.h"
+#import "GithubNotificationTableViewController.h"
 #import "Settings.h"
 
 @interface EventRootViewController ()
@@ -34,14 +35,19 @@
 -(void)viewWillAppear:(BOOL)animated {
     
     if ([Settings sharedInstance].isUsernameSet) { 
-        if (self.childViewControllers.count != 2) {
+        if (self.childViewControllers.count != 3) {
             [self removeAllChildControllers];
             NSString *username = [Settings sharedInstance].username;
+            
+            UIViewController* allNotificationViewController = [[GithubNotificationTableViewController alloc] initWithNotificationsAll:YES participating:NO];
+            [self addChildViewController:allNotificationViewController title:@"Notifications"];
+
             UIViewController* eventViewController1 = [[EventTableViewController alloc] initWithUrl:[NSString stringWithFormat:@"https://api.github.com/users/%@/received_events", username]];
-            [self addChildViewController:eventViewController1 title:@"Watched"];
+            [self addChildViewController:eventViewController1 title:@"Events Watched"];
             
             UIViewController* eventViewController2 = [[EventTableViewController alloc] initWithUrl:[NSString stringWithFormat:@"https://api.github.com/users/%@/events", username]];
-            [self addChildViewController:eventViewController2 title:@"Performed"];
+            [self addChildViewController:eventViewController2 title:@"Events Performed"];
+            
         }
     } else if (self.childViewControllers.count != 1) {
         [self removeAllChildControllers];

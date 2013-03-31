@@ -44,6 +44,7 @@
     
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:eventsNavigationController, navigationController, searchTableViewController, settingsController, nil];
+    eventRootViewController.tabBarItem = self.tabBarController.tabBar.items[0];
     self.window.rootViewController = self.tabBarController;
         
     [self.window makeKeyAndVisible];
