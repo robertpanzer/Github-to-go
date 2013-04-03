@@ -25,7 +25,6 @@
 		942130C414B455C000969D38 /* NetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130BF14B455C000969D38 /* NetworkProxy.m */; };
 		942130C514B455C000969D38 /* RepoBrowserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C114B455C000969D38 /* RepoBrowserTableViewController.m */; };
 		942130C614B455C000969D38 /* Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 942130C314B455C000969D38 /* Repository.m */; };
-		942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */; };
 		9424DE5214B9D97300B6538E /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5014B9D97300B6538E /* SettingsViewController.m */; };
 		9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9424DE5114B9D97300B6538E /* SettingsViewController.xib */; };
 		9424DE5614B9FEDF00B6538E /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 9424DE5514B9FEDF00B6538E /* Settings.m */; };
@@ -156,7 +155,6 @@
 		942130C114B455C000969D38 /* RepoBrowserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepoBrowserTableViewController.m; sourceTree = "<group>"; };
 		942130C214B455C000969D38 /* Repository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
 		942130C314B455C000969D38 /* Repository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Repository.m; sourceTree = "<group>"; };
-		942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepoBrowserTableViewController.xib; sourceTree = "<group>"; };
 		9424DE4F14B9D97300B6538E /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		9424DE5014B9D97300B6538E /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		9424DE5114B9D97300B6538E /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
@@ -561,7 +559,6 @@
 				942130BF14B455C000969D38 /* NetworkProxy.m */,
 				942130C014B455C000969D38 /* RepoBrowserTableViewController.h */,
 				942130C114B455C000969D38 /* RepoBrowserTableViewController.m */,
-				942130C814B4584B00969D38 /* RepoBrowserTableViewController.xib */,
 				94AB82261534CC51008E0FE7 /* img */,
 				949DB8CE14F1522D000BE743 /* RepositoryStorage.h */,
 				949DB8CF14F1522D000BE743 /* RepositoryStorage.m */,
@@ -740,7 +737,6 @@
 				949FB14B14B3327800D3E713 /* first@2x.png in Resources */,
 				949FB15014B3327800D3E713 /* second.png in Resources */,
 				949FB15214B3327800D3E713 /* second@2x.png in Resources */,
-				942130C914B4584B00969D38 /* RepoBrowserTableViewController.xib in Resources */,
 				946CB2B014B48E6000BBFDAD /* TreeViewController.xib in Resources */,
 				942CBD6914B6116A0047F712 /* BlobViewController.xib in Resources */,
 				94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */,
