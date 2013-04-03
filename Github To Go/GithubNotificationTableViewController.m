@@ -145,25 +145,25 @@ static UIColor *unreadColor, *readColor;
         return self.loadNextTableViewCell;
     }
 
-    UILabel* label = nil;
-    UILabel* repositoryLabel = nil;
-    UILabel* timeLabel = nil;
-    UILabel *statusLabel = nil;
+    UILabel *label = nil;
+    UILabel *repositoryLabel = nil;
+    UILabel *timeLabel = nil;
+    UILabel *typeLabel = nil;
     
     static NSString *CellIdentifier = @"NotificationCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
-        statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(8.0f, 13.0f, 36.0f, 18.0f)];
+        typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(4.0f, 13.0f, 42.0f, 18.0f)];
 
-        statusLabel.backgroundColor = [UIColor darkGrayColor];
-        statusLabel.textColor = [UIColor whiteColor];
-        statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
-        statusLabel.textAlignment = UITextAlignmentCenter;
-        statusLabel.tag = 42;
-        statusLabel.layer.cornerRadius = 5;
-        statusLabel.opaque = NO;
+        typeLabel.backgroundColor = [UIColor darkGrayColor];
+        typeLabel.textColor = [UIColor whiteColor];
+        typeLabel.font = [UIFont boldSystemFontOfSize:11.0f];
+        typeLabel.textAlignment = UITextAlignmentCenter;
+        typeLabel.tag = 42;
+        typeLabel.layer.cornerRadius = 5;
+        typeLabel.opaque = NO;
         
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
@@ -186,9 +186,9 @@ static UIColor *unreadColor, *readColor;
         [cell.contentView addSubview:label];
         [cell.contentView addSubview:repositoryLabel];
         [cell.contentView addSubview:timeLabel];
-        [cell.contentView addSubview:statusLabel];
+        [cell.contentView addSubview:typeLabel];
     } else {
-        statusLabel = (UILabel*)[cell.contentView viewWithTag:42];
+        typeLabel = (UILabel*)[cell.contentView viewWithTag:42];
         label = (UILabel*)[cell.contentView viewWithTag:2];
         repositoryLabel = (UILabel*)[cell.contentView viewWithTag:3];
         timeLabel = (UILabel*)[cell.contentView viewWithTag:4];
@@ -199,14 +199,13 @@ static UIColor *unreadColor, *readColor;
     timeLabel.text = [NSDateFormatter localizedStringFromDate:notification.updatedAt
                                                     dateStyle:NSDateFormatterNoStyle
                                                     timeStyle:NSDateFormatterShortStyle];
-
     if ([notification.type isEqualToString:@"PullRequest"]) {
-        statusLabel.text = @"PR";
+        typeLabel.text = @"PR";
     } else {
-        statusLabel.text = [notification.type substringToIndex:2];
+        typeLabel.text = notification.type;
     }
 
-    statusLabel.backgroundColor = notification.unread ? unreadColor : readColor;
+    typeLabel.backgroundColor = notification.unread ? unreadColor : readColor;
 
     repositoryLabel.text = notification.repository.fullName;
     CGFloat width = self.tableView.bounds.size.width;
