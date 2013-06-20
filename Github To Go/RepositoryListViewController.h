@@ -11,8 +11,6 @@
 
 @interface RepositoryListViewController : UITableViewController
 
-@property (strong, nonatomic) NSArray *repositories;
-
 -(id)initWithRepositories:(NSArray*)aRepositories;
 
 @end

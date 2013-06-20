@@ -57,7 +57,7 @@
     self = [super initWithNibName:@"EventTableViewController" bundle:nil];
     if (self) {
         _repository = aRepository;
-        _baseUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/events", self.repository.fullName];
+        _baseUrl = aRepository.eventsUrl;
         _eventHistory = [[HistoryList alloc] init];
         _isLoading = NO;
         _complete = NO;

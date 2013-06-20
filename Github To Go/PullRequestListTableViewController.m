@@ -17,23 +17,20 @@
 
 @implementation PullRequestListTableViewController
 
-@synthesize repository;
-@synthesize pullRequests;
-
 - (id)initWithRepository:(Repository*)aRepository
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         // Custom initialization
-        self.repository = aRepository;
-        self.pullRequests = [NSMutableArray array];
+        _repository = aRepository;
+        _pullRequests = [NSMutableArray array];
     }
     return self;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (pullRequests.count == 0) {
+    if (self.pullRequests.count == 0) {
         [self reload];
     }
 }
@@ -86,14 +83,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PullRequest* pullRequest = [pullRequests objectAtIndex:indexPath.row];
+    PullRequest* pullRequest = [self.pullRequests objectAtIndex:indexPath.row];
     PullRequestRootViewController* pullRequestRootViewController = [[PullRequestRootViewController alloc] initWithPullRequest:pullRequest];
     [self.navigationController pushViewController:pullRequestRootViewController animated:YES];
 }
 
 
 -(void)reload {
-    NSString* url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/pulls", repository.fullName];
+    NSString* url = [NSString stringWithFormat:self.repository.pullsUrl, self.repository.fullName];
     [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             if ([data isKindOfClass:[NSDictionary class]]) {

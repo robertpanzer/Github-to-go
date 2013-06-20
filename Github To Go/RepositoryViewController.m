@@ -11,7 +11,7 @@
 #import "BranchesBrowserViewController.h"
 #import "UITableViewCell+Person.h"
 #import "PersonViewController.h"
-
+#import "UIRepositoryRootViewController.h"
 
 static NSString *kName = @"name";
 static NSString *kDescription = @"description";
@@ -174,7 +174,6 @@ static NSSet *isBool;
             cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
             cell.detailTextLabel.text = [value description];
             return cell;
-            
         } else {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:InfoCellIdentifier];
             if (cell == nil) {
@@ -184,9 +183,16 @@ static NSSet *isBool;
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
-            cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
-            cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
-            return cell;    
+            if ([kFork isEqualToString:[keys objectAtIndex:indexPath.row]] && repository.fork) {
+                cell.textLabel.text = NSLocalizedString(@"Fork of", @"Fork of table view description");
+                cell.detailTextLabel.text = repository.parentRepo;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            } else {
+                cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
+                cell.detailTextLabel.text = [self stringValueForIndexPath:indexPath];
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            return cell;
         }        
     }
 }
@@ -200,7 +206,9 @@ static NSSet *isBool;
         NSString* keyPath = [keys objectAtIndex:indexPath.row];
         if ([keyPath isEqualToString:kDescription]) {
             NSString* value = [repository valueForKeyPath:keyPath];
-            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 118.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+            CGSize size = [value sizeWithFont:font
+                            constrainedToSize:CGSizeMake(tableView.frame.size.width - 118.0f/*280.0f*/, 1000.0f)
+                                lineBreakMode:NSLineBreakByWordWrapping];
             
             CGFloat height = size.height + 14.0f;
             
@@ -220,10 +228,20 @@ static NSSet *isBool;
     if (key == kOwner) {
         [[NetworkProxy sharedInstance] loadStringFromURL:self.repository.owner.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
             if (statusCode == 200) {
+                Person *newPerson = [[Person alloc] initWithJSONObject:data];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    Person *newPerson = [[Person alloc] initWithJSONObject:data];
                     PersonViewController *pwc = [[PersonViewController alloc] initWithPerson:newPerson];
                     [self.navigationController pushViewController:pwc animated:YES];
+                });
+            }
+        }];
+    } else if ([kFork isEqualToString:[keys objectAtIndex:indexPath.row]] && repository.fork) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:self.repository.parentRepoUrl block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                Repository *repo = [[Repository alloc] initFromJSONObject:data];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIRepositoryRootViewController *cwc = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
+                    [self.navigationController pushViewController:cwc animated:YES];
                 });
             }
         }];

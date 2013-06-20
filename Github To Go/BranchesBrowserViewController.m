@@ -45,8 +45,7 @@
     self.tableView.backgroundView = backgroundImageView;
 
     self.navigationItem.title = repository.fullName;
-    NSString* url = [[NSString alloc] initWithFormat:@"https://api.github.com/repos/%@/branches", repository.fullName];
-    [[NetworkProxy sharedInstance] loadStringFromURL:url block:^(int statusCode, NSDictionary* headerFields, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:repository.branchesUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             NSMutableArray* newBranches = [[NSMutableArray alloc] init];
             for (NSDictionary* jsonBranch in data) {

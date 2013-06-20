@@ -12,9 +12,15 @@
 @interface Repository : NSObject 
 
 @property(strong, nonatomic) NSString *name;
+@property(strong, nonatomic) NSString *fullName;
 @property(strong, nonatomic) NSString *description;
 @property(strong, nonatomic) NSString *url;
 @property(strong, nonatomic) NSString *htmlUrl;
+@property(strong, nonatomic) NSString *notificationsUrl;
+@property(strong, nonatomic) NSString *eventsUrl;
+@property(strong, nonatomic) NSString *issuesUrl;
+@property(strong, nonatomic) NSString *pullsUrl;
+@property(strong, nonatomic) NSString *branchesUrl;
 @property(strong, nonatomic) NSNumber *repoId;
 @property(strong, nonatomic) NSNumber *watchers;
 @property BOOL private;
@@ -26,9 +32,9 @@
 @property(strong, nonatomic) NSDate *createdAt;
 @property(strong, nonatomic) NSString *language;
 @property(strong, nonatomic) NSNumber *openIssues;
-
-
-@property(unsafe_unretained, readonly) NSString* fullName;
+@property(strong, nonatomic) NSString *parentRepo;
+@property(strong, nonatomic) NSString *parentRepoUrl;
+@property BOOL fullyInitialized;
 
 -(id) initFromJSONObject:(NSDictionary*)json;
 
@@ -37,5 +43,7 @@
 -(NSString*) urlOfMasterBranch;
 
 -(BOOL)matchesSearchString:(NSString*)searchString;
+
+-(void) initializeFully:(NSDictionary*)jsonObject;
 
 @end

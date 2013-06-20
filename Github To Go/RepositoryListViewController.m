@@ -9,20 +9,28 @@
 #import "RepositoryListViewController.h"
 #import "UITableViewCell+Repository.h"
 #import "UIRepositoryRootViewController.h"
+#import "NetworkProxy.h"
 
 @interface RepositoryListViewController ()
 
+@property (strong, nonatomic) NSMutableArray *repositories;
+
+@property (strong, nonatomic) NSMutableArray *repositoryInitialized;
+
 @end
 
-@implementation RepositoryListViewController
 
-@synthesize repositories;
+@implementation RepositoryListViewController
 
 - (id)initWithRepositories:(NSArray *)aRepositories
 {
     self = [super initWithNibName:@"RepositoryListViewController" bundle:nil];
     if (self) {
-        self.repositories = aRepositories;
+        _repositories = [NSMutableArray arrayWithArray:aRepositories];
+        _repositoryInitialized = [NSMutableArray arrayWithCapacity:aRepositories.count];
+        for (unsigned i=0; i < aRepositories.count; i++ ) {
+            _repositoryInitialized[i] = @NO;
+        }
     }
     return self;
 }
@@ -53,7 +61,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return repositories.count;
+    return self.repositories.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -69,9 +77,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Repository *repo = [self.repositories objectAtIndex:indexPath.row];
-    UIRepositoryRootViewController *repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
-    [self.navigationController pushViewController:repoViewController animated:YES];
     
+    if (![@YES isEqual:self.repositoryInitialized[indexPath.row]]) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:repo.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                Repository * newRepo = [[Repository alloc] initFromJSONObject:data];
+                self.repositories[indexPath.row] = newRepo;
+                self.repositoryInitialized[indexPath.row] = @YES;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIRepositoryRootViewController *repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:newRepo];
+                    [self.navigationController pushViewController:repoViewController animated:YES];
+                });
+            }
+        }];
+    } else {
+        UIRepositoryRootViewController *repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
+        [self.navigationController pushViewController:repoViewController animated:YES];
+    }
 }
 
 @end

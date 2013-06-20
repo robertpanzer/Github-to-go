@@ -13,30 +13,24 @@
 
 @interface IssueListViewController ()
 
-@property(strong, nonatomic) NSString *url;
-
 @end
 
 @implementation IssueListViewController
 
-@synthesize repository;
-@synthesize issues;
-@synthesize url;
 
 - (id)initWithRepository:(Repository*)aRepository
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         // Custom initialization
-        self.repository = aRepository;
-        self.url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/issues", repository.fullName];
-        self.issues = [NSMutableArray array];
+        _repository = aRepository;
+        _issues = [NSMutableArray array];
     }
     return self;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    if (issues.count == 0) {
+    if (self.issues.count == 0) {
         [self reload];
     }
 }
@@ -60,7 +54,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return issues.count;
+    return self.issues.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,7 +86,7 @@
 }
 
 -(void)reload {
-    [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
+    [[NetworkProxy sharedInstance] loadStringFromURL:self.repository.issuesUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
         if (statusCode == 200) {
             [self.issues removeAllObjects];
             if ([data isKindOfClass:[NSDictionary class]]) {

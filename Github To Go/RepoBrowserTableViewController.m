@@ -7,7 +7,6 @@
 //
 
 #import "RepoBrowserTableViewController.h"
-//#import "SBJson.h"
 #import "Repository.h"
 #import "RepositoryViewController.h"
 #import "Commit.h"
@@ -203,8 +202,24 @@
     if (repo == nil) {
         return;
     }
-    UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
-    [self.navigationController pushViewController:repoViewController animated:YES];
+
+    if (!repo.fullyInitialized) {
+        [[NetworkProxy sharedInstance] loadStringFromURL:repo.url block:^(int statusCode, NSDictionary *aHeaderFields, id data) {
+            if (statusCode == 200) {
+                [repo initializeFully:(NSDictionary*)data];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
+                    [self.navigationController pushViewController:repoViewController animated:YES];
+                });
+            }
+        } errorBlock:^(NSError *e) {
+            NSLog(@"Error %@",e);
+        }];
+    } else {
+        UIRepositoryRootViewController* repoViewController = [[UIRepositoryRootViewController alloc] initWithRepository:repo];
+        [self.navigationController pushViewController:repoViewController animated:YES];
+    }
+    
 }
 
 
