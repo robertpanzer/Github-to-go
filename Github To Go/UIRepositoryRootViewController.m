@@ -73,40 +73,38 @@ static NSString* StopWatchingRepo;
                                                                       title:_repository.fullName
                                                              viewController:self];
             NSString *repoName = self.repository.fullName;
-            if (![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository]) {
-                if (![[RepositoryStorage sharedStorage] repositoryIsWatched:_repository]) {
-                    [_shareUrlController addAction:WatchRepo
-                                             block:^() {
-                                                 NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
-                                                 [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
-                                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                                         if (status == 204) {
-                                                             UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                                                             [alertView show];
-                                                         } else {
-                                                             UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                                                             [alertView show];
-                                                         }
-                                                     });
-                                                 } ];
+            if (![[RepositoryStorage sharedStorage] repositoryIsWatched:_repository]) {
+                [_shareUrlController addAction:WatchRepo
+                                         block:^() {
+                                             NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
+                                             [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                     if (status == 204) {
+                                                         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Repository is being watched now", @"Alert View") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                         [alertView show];
+                                                     } else {
+                                                         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:WatchRepo message:NSLocalizedString(@"Starting to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                         [alertView show];
+                                                     }
+                                                 });
+                                             } ];
+                                         }];
+            } else {
+                [_shareUrlController addAction:StopWatchingRepo
+                                         block:^() {
+                                             NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
+                                             [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                     if (status == 204) {
+                                                         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                         [alertView show];
+                                                     } else {
+                                                         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                                                         [alertView show];
+                                                     }
+                                                 });
                                              }];
-                } else {
-                    [_shareUrlController addAction:StopWatchingRepo
-                                            block:^() {
-                                                NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/watched/%@", repoName];
-                                                [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
-                                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                                        if (status == 204) {
-                                                            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Repository is no longer watched now", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                                                            [alertView show];
-                                                        } else {
-                                                            UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:StopWatchingRepo message:NSLocalizedString(@"Stopping to watch repository failed", @"Alert view") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                                                            [alertView show];
-                                                        }
-                                                    });
-                                                }];
-                                            }];
-                }
+                                         }];
             }
         }
 

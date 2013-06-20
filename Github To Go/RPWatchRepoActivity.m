@@ -53,7 +53,7 @@ static NSString* StopWatchingRepo;
 }
 
 -(BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
-    return ![[RepositoryStorage sharedStorage] repositoryIsOwned:self.repository];
+    return YES;
 }
 
 -(void)prepareWithActivityItems:(NSArray *)activityItems {

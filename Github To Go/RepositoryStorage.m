@@ -121,9 +121,7 @@ static RepositoryStorage* sharedStorage;
             
             for (NSDictionary* repoObject in data) {
                 Repository* repo = [[Repository alloc] initFromJSONObject:repoObject];
-                if (! [[[Settings sharedInstance] username] isEqualToString: repo.owner.login]) {
-                    newRepos[repo.fullName] = repo;
-                }
+                newRepos[repo.fullName] = repo;
             }
             self.watchedRepositories = newRepos;
             [[NSNotificationCenter defaultCenter] postNotificationName:LOADED_REPOS_NOTIFICATION object:self];
