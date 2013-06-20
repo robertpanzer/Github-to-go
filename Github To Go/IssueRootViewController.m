@@ -30,10 +30,10 @@
     if (self) {
         self.issue = anIssue;
         [self addChildViewController:[[IssueViewController alloc] initWithIssue:anIssue] title:@"Info"];
-        NSString* eventsUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/issues/%@/events", issue.repository.fullName, issue.number];
+        NSString* eventsUrl = [NSString stringWithFormat:@"%@/%@/events", issue.repository.issuesUrl, issue.number];
         [self addChildViewController:[[EventTableViewController alloc] initWithUrl:eventsUrl] title:@"Events"];
         
-        PullRequestCommentViewController *commentViewController = [[PullRequestCommentViewController alloc] initWithUrl:[NSString stringWithFormat:@"https://api.github.com/repos/%@/issues/%@/comments", anIssue.repository.fullName, anIssue.number] number:anIssue.number];
+        PullRequestCommentViewController *commentViewController = [[PullRequestCommentViewController alloc] initWithUrl:[NSString stringWithFormat:@"%@/%@/comments", anIssue.repository.issuesUrl, anIssue.number] number:anIssue.number];
         [self addChildViewController:commentViewController title:@"Comments"];
         
         self.navigationItem.title = [anIssue.number description];

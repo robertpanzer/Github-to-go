@@ -44,10 +44,19 @@ static dispatch_queue_t dispatch_queue;
 - (void) extractData:(NSDictionary*) jsonObject {
     _name = [jsonObject valueForKey:@"name"];
     _fullName = [jsonObject valueForKey:@"full_name"];
-    
+
+    id ownerObject = [jsonObject valueForKey:@"owner"];
+    if ([ownerObject isKindOfClass:[NSString class]]) {
+        _owner = [[Person alloc] initWithLogin:ownerObject];
+    } else if (ownerObject != nil) {
+        _owner = [[Person alloc] initWithJSONObject:ownerObject];
+    }
+
     if ([_name rangeOfString:@"/"].location != NSNotFound) {
         _fullName = _name;
         _name = [_name substringFromIndex:[_name rangeOfString:@"/"].location + 1];
+    } else if (_fullName == nil) {
+        _fullName = [NSString stringWithFormat:@"%@/%@", _owner.login, _name];
     }
     
     _description = [jsonObject valueForKey:@"description"];
@@ -57,12 +66,6 @@ static dispatch_queue_t dispatch_queue;
     
     _branches = [[NSMutableDictionary alloc] init];
     
-    id ownerObject = [jsonObject valueForKey:@"owner"];
-    if ([ownerObject isKindOfClass:[NSString class]]) {
-        _owner = [[Person alloc] initWithLogin:ownerObject];
-    } else if (ownerObject != nil) {
-        _owner = [[Person alloc] initWithJSONObject:ownerObject];
-    }
     
     _repoId = [jsonObject valueForKey:@"id"];
     
