@@ -71,8 +71,8 @@ static UIColor *unreadColor, *readColor;
         _isLoading = NO;
         _complete = NO;
         _notificationHistory = [[HistoryList alloc] init];
-        _url = [NSString stringWithFormat:@"https://api.github.com/repos/%@/notifications?all=%@&participating=%@",
-                repository.fullName,
+        _url = [NSString stringWithFormat:@"%@?all=%@&participating=%@",
+                repository.notificationsUrl,
                 all ? @"true" : @"false",
                 participating ? @"true" : @"false"];
         _cachedHeights = [[NSCache alloc] init];
@@ -216,7 +216,7 @@ static UIColor *unreadColor, *readColor;
     if (height == nil) {
         CGSize size = [label.text sizeWithFont:label.font
                              constrainedToSize:CGSizeMake(width - 97.0f, 200.0f)
-                                 lineBreakMode:UILineBreakModeWordWrap];
+                                 lineBreakMode:NSLineBreakByWordWrapping];
         height = [NSNumber numberWithFloat:size.height];
         @try {
             [self.cachedHeights setValue:height forKey:key];

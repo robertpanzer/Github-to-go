@@ -160,8 +160,8 @@
 
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     
-    UIInterfaceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (UIDeviceOrientationIsPortrait(orientation)) {
         self.textView.frame = CGRectMake(self.textView.frame.origin.x, self.textView.frame.origin.y, 320.0f, 200.0f);
     } else {
         self.textView.frame = CGRectMake(self.textView.frame.origin.x, self.textView.frame.origin.y, 480.0f, 94.0f);
@@ -170,8 +170,8 @@
 }
 -(void)viewDidLoad {
     [super viewDidLoad];
-    UIInterfaceOrientation orientation = [[UIDevice currentDevice] orientation];
-    if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown) {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (UIDeviceOrientationIsPortrait(orientation)) {
         self.textView.frame = CGRectMake(self.textView.frame.origin.x, self.textView.frame.origin.y, self.view.frame.size.width, 200.0f);
     } else {
         self.textView.frame = CGRectMake(self.textView.frame.origin.x, self.textView.frame.origin.y, self.view.frame.size.width, 94.0f);
