@@ -81,7 +81,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 400.0f, 40.0f)];
-    titleLabel.lineBreakMode = UILineBreakModeMiddleTruncation;
+    titleLabel.lineBreakMode =  NSLineBreakByTruncatingMiddle;
     titleLabel.text = self.absolutePath;
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];

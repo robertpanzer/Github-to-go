@@ -189,7 +189,7 @@
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
         label.numberOfLines = 0;
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         imageView.tag = 1;
         label.tag = 2;
 
@@ -260,7 +260,9 @@
     NSString *key = event.text;
     NSNumber *height = [self.cachedHeights objectForKey:key];
     if (height == nil) {
-        CGSize size = [label.text sizeWithFont:label.font constrainedToSize:CGSizeMake(width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+        CGSize size = [label.text sizeWithFont:label.font
+                             constrainedToSize:CGSizeMake(width - 97.0f, 200.0f)
+                                 lineBreakMode:NSLineBreakByWordWrapping];
         height = [NSNumber numberWithFloat:size.height];
         @try {
             [self.cachedHeights setObject:height forKey:key];
@@ -296,7 +298,9 @@
         cachedHeight = cachedHeight > 55.0f ? cachedHeight : 55.0f;
         return cachedHeight;
     }
-    CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [event.text sizeWithFont:[UIFont systemFontOfSize:14.0f]
+                         constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f)
+                             lineBreakMode:NSLineBreakByWordWrapping];
     CGFloat labelHeight = size.height + 4;
     [self.cachedHeights setObject:[NSNumber numberWithFloat:labelHeight] forKey:key];
     labelHeight += 18.0f;

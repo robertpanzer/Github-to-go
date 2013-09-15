@@ -59,14 +59,16 @@
     UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.frame.size.width, 20)];
     footerLabel.text = [NSString stringWithFormat:@"Version: %@ %@ %@", productName, version, buildNo];
     footerLabel.backgroundColor = [UIColor clearColor];
-    footerLabel.textAlignment = UITextAlignmentCenter;
+    footerLabel.textAlignment = NSTextAlignmentCenter;
     footerLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     footerLabel.font = [UIFont systemFontOfSize:13.0f];
     self.tableView.tableFooterView = footerLabel;
-            
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
+    
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
 }
 
 - (void)viewDidUnload

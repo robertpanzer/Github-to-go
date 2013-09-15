@@ -50,11 +50,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
-
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
     self.navigationItem.title = self.message;
     NSString* commitUrl = [NSString stringWithFormat:@"https://api.github.com/repos/%@/commits/%@", self.repository.fullName, self.commitSha];
     [[NetworkProxy sharedInstance] loadStringFromURL:commitUrl block:^(int statusCode, NSDictionary* headerFields, id data) {
@@ -164,7 +164,7 @@
             if (cell == nil) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault 
                                               reuseIdentifier:MessageCellIdentifier];
-                cell.textLabel.lineBreakMode = UILineBreakModeWordWrap;
+                cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
                 cell.textLabel.numberOfLines = 0;
                 cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
             }
@@ -266,7 +266,9 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         UIFont* font = [UIFont systemFontOfSize:13.0f];
         
-        CGSize size = [commit.message sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 118.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+        CGSize size = [commit.message sizeWithFont:font
+                                 constrainedToSize:CGSizeMake(tableView.frame.size.width - 118.0f/*280.0f*/, 1000.0f)
+                                     lineBreakMode:NSLineBreakByWordWrapping];
                 
         CGFloat height = size.height + 10;
 

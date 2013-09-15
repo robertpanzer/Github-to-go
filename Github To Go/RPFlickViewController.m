@@ -50,12 +50,18 @@
         CGContextClipToRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width * scale, self.frame.size.height * scale));
         
         CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-        NSArray *colors = [NSArray arrayWithObjects:
-                           (id)[UIColor darkGrayColor].CGColor, (id)[UIColor lightGrayColor].CGColor, nil];
-        CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, 
-                                                            (__bridge CFArrayRef) colors, NULL);
-        CGContextDrawLinearGradient(layerContext, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.frame.size.height * scale), 0);
-        CGGradientRelease(gradient);
+        if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+            NSArray *colors = [NSArray arrayWithObjects:
+                               (id)[UIColor darkGrayColor].CGColor, (id)[UIColor lightGrayColor].CGColor, nil];
+            CGGradientRef gradient = CGGradientCreateWithColors(colorSpace,
+                                                                (__bridge CFArrayRef) colors, NULL);
+            CGContextDrawLinearGradient(layerContext, gradient, CGPointMake(0.0f, 0.0f), CGPointMake(0.0f, self.frame.size.height * scale), 0);
+            CGGradientRelease(gradient);
+        } else {
+            CGFloat grey = 246.0 / 256.0;
+            CGContextSetFillColorWithColor(layerContext, [UIColor colorWithRed:grey green:grey blue:grey alpha:1.0].CGColor);
+            CGContextFillRect(layerContext, CGRectMake(0.0f, 0.0f, self.frame.size.width * scale, self.frame.size.height * scale));
+        }
         
         // Draw the strings using UIKit draw methods
         UIGraphicsPushContext(layerContext);
@@ -64,29 +70,38 @@
         CGContextSetFillColorWithColor(layerContext, [UIColor clearColor].CGColor);
         
         for (int i = 0; i < titles.count; i++) {
-            CGContextSetBlendMode(layerContext, kCGBlendModeNormal);
-            CGContextSetFillColorWithColor(layerContext, [UIColor darkGrayColor].CGColor);
-
-            [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i * scale + 1.0f, 4.0f, width * scale, 17.0f) 
-                                                   withFont:[UIFont boldSystemFontOfSize:12.0f * scale + 1.0f] 
-                                              lineBreakMode:UILineBreakModeTailTruncation 
-                                                  alignment:UITextAlignmentCenter];
-
+            if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+                CGContextSetBlendMode(layerContext, kCGBlendModeNormal);
+                CGContextSetFillColorWithColor(layerContext, [UIColor darkGrayColor].CGColor);
+                
+                [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i * scale + 1.0f, 4.0f, width * scale, 17.0f)
+                                                       withFont:[UIFont boldSystemFontOfSize:12.0f * scale + 1.0f]
+                                                  lineBreakMode:NSLineBreakByTruncatingTail
+                                                      alignment:NSTextAlignmentCenter];
+            }
             CGContextSetBlendMode(layerContext, kCGBlendModeClear);
             CGContextSetFillColorWithColor(layerContext, [UIColor clearColor].CGColor);
             
             [(NSString*)[titles objectAtIndex:i] drawInRect:CGRectMake(width * i * scale, 3.0f, width * scale, 17.0f) 
                                                    withFont:[UIFont boldSystemFontOfSize:12.0f * scale +1.0f] 
-                                              lineBreakMode:UILineBreakModeTailTruncation 
-                                                  alignment:UITextAlignmentCenter];
+                                              lineBreakMode:NSLineBreakByTruncatingTail 
+                                                  alignment:NSTextAlignmentCenter];
         }
         
         UIGraphicsPopContext();
     }
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    } else {
+        CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
+    }
     CGContextFillRect(context, CGRectMake(0.0f, 0.0f, self.frame.size.width, 20.0f));
     // Now draw a block in blue behind the text that is current select
-    CGContextSetFillColorWithColor(context, [UIColor yellowColor].CGColor);
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        CGContextSetFillColorWithColor(context, [UIColor yellowColor].CGColor);
+    } else {
+        CGContextSetFillColorWithColor(context, [UIColor colorWithRed:0.0f green:122.0f/256.0f blue:1.0f alpha:1.0f].CGColor);
+    }
     CGContextFillRect(context, CGRectMake(currentTitle*width, 0.0f, width, 20.0f));
     // And draw the texts on top so that the block shines through the text
     CGContextDrawLayerInRect(context, CGRectMake(0.0f, 0.0f, self.frame.size.width, self.frame.size.height), layerRef);

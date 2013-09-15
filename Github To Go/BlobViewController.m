@@ -11,8 +11,6 @@
 #import "BranchViewController.h"
 #import "CommitComment.h"
 #import "RPShowObjectHistoryActivity.h"
-#import <Twitter/Twitter.h>
-#import <MessageUI/MFMailComposeViewController.h>
 
 
 @implementation NSString (RPFiltering)
@@ -72,12 +70,11 @@
 
 @end
 
-@interface BlobViewController() <UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
+@interface BlobViewController()
 
 -(NSArray*)commentsForOldLine:(NSNumber*)lineNumber;
 -(NSArray*)commentsForNewLine:(NSNumber*)lineNumber;
 -(NSString*)wrapComments:(NSArray*)aComments;
--(void)showActionSheet:(id)sender;
 -(void)hideProgressView;
 
 @end
@@ -137,17 +134,11 @@
     self.progressLabel.text = @"Loading data";
     self.progressView.progress = 0.0f;
 
-    if (NSClassFromString(@"UIActivityViewController") != NULL) {
-        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:self.htmlUrl
-                                                                      title:self.blob.name
-                                                             viewController:self];
-        [self.shareUrlController addActivity:[[RPShowObjectHistoryActivity alloc] initWithCommitSha:self.commitSha repository:self.repository absolutePath:self.absolutePath owningViewController:self]];
-        self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                                               target:self
-                                                                                               action:@selector(showActionSheet:)];
-    }
+    self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:self.htmlUrl
+                                                                  title:self.blob.name
+                                                         viewController:self];
+    [self.shareUrlController addActivity:[[RPShowObjectHistoryActivity alloc] initWithCommitSha:self.commitSha repository:self.repository absolutePath:self.absolutePath owningViewController:self]];
+    self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
 
     // Do any additional setup after loading the view from its nib.
     [[NetworkProxy sharedInstance] loadStringFromURL:self.url block:^(int statusCode, NSDictionary* headerFields, id data) {
@@ -314,56 +305,11 @@
     return YES;
 }
 
--(void)showActionSheet:(id)sender {
-    
-    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil 
-                                                             delegate:self 
-                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel Button") 
-                                               destructiveButtonTitle:nil otherButtonTitles:nil];
-    [actionSheet addButtonWithTitle:@"Show history"];
-    [actionSheet addButtonWithTitle:@"Tweet"];
-    [actionSheet addButtonWithTitle:@"Share via Mail"];
-    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-
-    
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
-    if ([@"Show history" isEqualToString:titleClicked]) {
-        [self showBlobHistory];
-    } else if ([@"Tweet" isEqualToString:titleClicked]) {
-        TWTweetComposeViewController *tweetController = [[TWTweetComposeViewController alloc] init];
-        [tweetController addURL:[NSURL URLWithString:self.htmlUrl]];
-        [tweetController setInitialText:self.blob.name];
-        [self presentModalViewController:tweetController animated:YES];
-    } else if ([@"Share via Mail" isEqualToString:titleClicked]) {
-        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc] init];
-        [mailController setMessageBody:self.htmlUrl isHTML:NO];
-        [mailController setSubject:self.blob.name];
-        mailController.mailComposeDelegate = self;
-        [self presentModalViewController:mailController animated:YES];
-    }
-}
-
--(void)showBlobHistory {    
-    BranchViewController* branchViewController = [[BranchViewController alloc] initWithAbsolutePath:self.absolutePath
-                                                                                          commitSha:self.commitSha
-                                                                                         repository:self.repository];
-    [self.navigationController pushViewController:branchViewController animated:YES];
-    
-}
 
 -(void)hideProgressView {
     self.progressView.hidden = YES;
     self.progressLabel.hidden = YES;
     self.backgroundView.hidden = YES;
-}
-
--(void)mailComposeController:(MFMailComposeViewController *)controller
-         didFinishWithResult:(MFMailComposeResult)result
-                       error:(NSError *)error {
-    [controller dismissModalViewControllerAnimated:YES];
 }
 
 

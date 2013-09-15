@@ -42,7 +42,7 @@ static UIImage *commentsImage;
         statusLabel.backgroundColor = [UIColor darkGrayColor];
         statusLabel.textColor = [UIColor lightTextColor];
         statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
-        statusLabel.textAlignment = UITextAlignmentCenter;
+        statusLabel.textAlignment = NSTextAlignmentCenter;
         statusLabel.tag = 42;
         statusLabel.layer.cornerRadius = 5;
         statusLabel.opaque = NO;
@@ -90,7 +90,9 @@ static UIImage *commentsImage;
     UILabel *nameLabel = (UILabel*)[self viewWithTag:41];
     nameLabel.text = commitFile.fileName;
 
-    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(self.frame.size.width - 70.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f]
+                                  constrainedToSize:CGSizeMake(self.frame.size.width - 70.0f, 1000.0f)
+                                      lineBreakMode:NSLineBreakByWordWrapping];
     
     CGFloat height = tableView.rowHeight;
     if (size.height > tableView.rowHeight) {
@@ -128,7 +130,9 @@ static UIImage *commentsImage;
         width = tableView.frame.size.width - 105.0f;
     }
 
-    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(width, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f]
+                                  constrainedToSize:CGSizeMake(width, 1000.0f)
+                                      lineBreakMode:NSLineBreakByWordWrapping];
     
     CGFloat height = tableView.rowHeight;
     if (size.height > tableView.rowHeight) {
@@ -158,7 +162,9 @@ static UIImage *commentsImage;
         width = tableView.frame.size.width - 105.0f;
     }
     
-    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(width, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [commitFile.fileName sizeWithFont:[UIFont systemFontOfSize:13.0f]
+                                  constrainedToSize:CGSizeMake(width, 1000.0f)
+                                      lineBreakMode:NSLineBreakByWordWrapping];
     CGFloat height = size.height + 6;
     
     return height > tableView.rowHeight ? height : tableView.rowHeight;

@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		9402273C14C167260036A676 /* CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9402273B14C167260036A676 /* CommitFile.m */; };
+		9402CE8B17E6571F0057777F /* IconRetinaiOS7.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE8A17E6571E0057777F /* IconRetinaiOS7.png */; };
+		9402CE8D17E657490057777F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE8C17E657490057777F /* Images.xcassets */; };
+		9402CE9317E658630057777F /* IconSpotlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE9217E658630057777F /* IconSpotlight.png */; };
+		9402CE9517E6589F0057777F /* IconSpotlightSettings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE9417E6589F0057777F /* IconSpotlightSettings@2x.png */; };
+		9402CE9717E658E30057777F /* IconSpotlightSettings.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE9617E658E30057777F /* IconSpotlightSettings.png */; };
+		9402CE9917E65DA80057777F /* DefaultIOS7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE9817E65DA80057777F /* DefaultIOS7@2x.png */; };
+		9402CE9B17E65E810057777F /* DefaultIOS7-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9402CE9A17E65E810057777F /* DefaultIOS7-568h@2x.png */; };
 		940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 940339951528A43F004ABDDD /* SearchTableViewController.m */; };
 		940339981528A43F004ABDDD /* SearchTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 940339961528A43F004ABDDD /* SearchTableViewController.xib */; };
 		9403399B1528B4C6004ABDDD /* UITableViewCell+Repository.m in Sources */ = {isa = PBXBuildFile; fileRef = 9403399A1528B4C6004ABDDD /* UITableViewCell+Repository.m */; };
@@ -15,8 +22,6 @@
 		940339A01528C8D5004ABDDD /* RepositoryListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9403399E1528C8D5004ABDDD /* RepositoryListViewController.xib */; };
 		9404B4FC150CB38E0077BA8E /* UITableViewCell+CommitFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FB150CB38E0077BA8E /* UITableViewCell+CommitFile.m */; };
 		9404B500150CE6F70077BA8E /* UITableViewCell+PullRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9404B4FF150CE6F70077BA8E /* UITableViewCell+PullRequest.m */; };
-		940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF85E159B7A8A00F8A5EB /* Twitter.framework */; };
-		940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940AF861159BAD7200F8A5EB /* MessageUI.framework */; };
 		941C052A15A03FF1009B772A /* RPShareUrlController.m in Sources */ = {isa = PBXBuildFile; fileRef = 941C052915A03FF1009B772A /* RPShareUrlController.m */; };
 		941FCF8A150E18A10046F72F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF89150E18A10046F72F /* Icon.png */; };
 		941FCF8C150E1A5C0046F72F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 941FCF8B150E1A5C0046F72F /* Icon@2x.png */; };
@@ -36,6 +41,8 @@
 		942CBD6814B6116A0047F712 /* BlobViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 942CBD6614B6116A0047F712 /* BlobViewController.m */; };
 		942CBD6914B6116A0047F712 /* BlobViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 942CBD6714B6116A0047F712 /* BlobViewController.xib */; };
 		9435DC2414C935D800E0B15B /* CommitHistoryList.m in Sources */ = {isa = PBXBuildFile; fileRef = 9435DC2314C935D800E0B15B /* CommitHistoryList.m */; };
+		9442034317E4B1C600393463 /* MainTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9442034117E4B1C600393463 /* MainTabBarViewController.m */; };
+		9442034417E4B1C600393463 /* MainTabBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9442034217E4B1C600393463 /* MainTabBarViewController.xib */; };
 		94435C1114B772BB0037CF87 /* BranchesBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */; };
 		94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */; };
 		9445E35B14B6198300BB929C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9445E35A14B6198300BB929C /* NSData+Base64.m */; };
@@ -127,6 +134,13 @@
 /* Begin PBXFileReference section */
 		9402273A14C167260036A676 /* CommitFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitFile.h; sourceTree = "<group>"; };
 		9402273B14C167260036A676 /* CommitFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitFile.m; sourceTree = "<group>"; };
+		9402CE8A17E6571E0057777F /* IconRetinaiOS7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconRetinaiOS7.png; sourceTree = "<group>"; };
+		9402CE8C17E657490057777F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "Hub To Go/Images.xcassets"; sourceTree = "<group>"; };
+		9402CE9217E658630057777F /* IconSpotlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconSpotlight.png; sourceTree = "<group>"; };
+		9402CE9417E6589F0057777F /* IconSpotlightSettings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IconSpotlightSettings@2x.png"; sourceTree = "<group>"; };
+		9402CE9617E658E30057777F /* IconSpotlightSettings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconSpotlightSettings.png; sourceTree = "<group>"; };
+		9402CE9817E65DA80057777F /* DefaultIOS7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DefaultIOS7@2x.png"; sourceTree = "<group>"; };
+		9402CE9A17E65E810057777F /* DefaultIOS7-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "DefaultIOS7-568h@2x.png"; sourceTree = "<group>"; };
 		940339941528A43F004ABDDD /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
 		940339951528A43F004ABDDD /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		940339961528A43F004ABDDD /* SearchTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchTableViewController.xib; sourceTree = "<group>"; };
@@ -174,6 +188,9 @@
 		942CBD6714B6116A0047F712 /* BlobViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlobViewController.xib; sourceTree = "<group>"; };
 		9435DC2214C935D800E0B15B /* CommitHistoryList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommitHistoryList.h; sourceTree = "<group>"; };
 		9435DC2314C935D800E0B15B /* CommitHistoryList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommitHistoryList.m; sourceTree = "<group>"; };
+		9442034017E4B1C600393463 /* MainTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabBarViewController.h; sourceTree = "<group>"; };
+		9442034117E4B1C600393463 /* MainTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabBarViewController.m; sourceTree = "<group>"; };
+		9442034217E4B1C600393463 /* MainTabBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainTabBarViewController.xib; sourceTree = "<group>"; };
 		94435C0E14B772BB0037CF87 /* BranchesBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BranchesBrowserViewController.h; sourceTree = "<group>"; };
 		94435C0F14B772BB0037CF87 /* BranchesBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BranchesBrowserViewController.m; sourceTree = "<group>"; };
 		94435C1014B772BB0037CF87 /* BranchesBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BranchesBrowserViewController.xib; sourceTree = "<group>"; };
@@ -314,8 +331,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				94C8AE7616038C540026FD9E /* CoreText.framework in Frameworks */,
-				940AF862159BAD7200F8A5EB /* MessageUI.framework in Frameworks */,
-				940AF85F159B7A8A00F8A5EB /* Twitter.framework in Frameworks */,
 				94C2F9FC158CBEDF0006640F /* QuartzCore.framework in Frameworks */,
 				949FB13414B3327800D3E713 /* UIKit.framework in Frameworks */,
 				949FB13614B3327800D3E713 /* Foundation.framework in Frameworks */,
@@ -503,6 +518,7 @@
 		949FB12414B3327700D3E713 = {
 			isa = PBXGroup;
 			children = (
+				9402CE8C17E657490057777F /* Images.xcassets */,
 				94C8AE7516038C540026FD9E /* CoreText.framework */,
 				940AF861159BAD7200F8A5EB /* MessageUI.framework */,
 				940AF85E159B7A8A00F8A5EB /* Twitter.framework */,
@@ -537,12 +553,8 @@
 				9426E7BC16C7B71C00715788 /* Notifications */,
 				947B76BD1618518E00E9A9A3 /* Activities */,
 				94FAB65815337F8200C89D7C /* en.lproj */,
-				94FAB6461531A2A400C89D7C /* background.png */,
-				94FAB6481531A2FA00C89D7C /* background@2x.png */,
 				940339931528A423004ABDDD /* Search */,
 				949F506D151D2704009D5DC3 /* Hub To Go.entitlements */,
-				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
-				941FCF89150E18A10046F72F /* Icon.png */,
 				94EF406D1543FE4D002FA8B5 /* Issues */,
 				94BCF2CC150A7037005EA1BD /* PullRequest */,
 				94D50E0514E472B9000C92E2 /* Events */,
@@ -570,16 +582,15 @@
 				941C052915A03FF1009B772A /* RPShareUrlController.m */,
 				949FB14214B3327800D3E713 /* AppDelegate.h */,
 				949FB14314B3327800D3E713 /* AppDelegate.m */,
-				949FB14814B3327800D3E713 /* first.png */,
-				949FB14A14B3327800D3E713 /* first@2x.png */,
-				949FB14F14B3327800D3E713 /* second.png */,
-				949FB15114B3327800D3E713 /* second@2x.png */,
 				949FB13A14B3327800D3E713 /* Supporting Files */,
 				9445E35914B6198300BB929C /* NSData+Base64.h */,
 				9445E35A14B6198300BB929C /* NSData+Base64.m */,
 				94C0602614CE174600E28C5F /* GitObject.h */,
 				9491EE3C151658550050C424 /* PullToRefreshTableViewController.h */,
 				9491EE3D151658550050C424 /* PullToRefreshTableViewController.m */,
+				9442034017E4B1C600393463 /* MainTabBarViewController.h */,
+				9442034117E4B1C600393463 /* MainTabBarViewController.m */,
+				9442034217E4B1C600393463 /* MainTabBarViewController.xib */,
 			);
 			path = "Github To Go";
 			sourceTree = "<group>";
@@ -598,6 +609,20 @@
 		94AB82261534CC51008E0FE7 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				949FB14814B3327800D3E713 /* first.png */,
+				949FB14A14B3327800D3E713 /* first@2x.png */,
+				949FB14F14B3327800D3E713 /* second.png */,
+				949FB15114B3327800D3E713 /* second@2x.png */,
+				9402CE9A17E65E810057777F /* DefaultIOS7-568h@2x.png */,
+				9402CE9817E65DA80057777F /* DefaultIOS7@2x.png */,
+				9402CE9617E658E30057777F /* IconSpotlightSettings.png */,
+				9402CE9417E6589F0057777F /* IconSpotlightSettings@2x.png */,
+				9402CE9217E658630057777F /* IconSpotlight.png */,
+				9402CE8A17E6571E0057777F /* IconRetinaiOS7.png */,
+				94FAB6461531A2A400C89D7C /* background.png */,
+				94FAB6481531A2FA00C89D7C /* background@2x.png */,
+				941FCF8B150E1A5C0046F72F /* Icon@2x.png */,
+				941FCF89150E18A10046F72F /* Icon.png */,
 				94E7A15B1694A1B500AB6B56 /* unstar.png */,
 				94E7A15C1694A1B500AB6B56 /* unstar@2x.png */,
 				94E7A1561694A0BB00AB6B56 /* star.png */,
@@ -734,6 +759,7 @@
 			files = (
 				949FB13E14B3327800D3E713 /* InfoPlist.strings in Resources */,
 				949FB14914B3327800D3E713 /* first.png in Resources */,
+				9402CE8D17E657490057777F /* Images.xcassets in Resources */,
 				949FB14B14B3327800D3E713 /* first@2x.png in Resources */,
 				949FB15014B3327800D3E713 /* second.png in Resources */,
 				949FB15214B3327800D3E713 /* second@2x.png in Resources */,
@@ -742,6 +768,7 @@
 				94B9880914B72986007AA6A6 /* RepositoryViewController.xib in Resources */,
 				94435C1214B772BB0037CF87 /* BranchesBrowserViewController.xib in Resources */,
 				9466DBDA14B7B77800238151 /* BranchViewController.xib in Resources */,
+				9402CE9917E65DA80057777F /* DefaultIOS7@2x.png in Resources */,
 				9424DE5314B9D97300B6538E /* SettingsViewController.xib in Resources */,
 				94A12FDA14BB972A00453774 /* CommitViewController.xib in Resources */,
 				94D50E0B14E472D6000C92E2 /* EventTableViewController.xib in Resources */,
@@ -761,19 +788,25 @@
 				94FAB6511532359D00C89D7C /* settings@2x.png in Resources */,
 				94FAB65F15337F8400C89D7C /* InfoPlist.strings in Resources */,
 				94FAB66015337F8400C89D7C /* Localizable.strings in Resources */,
+				9402CE9B17E65E810057777F /* DefaultIOS7-568h@2x.png in Resources */,
 				94AB82291534CC66008E0FE7 /* default@2x.png in Resources */,
 				94AB822D1534CE8A008E0FE7 /* default.png in Resources */,
 				94EF40781543FEAB002FA8B5 /* IssueListViewController.xib in Resources */,
 				94C8AE74160385900026FD9E /* Default-568h@2x.png in Resources */,
 				947B76D7161C6E7300E9A9A3 /* follow.png in Resources */,
 				947B76D8161C6E7300E9A9A3 /* follow@2x.png in Resources */,
+				9402CE8B17E6571F0057777F /* IconRetinaiOS7.png in Resources */,
 				947B76DC161C6FA000E9A9A3 /* unfollow.png in Resources */,
 				947B76DD161C6FA000E9A9A3 /* unfollow@2x.png in Resources */,
 				947B76E4161C731200E9A9A3 /* openinsafari.png in Resources */,
+				9402CE9717E658E30057777F /* IconSpotlightSettings.png in Resources */,
 				947B76E5161C731200E9A9A3 /* openinsafari@2x.png in Resources */,
 				947B76EC161C846100E9A9A3 /* history.png in Resources */,
 				947B76ED161C846100E9A9A3 /* history@2x.png in Resources */,
+				9402CE9317E658630057777F /* IconSpotlight.png in Resources */,
 				94E7A1581694A0BB00AB6B56 /* star.png in Resources */,
+				9442034417E4B1C600393463 /* MainTabBarViewController.xib in Resources */,
+				9402CE9517E6589F0057777F /* IconSpotlightSettings@2x.png in Resources */,
 				94E7A1591694A0BB00AB6B56 /* star@2x.png in Resources */,
 				94E7A15D1694A1B500AB6B56 /* unstar.png in Resources */,
 				94E7A15E1694A1B500AB6B56 /* unstar@2x.png in Resources */,
@@ -830,6 +863,7 @@
 				9491EE3E151658550050C424 /* PullToRefreshTableViewController.m in Sources */,
 				949F5071151E4EF5009D5DC3 /* NSString+ISO8601Parsing.m in Sources */,
 				94E9F5F0151E747100AF5DD2 /* UITableViewCell+Commit.m in Sources */,
+				9442034317E4B1C600393463 /* MainTabBarViewController.m in Sources */,
 				944D6662151FBEDB002208FB /* PersonViewController.m in Sources */,
 				94CC3C3B1523B31B00F4B25B /* PersonListTableViewController.m in Sources */,
 				940339971528A43F004ABDDD /* SearchTableViewController.m in Sources */,
@@ -947,13 +981,19 @@
 		949FB15C14B3327800D3E713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "Github To Go/Hub To Go.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Robert Panzer (ZFPS77SPD6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Robert Panzer (ZFPS77SPD6)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Hub To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Hub To Go-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "Hub To Go";
+				PROVISIONING_PROFILE = "072E4F0B-08D0-434F-B943-65F6CD1E3997";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -961,17 +1001,20 @@
 		949FB15D14B3327800D3E713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = "Github To Go/Hub To Go.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Robert Panzer (ZFPS77SPD6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Robert Panzer (ZFPS77SPD6)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Github To Go/Hub To Go-Prefix.pch";
 				INFOPLIST_FILE = "Github To Go/Hub To Go-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "Hub To Go";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "072E4F0B-08D0-434F-B943-65F6CD1E3997";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "072E4F0B-08D0-434F-B943-65F6CD1E3997";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

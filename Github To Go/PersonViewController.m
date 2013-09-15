@@ -50,7 +50,6 @@ static NSString *follow, *unfollow;
 
 -(NSString*)stringValueForIndexPath:(NSIndexPath*)indexPath;
 
--(void)showPersonActions;
 
 @end
 
@@ -107,21 +106,17 @@ static NSString *follow, *unfollow;
     
     self.nameLabel.font = [UIFont boldSystemFontOfSize:17.0f];
     self.navigationItem.title = self.person.displayname;
-    
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
 
-    if (NSClassFromString(@"UIActivityViewController") != NULL) {
-        self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:[NSString stringWithFormat:@"http://github.com/%@", _person.login]
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
+    self.shareUrlController = [[RPShareUrlController alloc] initWithUrl:[NSString stringWithFormat:@"http://github.com/%@", _person.login]
                                                                   title:_person.displayname
                                                          viewController:self];
-        [self.shareUrlController addActivity:[[RPFollowPersonActivity alloc] initWithPerson:self.person]];
-        self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
-        
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showPersonActions)];
-    }
+    [self.shareUrlController addActivity:[[RPFollowPersonActivity alloc] initWithPerson:self.person]];
+    self.navigationItem.rightBarButtonItem = self.shareUrlController.barButtonItem;
 
 }
 
@@ -177,10 +172,10 @@ static NSString *follow, *unfollow;
     cell.accessoryType = [showDisclosure containsObject:key] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     if ([[keys objectAtIndex:indexPath.section] objectAtIndex:indexPath.row] == kBio) {
         cell.detailTextLabel.numberOfLines = 0;
-        cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+        cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
     } else {
         cell.detailTextLabel.numberOfLines = 1;
-        cell.detailTextLabel.textAlignment = UITextAlignmentRight;
+        cell.detailTextLabel.textAlignment = NSTextAlignmentRight;
     }
 
     cell.textLabel.text = [titles objectForKey:key];
@@ -266,7 +261,9 @@ static NSString *follow, *unfollow;
         UIFont* font = [UIFont systemFontOfSize:13.0f];
         NSString* value = [self stringValueForIndexPath:indexPath];
         if (value != nil) {
-            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 110.0f, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+            CGSize size = [value sizeWithFont:font
+                            constrainedToSize:CGSizeMake(tableView.frame.size.width - 110.0f, 1000.0f)
+                                lineBreakMode:NSLineBreakByWordWrapping];
             
             CGFloat height = size.height + 10;
             
@@ -296,53 +293,5 @@ static NSString *follow, *unfollow;
     }
     
 }
-
--(void)showPersonActions {
-    UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:nil];
-    if ([[RepositoryStorage sharedStorage].followedPersons objectForKey:self.person.login] == nil) {
-        [actionSheet addButtonWithTitle:NSLocalizedString(@"Follow", @"Follow")];
-    } else {
-        [actionSheet addButtonWithTitle:NSLocalizedString(@"Unfollow", @"Unfollow")];
-    }
-    
-    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    NSString* titleClicked = [actionSheet buttonTitleAtIndex:buttonIndex];
-    NSString* url = [NSString stringWithFormat:@"https://api.github.com/user/following/%@", self.person.login];
-    if ([[RepositoryStorage sharedStorage].followedPersons objectForKey:self.person.login] == nil) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"PUT" block:^(int status, NSDictionary* headerFields, id data) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"User is being followed now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                    [[RepositoryStorage sharedStorage].followedPersons setObject:self.person forKey:self.person.login];
-                } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Following user failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                }
-            });
-            [[RepositoryStorage sharedStorage] loadFollowed];
-        } ];
-    } else if ([unfollow isEqualToString:titleClicked]) {
-        [[NetworkProxy sharedInstance] loadStringFromURL:url verb:@"DELETE" block:^(int status, NSDictionary* headerFields, id data) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (status == 204) {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"User is no longer followed now" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                    [[RepositoryStorage sharedStorage].followedPersons removeObjectForKey:self.person.login];
-                } else {
-                    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:titleClicked message:@"Stopping to follow user failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                    [alertView show];
-                }
-            });
-            [[RepositoryStorage sharedStorage] loadFollowed];
-        } ];
-    }
-    
-}
-
 
 @end

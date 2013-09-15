@@ -160,7 +160,7 @@ static UIColor *unreadColor, *readColor;
         typeLabel.backgroundColor = [UIColor darkGrayColor];
         typeLabel.textColor = [UIColor whiteColor];
         typeLabel.font = [UIFont boldSystemFontOfSize:11.0f];
-        typeLabel.textAlignment = UITextAlignmentCenter;
+        typeLabel.textAlignment = NSTextAlignmentCenter;
         typeLabel.tag = 42;
         typeLabel.layer.cornerRadius = 5;
         typeLabel.opaque = NO;
@@ -168,7 +168,7 @@ static UIColor *unreadColor, *readColor;
         label = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 0.0f, 0.0f)];
         label.font = [UIFont systemFontOfSize:14.0f];
         label.numberOfLines = 0;
-        label.lineBreakMode = UILineBreakModeWordWrap;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
         label.tag = 2;
         
         repositoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(57.0f, 2.0f, 200.0f, 18.0f)];
@@ -255,7 +255,7 @@ static UIColor *unreadColor, *readColor;
     }
     CGSize size = [notification.title sizeWithFont:[UIFont systemFontOfSize:14.0f]
                           constrainedToSize:CGSizeMake(tableView.frame.size.width - 97.0f, 200.0f)
-                              lineBreakMode:UILineBreakModeWordWrap];
+                              lineBreakMode:NSLineBreakByWordWrapping];
     CGFloat labelHeight = size.height + 4;
     [self.cachedHeights setObject:[NSNumber numberWithFloat:labelHeight]
                            forKey:key];
@@ -328,8 +328,6 @@ static UIColor *unreadColor, *readColor;
 -(void)reload {
     self.pagesLoaded = 0;
     [self loadEvents];
-    
-    self.tabBarItem.badgeValue = @"42";
 }
 
 

@@ -33,7 +33,7 @@
 
 - (IBAction)showAddCommentDialog:(id)sender {
     PullRequestAddCommentViewController *addCommentViewController = [[PullRequestAddCommentViewController alloc] initWithUrl:url number:self.number];
-    [self presentModalViewController:addCommentViewController animated:YES];
+    [self presentViewController:addCommentViewController animated:YES completion:nil];
 }
 
 
@@ -46,9 +46,11 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
 }
 
 - (void)viewDidUnload
@@ -199,7 +201,7 @@
         if (statusCode == 201) {
             [(PullRequestCommentViewController*)self.parentViewController loadComments];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self dismissModalViewControllerAnimated:YES];
+                [self dismissViewControllerAnimated:YES completion:nil];
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -220,7 +222,7 @@
 }
 
 -(void)cancel:(id)sender {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

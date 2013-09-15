@@ -31,7 +31,7 @@
         nameLabel.backgroundColor = [UIColor clearColor];
         nameLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         nameLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
-        nameLabel.textAlignment = UITextAlignmentRight;
+        nameLabel.textAlignment = NSTextAlignmentRight;
         [ret.contentView addSubview:nameLabel];
         
         UILabel* bodyLabel = [[UILabel alloc] init];
@@ -40,9 +40,9 @@
         bodyLabel.backgroundColor = [UIColor clearColor];
         bodyLabel.font = [UIFont systemFontOfSize:13.0f];
         bodyLabel.textColor = [UIColor blackColor];
-        bodyLabel.textAlignment = UITextAlignmentLeft;
+        bodyLabel.textAlignment = NSTextAlignmentLeft;
         bodyLabel.numberOfLines = 0;
-        bodyLabel.lineBreakMode = UILineBreakModeWordWrap;
+        bodyLabel.lineBreakMode = NSLineBreakByWordWrapping;
         [ret.contentView addSubview:bodyLabel];
 
         UILabel* dateLabel = [[UILabel alloc] init];
@@ -51,7 +51,7 @@
         dateLabel.backgroundColor = [UIColor clearColor];
         dateLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         dateLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
-        dateLabel.textAlignment = UITextAlignmentLeft;
+        dateLabel.textAlignment = NSTextAlignmentLeft;
         [ret.contentView addSubview:dateLabel];
     }
     return ret;
@@ -76,12 +76,16 @@
 
     UILabel* bodyLabel = (UILabel*)[self.contentView viewWithTag:3];
     bodyLabel.text = issueComment.body;
-    CGFloat textHeight = [issueComment.body sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f, 2000.0f) lineBreakMode:UILineBreakModeWordWrap].height;
+    CGFloat textHeight = [issueComment.body sizeWithFont:[UIFont systemFontOfSize:13.0f]
+                                       constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f, 2000.0f)
+                                           lineBreakMode:NSLineBreakByWordWrapping].height;
     bodyLabel.frame = CGRectMake(2.0f, imageView.frame.size.height, tableView.frame.size.width - 40.0f, textHeight);
 }
 
 +(CGFloat)tableView:(UITableView *)tableView heightForRowForIssueComment:(PullRequestIssueComment*)issueComment {
-    CGSize size = [issueComment.body sizeWithFont:[UIFont systemFontOfSize:13.0f] constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f, 2000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [issueComment.body sizeWithFont:[UIFont systemFontOfSize:13.0f]
+                                constrainedToSize:CGSizeMake(tableView.frame.size.width - 40.0f, 2000.0f)
+                                    lineBreakMode:NSLineBreakByWordWrapping];
     
     return 60.0f + size.height;
     

@@ -7,20 +7,13 @@
 //
 
 #import "AppDelegate.h"
-#import "Repository.h"
-#import "NetworkProxy.h"
-#import "RepoBrowserTableViewController.h"
-#import "SettingsViewController.h"
-#import "EventTableViewController.h"
-#import "SearchTableViewController.h"
 #import "RepositoryStorage.h"
-#import "RPFlickViewController.h"
-#import "EventRootViewController.h"
+#import "MainTabBarViewController.h"
 
 @implementation AppDelegate
 
-@synthesize window = _window;
-@synthesize tabBarController = _tabBarController;
+@synthesize window;
+@synthesize tabBarController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -28,23 +21,10 @@
     
     [[UINavigationBar appearance] setTintColor:[UIColor darkGrayColor]];
     [[UIToolbar appearance] setTintColor:[UIColor darkGrayColor]];
-//    [[UILabel appearance] setFont:[UIFont systemFontOfSize:13.0f]];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    
-    EventRootViewController *eventRootViewController = [[EventRootViewController alloc] init];
-    UINavigationController *eventsNavigationController = [[UINavigationController alloc] initWithRootViewController:eventRootViewController];
-
-    RepoBrowserTableViewController* repoBrowserController = [[RepoBrowserTableViewController alloc] init];
-    UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:repoBrowserController];
-    
-    UINavigationController *searchTableViewController = [[UINavigationController alloc] initWithRootViewController:[[SearchTableViewController alloc] init]];
-    
-    SettingsViewController* settingsController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
-    
-    self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:eventsNavigationController, navigationController, searchTableViewController, settingsController, nil];
-    eventRootViewController.tabBarItem = self.tabBarController.tabBar.items[0];
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    self.tabBarController = [[MainTabBarViewController alloc] initWithNibName:@"MainTabBar" bundle:nil];
     self.window.rootViewController = self.tabBarController;
         
     [self.window makeKeyAndVisible];

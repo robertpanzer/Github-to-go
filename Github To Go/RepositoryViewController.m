@@ -92,12 +92,11 @@ static NSSet *isBool;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
-
-
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
 }
 
 - (void)viewDidUnload
@@ -168,8 +167,8 @@ static NSSet *isBool;
                 cell.textLabel.font = [UIFont systemFontOfSize:14.0f];
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0f];
                 cell.detailTextLabel.numberOfLines = 0;
-                cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-                cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+                cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
             }
             cell.textLabel.text = [descriptions objectAtIndex:indexPath.row];
             cell.detailTextLabel.text = [value description];

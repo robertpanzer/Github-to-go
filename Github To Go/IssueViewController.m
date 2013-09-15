@@ -87,9 +87,11 @@ static NSString* titleClosedAt;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIImage *backgroundImage = [UIImage imageNamed:@"background"];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
-    self.tableView.backgroundView = backgroundImageView;
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        UIImage *backgroundImage = [UIImage imageNamed:@"background"];
+        UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:backgroundImage];
+        self.tableView.backgroundView = backgroundImageView;
+    }
 }
 
 - (void)viewDidUnload
@@ -137,8 +139,8 @@ static NSString* titleClosedAt;
                 cell.textLabel.font = [UIFont systemFontOfSize:13.0f];
                 cell.detailTextLabel.font = [UIFont systemFontOfSize:13.0f];
                 cell.detailTextLabel.numberOfLines = 0;
-                cell.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;
-                cell.detailTextLabel.textAlignment = UITextAlignmentLeft;
+                cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+                cell.detailTextLabel.textAlignment = NSTextAlignmentLeft;
             }
             cell.textLabel.text = [titles valueForKey:keyPath];
             cell.detailTextLabel.text = [value description];
@@ -196,7 +198,9 @@ static NSString* titleClosedAt;
         NSString* keyPath = [keyPaths objectAtIndex:indexPath.row];
         if ([keyPath isEqualToString:kTitle] || [keyPath isEqualToString:kBody]) {
             NSString* value = [issue valueForKeyPath:keyPath];
-            CGSize size = [value sizeWithFont:font constrainedToSize:CGSizeMake(tableView.frame.size.width - 80.0f/*280.0f*/, 1000.0f) lineBreakMode:UILineBreakModeWordWrap];
+            CGSize size = [value sizeWithFont:font
+                            constrainedToSize:CGSizeMake(tableView.frame.size.width - 80.0f/*280.0f*/, 1000.0f)
+                                lineBreakMode:NSLineBreakByWordWrapping];
             
             CGFloat height = size.height + 10;
             

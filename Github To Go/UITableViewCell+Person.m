@@ -42,7 +42,7 @@
         nameLabel.backgroundColor = [UIColor clearColor];
         nameLabel.font = [UIFont systemFontOfSize:13.0f];
         nameLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
-        nameLabel.textAlignment = UITextAlignmentRight;
+        nameLabel.textAlignment = NSTextAlignmentRight;
         [ret.contentView addSubview:nameLabel];
         
         UILabel* emailLabel = [[UILabel alloc] init];
@@ -51,7 +51,7 @@
         emailLabel.backgroundColor = [UIColor clearColor];
         emailLabel.font = [UIFont systemFontOfSize:13.0f];
         emailLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
-        emailLabel.textAlignment = UITextAlignmentRight;
+        emailLabel.textAlignment = NSTextAlignmentRight;
         [ret.contentView addSubview:emailLabel];
     }
     return ret;
@@ -113,7 +113,7 @@
         nameLabel.backgroundColor = [UIColor clearColor];
         nameLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         nameLabel.textColor = [UIColor colorWithRed:0.22f green:0.33f blue:0.53f alpha:1.0f];
-        nameLabel.textAlignment = UITextAlignmentLeft;
+        nameLabel.textAlignment = NSTextAlignmentLeft;
         nameLabel.frame = CGRectMake(tableView.rowHeight, 0.0f, tableView.frame.size.width - tableView.rowHeight, tableView.rowHeight);
 
         [ret.contentView addSubview:nameLabel];
