@@ -25,7 +25,9 @@
 
 -(void)bindRepository:(Repository *)repository tableView:(UITableView *)tableView {
     self.textLabel.text = repository.fullName;
-    self.detailTextLabel.text = repository.description;
+    if (repository.description != (id)[NSNull null]) {
+        self.detailTextLabel.text = repository.description;
+    }
 }
 
 @end
