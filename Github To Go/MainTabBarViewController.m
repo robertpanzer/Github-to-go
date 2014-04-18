@@ -40,6 +40,7 @@
     navigationController.navigationBar.translucent = NO;
     
     UINavigationController *searchTableViewController = [[UINavigationController alloc] initWithRootViewController:[[SearchTableViewController alloc] init]];
+    searchTableViewController.navigationBar.translucent = NO;
     
     SettingsViewController* settingsController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
     
